@@ -1,0 +1,300 @@
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/2.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/3.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/4.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/5.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/6.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/7.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/8.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/9.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/10.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/11.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/12.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/13.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/14.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/15.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/16.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/17.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/18.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/19.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/20.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/21.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/22.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/23.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/24.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/25.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/26.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/27.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/28.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/29.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/30.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/31.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/32.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/33.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/34.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/35.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/36.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/37.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/38.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/39.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/40.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/41.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/42.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/43.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/44.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/45.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/46.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/47.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/48.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/49.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/50.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Random Cloud/51.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/2.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/3.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/4.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/5.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/6.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/7.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/8.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/9.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/10.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/11.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/12.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/13.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/14.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/15.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/16.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/17.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/18.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/19.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/20.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/21.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/22.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/23.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/24.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/25.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/26.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/27.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/28.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/29.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/30.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/31.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/32.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/33.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/34.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/35.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/36.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/37.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/38.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/39.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/40.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/41.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/42.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/43.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/44.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/45.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/46.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/47.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/48.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/49.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/50.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Circle/51.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/2.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/3.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/4.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/5.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/6.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/7.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/8.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/9.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/10.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/11.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/12.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/13.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/14.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/15.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/16.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/17.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/18.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/19.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/20.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/21.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/22.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/23.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/24.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/25.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/26.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/27.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/28.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/29.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/30.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/31.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/32.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/33.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/34.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/35.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/36.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/37.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/38.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/39.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/40.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/41.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/42.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/43.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/44.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/45.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/46.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/47.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/48.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/49.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/50.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Sphere/51.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/2.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/3.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/4.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/5.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/6.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/7.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/8.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/9.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/10.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/11.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/12.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/13.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/14.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/15.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/16.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/17.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/18.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/19.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/20.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/21.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/22.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/23.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/24.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/25.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/26.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/27.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/28.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/29.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/30.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/31.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/32.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/33.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/34.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/35.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/36.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/37.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/38.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/39.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/40.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/41.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/42.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/43.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/44.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/45.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/46.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/47.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/48.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/49.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/50.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters/51.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/2.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/3.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/4.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/5.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/6.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/7.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/8.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/9.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/10.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/11.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/12.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/13.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/14.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/15.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/16.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/17.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/18.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/19.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/20.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/21.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/22.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/23.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/24.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/25.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/26.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/27.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/28.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/29.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/30.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/31.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/32.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/33.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/34.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/35.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/36.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/37.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/38.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/39.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/40.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/41.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/42.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/43.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/44.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/45.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/46.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/47.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/48.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/49.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/50.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Clusters within Clusters/51.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/2.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/3.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/4.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/5.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/6.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/7.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/8.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/9.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/10.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/11.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/12.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/13.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/14.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/15.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/16.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/17.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/18.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/19.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/20.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/21.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/22.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/23.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/24.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/25.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/26.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/27.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/28.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/29.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/30.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/31.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/32.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/33.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/34.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/35.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/36.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/37.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/38.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/39.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/40.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/41.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/42.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/43.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/44.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/45.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/46.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/47.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/48.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/49.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/50.h5.pc.simba.1.00001_3.persistence
+/mnt/remote/capdnet_shared/projects/sonata/data_point_cloud/data2/gauss/gauss_0_1/Torus/51.h5.pc.simba.1.00001_3.persistence
