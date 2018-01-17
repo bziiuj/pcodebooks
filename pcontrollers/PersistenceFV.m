@@ -37,8 +37,6 @@ classdef PersistenceFV < PersistenceBow
           obj.covariances, ...
           obj.priors, ...
           'Improved') ;
-        %z = sign(z) .* sqrt(abs(z));
-        %z = bsxfun(@times, z, 1./max(1e-12, sqrt(sum(z .^ 2))));
         repr{i} = z;
       end
     end

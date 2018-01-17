@@ -7,11 +7,12 @@ function experiment01()
   
   pds = prepareDiagrams(libPath, expPath);
 
-  N = 1;
+  N = 50;
   algorithm = 'pam'; %small
 
-  accuracies = zeros(N, 6);
   for i = 1:N
+    fprintf('repetition %d\n', i);
+
     seedBig = i * 100000;
 
     objs = {};
@@ -31,7 +32,24 @@ function experiment01()
       objs{end + 1} = {PersistenceBow(c, @linear_ramp, [0, 0.1841]), {'pbow', ['pbow_', num2str(c)]}};
     end
     for c = 10:10:50
+      objs{end + 1} = {PersistenceVLAD(c, @linear_ramp, [0, 0.1841]), {'pvlad', ['pvlad_', num2str(c)]}};
+    end
+    for c = 10:10:50
       objs{end + 1} = {PersistenceFV(c, @linear_ramp, [0, 0.1841]), {'pfv', ['pfv_', num2str(c)]}};
+    end
+    for r = 10:10:50
+      for s = 0.05:0.05:0.25
+        objs{end + 1} = {PersistenceImage(r, s, @one_ramp, [0, 0.1841]), {'pi', ['pi_', num2str(r), '_', num2str(s)]}};
+      end
+    end
+    for c = 10:10:50
+      objs{end + 1} = {PersistenceBow(c, @one_ramp, [0, 0.1841]), {'pbow', ['pbow_', num2str(c)]}};
+    end
+    for c = 10:10:50
+      objs{end + 1} = {PersistenceVLAD(c, @one_ramp, [0, 0.1841]), {'pvlad', ['pvlad_', num2str(c)]}};
+    end
+    for c = 10:10:50
+      objs{end + 1} = {PersistenceFV(c, @one_ramp, [0, 0.1841]), {'pfv', ['pfv_', num2str(c)]}};
     end
 
     for o = 1:numel(objs)
@@ -62,7 +80,7 @@ function experiment01()
           f = functions(obj.weightingFunction);
           fprintf(fid, '%s;%d;%f;%s;%f;%f\n', basicLine, obj.resolution, obj.sigma, ...
             f.function, obj.diagramLimits);
-        case {'pbow', 'pfv'}
+        case {'pbow', 'pvlad', 'pfv'}
           f = functions(obj.weightingFunction);
           % basicLine;numWords;weightingFunction;diagramLimits
           fprintf(fid, '%s;%d;%s;%f;%f\n', basicLine, obj.numWords, ...

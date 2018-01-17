@@ -59,10 +59,10 @@ classdef PersistenceBow < PersistenceRepresentation
       for i = 1:numel(diagrams)
         [words, ~] = vl_kdtreequery(obj.kdtree, obj.kdwords, ...
             [diagrams{i}(:, 1), diagrams{i}(:, 2) - diagrams{i}(:, 1)]', ...
-            'MaxComparisons', 100) ;
-        z = vl_binsum(zeros(obj.numWords, 1), 1, double(words)) ;
-        %z = sign(z) .* sqrt(abs(z));
-        %z = bsxfun(@times, z, 1./max(1e-12, sqrt(sum(z .^ 2))));
+            'MaxComparisons', 100);
+        z = vl_binsum(zeros(obj.numWords, 1), 1, double(words));
+        z = sign(z) .* sqrt(abs(z));
+        z = bsxfun(@times, z, 1./max(1e-12, sqrt(sum(z .^ 2))));
         repr{i} = z;
       end
     end
