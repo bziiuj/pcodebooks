@@ -19,12 +19,14 @@ classdef PersistenceKernelOne < PersistenceRepresentation
     end
 
     function K = generateKernel(obj, repr)
-      dim = 0; % TODO: does it matter?
+      dim = 1; % TODO: does it matter?
 
       diagram_distance = '../persistence-learning/code/dipha-pss/build/diagram_distance';
     
       outDir = 'temp';
-      rmdir(outDir, 's');
+      if exist(outDir)
+        rmdir(outDir, 's');
+      end
       mkdir(outDir);
 
       % Number of diagrams to create
@@ -49,10 +51,9 @@ classdef PersistenceKernelOne < PersistenceRepresentation
           gram_matrix_file_wIFGT = fullfile(outDir, ...
               sprintf('K_wIFGT.txt'));
 
-          options = ['--distance_squared --time ' ...
-              num2str(1, '%e') ...
-              ' --use_fgt ' ...
-              ' --dim ' num2str(dim) ' '];
+          options = ['--time ', num2str(1, '%e'), ...
+              ...%' --use_fgt ', ...
+              ' --dim ', num2str(dim) ' '];
           exec = [diagram_distance ' ' options listFile ' > ' gram_matrix_file_wIFGT];
           system(exec);
 

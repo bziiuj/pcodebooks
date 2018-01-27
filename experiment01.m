@@ -1,14 +1,20 @@
 % First experiment
 function experiment01()
-  addpath('pcontrollers')
+  addpath('pcontrollers');
 
-  libPath = 'data/';
+  rawPath = 'rawdata/exp01/';
   expPath = 'exp01/';
   
-  pds = prepareDiagrams(libPath, expPath);
+  pds = prepareDiagrams(rawPath, expPath);
 
-  N = 50;
+  % calculate diagram limits
+  allPoints = cat(1, pds{:});
+  diagramLimits = [quantile(allPoints(:, 1), 0.05), ...
+    quantile(allPoints(:, 2), 0.95)];
+
   algorithm = 'pam'; %small
+
+  N = 25;
 
   for i = 1:N
     fprintf('repetition %d\n', i);
@@ -25,31 +31,39 @@ function experiment01()
     objs{end + 1} = {PersistenceLandscape(), {'pl', 'pl'}};
     for r = 10:10:50
       for s = 0.05:0.05:0.25
-        objs{end + 1} = {PersistenceImage(r, s, @linear_ramp, [0, 0.1841]), {'pi', ['pi_', num2str(r), '_', num2str(s)]}};
+        objs{end + 1} = {PersistenceImage(r, s, @linear_ramp), {'pi', ['pi_', num2str(r), '_', num2str(s)]}};
       end
     end
     for c = 10:10:50
-      objs{end + 1} = {PersistenceBow(c, @linear_ramp, [0, 0.1841]), {'pbow', ['pbow_', num2str(c)]}};
+      objs{end + 1} = {PersistenceBow(c, @linear_ramp), {'pbow', ['pbow_', num2str(c)]}};
     end
     for c = 10:10:50
-      objs{end + 1} = {PersistenceVLAD(c, @linear_ramp, [0, 0.1841]), {'pvlad', ['pvlad_', num2str(c)]}};
+      objs{end + 1} = {PersistenceVLAD(c, @linear_ramp), {'pvlad', ['pvlad_', num2str(c)]}};
     end
     for c = 10:10:50
-      objs{end + 1} = {PersistenceFV(c, @linear_ramp, [0, 0.1841]), {'pfv', ['pfv_', num2str(c)]}};
+      objs{end + 1} = {PersistenceFV(c, @linear_ramp), {'pfv', ['pfv_', num2str(c)]}};
     end
     for r = 10:10:50
       for s = 0.05:0.05:0.25
-        objs{end + 1} = {PersistenceImage(r, s, @one_ramp, [0, 0.1841]), {'pi', ['pi_', num2str(r), '_', num2str(s)]}};
+        objs{end + 1} = {PersistenceImage(r, s, @one_ramp), {'pi', ['pi_', num2str(r), '_', num2str(s)]}};
       end
     end
     for c = 10:10:50
-      objs{end + 1} = {PersistenceBow(c, @one_ramp, [0, 0.1841]), {'pbow', ['pbow_', num2str(c)]}};
+      objs{end + 1} = {PersistenceBow(c, @one_ramp), {'pbow', ['pbow_', num2str(c)]}};
     end
     for c = 10:10:50
-      objs{end + 1} = {PersistenceVLAD(c, @one_ramp, [0, 0.1841]), {'pvlad', ['pvlad_', num2str(c)]}};
+      objs{end + 1} = {PersistenceVLAD(c, @one_ramp), {'pvlad', ['pvlad_', num2str(c)]}};
     end
     for c = 10:10:50
-      objs{end + 1} = {PersistenceFV(c, @one_ramp, [0, 0.1841]), {'pfv', ['pfv_', num2str(c)]}};
+      objs{end + 1} = {PersistenceFV(c, @one_ramp), {'pfv', ['pfv_', num2str(c)]}};
+    end
+    for r = [20, 40]
+      for s = 0.1:0.1:0.3
+        for d = 25:25:100
+          objs{end + 1} = {PersistencePds(r, s, d), {'pds', ['pds_', num2str(r), ...
+            '_', num2str(s), '_', num2str(d)]}};
+        end
+      end
     end
 
     for o = 1:numel(objs)
@@ -58,7 +72,8 @@ function experiment01()
 
       fprintf('Computing: %s\n', prop{2});
 
-      [accuracy, preciseAccuracy, time] = computeAccuracy(obj, pds, algorithm, expPath, prop{1}, prop{2}, seedBig);
+      [accuracy, preciseAccuracy, time] = computeAccuracy(obj, pds, diagramLimits, ...
+        algorithm, expPath, prop{1}, prop{2}, seedBig);
 
       % TODO: save time
       fid = fopen([expPath, 'results_', algorithm, '_', prop{1}, '.txt'], 'a');
@@ -76,15 +91,19 @@ function experiment01()
           % basicLine
           fprintf(fid, '%s\n', basicLine);
         case 'pi'
-          % basicLine;resolution;sigma;weightingFunction;diagramLimits
+          % basicLine;resolution;sigma;weightingFunction
           f = functions(obj.weightingFunction);
-          fprintf(fid, '%s;%d;%f;%s;%f;%f\n', basicLine, obj.resolution, obj.sigma, ...
-            f.function, obj.diagramLimits);
+          fprintf(fid, '%s;%d;%f;%s\n', basicLine, obj.resolution, obj.sigma, ...
+            f.function);
         case {'pbow', 'pvlad', 'pfv'}
           f = functions(obj.weightingFunction);
-          % basicLine;numWords;weightingFunction;diagramLimits
-          fprintf(fid, '%s;%d;%s;%f;%f\n', basicLine, obj.numWords, ...
-            f.function, obj.diagramLimits);
+          % basicLine;numWords;weightingFunction
+          fprintf(fid, '%s;%d;%s\n', basicLine, obj.numWords, ...
+            f.function);
+        case 'pds'
+          % basicLine;resolution;sigma;dim
+          fprintf(fid, '%s;%d;%f;%d\n', basicLine, obj.resolution, obj.sigma, ...
+            obj.dim);
         otherwise
           throw(MException('Error', 'Representation is not saved'));
       end
@@ -93,7 +112,7 @@ function experiment01()
   end
 end
 
-function pds = prepareDiagrams(libPath, expPath)
+function pds = prepareDiagrams(rawPath, expPath)
   types = {'Random Cloud', 'Circle', 'Sphere', 'Clusters', ...
     'Clusters within Clusters', 'Torus'};
 
@@ -104,7 +123,7 @@ function pds = prepareDiagrams(libPath, expPath)
     pds = cell(numel(types), 50);
     for i = 2:51
       for j = 1:numel(types)
-        filePath = [libPath, 'pd_gauss_0_1/', types{j}, '/', num2str(i), '.h5.pc.simba.1.00001_3.persistence'];
+        filePath = [rawPath, 'pd_gauss_0_1/', types{j}, '/', num2str(i), '.h5.pc.simba.1.00001_3.persistence'];
         pd = importdata(filePath, ' ');
         pd(isinf(pd(:, 3)) | pd(:, 1) ~= 1, :) = [];
         pds{j, i - 1} = pd(:, 2:3);
@@ -124,7 +143,8 @@ function pds = prepareDiagrams(libPath, expPath)
   end
 end
 
-function [accuracy, preciseAccuracy, time] = computeAccuracy(obj, pds, algorithm, expPath, name, detailName, seedBig)
+function [accuracy, preciseAccuracy, time] = computeAccuracy(obj, pds, diagramLimits, ...
+  algorithm, expPath, name, detailName, seedBig)
   kernelPath = [expPath, detailName, '.mat'];
 
   switch name
@@ -138,18 +158,28 @@ function [accuracy, preciseAccuracy, time] = computeAccuracy(obj, pds, algorithm
     case {'pk1', 'pk2e', 'pk2a', 'pl', 'pi'}
       if ~exist(kernelPath, 'file')
         tic;
-        repr = obj.train(pds(:));
-        time = toc;
+        if strcmp(name, 'pi')
+          repr = obj.train(pds(:), diagramLimits);
+        else
+          repr = obj.train(pds(:));
+        end
         K = obj.generateKernel(repr);
+        time = toc;
         save(kernelPath, 'K', 'time');
       else
         load(kernelPath);
       end
     otherwise
       tic;
-      repr = obj.train(pds(:));
-      time = toc;
+      reprNonCell = obj.train(pds(:), diagramLimits);
+      % this is hack - modify it in the future, so that all representations
+      % return the same thing
+      repr = cell(1, size(reprNonCell, 2));
+      for i = 1:size(reprNonCell, 2)
+        repr{i} = reprNonCell(:, i);
+      end
       K = obj.generateKernel(repr);
+      time = toc;
   end
 
   [accuracy, preciseAccuracy] = computeAccuracyK(K, algorithm, seedBig);
