@@ -169,6 +169,17 @@ function [accuracy, preciseAccuracy, time] = computeAccuracy(obj, pds, diagramLi
       else
         load(kernelPath);
       end
+    case {'pbow', 'pvlad', 'pfv'}
+      tic;
+      reprNonCell = obj.train(pds(:), diagramLimits);
+      % this is hack - modify it in the future, so that all representations
+      % return the same thing
+      repr = cell(1, size(reprNonCell, 2));
+      for i = 1:size(reprNonCell, 2)
+        repr{i} = reprNonCell(:, i);
+      end
+      K = obj.generateKernel(cat(1, repr{:}));
+      time = toc;
     otherwise
       tic;
       reprNonCell = obj.train(pds(:), diagramLimits);
@@ -178,7 +189,7 @@ function [accuracy, preciseAccuracy, time] = computeAccuracy(obj, pds, diagramLi
       for i = 1:size(reprNonCell, 2)
         repr{i} = reprNonCell(:, i);
       end
-      K = obj.generateKernel(repr);
+      K = obj.generateKernel(cat(1, repr));
       time = toc;
   end
 

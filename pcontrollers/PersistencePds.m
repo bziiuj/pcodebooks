@@ -17,6 +17,7 @@ classdef PersistencePds < PersistenceRepresentation
     end
     
     function setup(obj)
+      addpath('../pdsphere/matlab/');
       addpath('../pdsphere/matlab/Sphere tools/');
     end
 

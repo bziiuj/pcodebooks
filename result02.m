@@ -1,16 +1,17 @@
 expPath = 'exp02/';
 algorithm = 'linearSVM';
 
-forBoxplot = zeros(1, 9);
+forBoxplot = zeros(100, 9);
 forBoxplotTime = zeros(1, 9);
 
 rrr = 3;
 ccc = 4;
 clim = [83, 93];
 
-figure;
+figure('Name', 'Accuracy for experiment 2');
 
 %%
+
 basicLine = ['%s %d %f %f', ...
         ' %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f', ...
         ' %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f', ...
@@ -20,9 +21,10 @@ basicLine = ['%s %d %f %f', ...
 fid = fopen([expPath, 'results_', algorithm, '_pi.txt'], 'r');
 cellArray = textscan(fid, [basicLine, '%d %f %s'], 'delimiter', ';');
 fclose(fid);
-forBoxplot(:, 1) = cellArray{4}(cellArray{105} == 40 & ...
+allAccuracies = cat(2, cellArray{5:104});
+forBoxplot(:, 1) = allAccuracies(cellArray{105} == 40 & ...
   round(cellArray{106} / 0.05) == round(0.1 / 0.05) & ...
-  strcmp(cellArray{107}, 'one_ramp'));
+  strcmp(cellArray{107}, 'one_ramp'), :);
 forBoxplotTime(:, 1) = cellArray{3}(cellArray{105} == 40 & ...
   round(cellArray{106} / 0.05) == round(0.1 / 0.05) & ...
   strcmp(cellArray{107}, 'one_ramp'));
@@ -41,9 +43,10 @@ yticks([1, 2, 3, 4, 5]); yticklabels({'0.05', '0.10', '0.15', '0.20', '0.25'});
 fid = fopen([expPath, 'results_', algorithm, '_pi.txt'], 'r');
 cellArray = textscan(fid, [basicLine, '%d %f %s'], 'delimiter', ';');
 fclose(fid);
-forBoxplot(:, 2) = cellArray{4}(cellArray{105} == 50 & ...
+allAccuracies = cat(2, cellArray{5:104});
+forBoxplot(:, 2) = allAccuracies(cellArray{105} == 50 & ...
   round(cellArray{106} / 0.05) == round(0.05 / 0.05) & ...
-  strcmp(cellArray{107}, 'linear_ramp'));
+  strcmp(cellArray{107}, 'linear_ramp'), :);
 forBoxplotTime(:, 2) = cellArray{3}(cellArray{105} == 50 & ...
   round(cellArray{106} / 0.05) == round(0.05 / 0.05) & ...
   strcmp(cellArray{107}, 'linear_ramp'));
@@ -64,7 +67,8 @@ yticks([1, 2, 3, 4, 5]); yticklabels({'0.05', '0.10', '0.15', '0.20', '0.25'});
 fid = fopen([expPath, 'results_', algorithm, '_pbow.txt'], 'r');
 cellArray = textscan(fid, [basicLine, '%d %s'], 'delimiter', ';');
 fclose(fid);
-forBoxplot(:, 3) = cellArray{4}(cellArray{105} == 10 & strcmp(cellArray{106}, 'one_ramp'));
+allAccuracies = cat(2, cellArray{5:104});
+forBoxplot(:, 3) = allAccuracies(cellArray{105} == 10 & strcmp(cellArray{106}, 'one_ramp'), :);
 forBoxplotTime(:, 3) = cellArray{3}(cellArray{105} == 10 & strcmp(cellArray{106}, 'one_ramp'));
 pbow = zeros(1, 5);
 for c = 10:10:50
@@ -77,7 +81,8 @@ yticklabels({''});
 fid = fopen([expPath, 'results_', algorithm, '_pbow.txt'], 'r');
 cellArray = textscan(fid, [basicLine, '%d %s'], 'delimiter', ';');
 fclose(fid);
-forBoxplot(:, 4) = cellArray{4}(cellArray{105} == 40 & strcmp(cellArray{106}, 'linear_ramp'));
+allAccuracies = cat(2, cellArray{5:104});
+forBoxplot(:, 4) = allAccuracies(cellArray{105} == 40 & strcmp(cellArray{106}, 'linear_ramp'), :);
 forBoxplotTime(:, 4) = cellArray{3}(cellArray{105} == 40 & strcmp(cellArray{106}, 'linear_ramp'));
 pbow = zeros(1, 5);
 for c = 10:10:50
@@ -92,7 +97,8 @@ yticklabels({''});
 fid = fopen([expPath, 'results_', algorithm, '_pvlad.txt'], 'r');
 cellArray = textscan(fid, [basicLine, '%d %s'], 'delimiter', ';');
 fclose(fid);
-forBoxplot(:, 5) = cellArray{4}(cellArray{105} == 50 & strcmp(cellArray{106}, 'one_ramp'));
+allAccuracies = cat(2, cellArray{5:104});
+forBoxplot(:, 5) = allAccuracies(cellArray{105} == 50 & strcmp(cellArray{106}, 'one_ramp'), :);
 forBoxplotTime(:, 5) = cellArray{3}(cellArray{105} == 50 & strcmp(cellArray{106}, 'one_ramp'));
 pfv = zeros(1, 5);
 for c = 10:10:50
@@ -105,7 +111,8 @@ yticklabels({''});
 fid = fopen([expPath, 'results_', algorithm, '_pvlad.txt'], 'r');
 cellArray = textscan(fid, [basicLine, '%d %s'], 'delimiter', ';');
 fclose(fid);
-forBoxplot(:, 6) = cellArray{4}(cellArray{105} == 50 & strcmp(cellArray{106}, 'linear_ramp'));
+allAccuracies = cat(2, cellArray{5:104});
+forBoxplot(:, 6) = allAccuracies(cellArray{105} == 50 & strcmp(cellArray{106}, 'linear_ramp'), :);
 forBoxplotTime(:, 6) = cellArray{3}(cellArray{105} == 50 & strcmp(cellArray{106}, 'linear_ramp'));
 pfv = zeros(1, 5);
 for c = 10:10:50
@@ -120,7 +127,8 @@ yticklabels({''});
 fid = fopen([expPath, 'results_', algorithm, '_pfv.txt'], 'r');
 cellArray = textscan(fid, [basicLine, '%d %s'], 'delimiter', ';');
 fclose(fid);
-forBoxplot(:, 7) = cellArray{4}(cellArray{105} == 50 & strcmp(cellArray{106}, 'one_ramp'));
+allAccuracies = cat(2, cellArray{5:104});
+forBoxplot(:, 7) = allAccuracies(cellArray{105} == 50 & strcmp(cellArray{106}, 'one_ramp'), :);
 forBoxplotTime(:, 7) = cellArray{3}(cellArray{105} == 50 & strcmp(cellArray{106}, 'one_ramp'));
 pfv = zeros(1, 5);
 for c = 10:10:50
@@ -133,7 +141,8 @@ yticklabels({''});
 fid = fopen([expPath, 'results_', algorithm, '_pfv.txt'], 'r');
 cellArray = textscan(fid, [basicLine, '%d %s'], 'delimiter', ';');
 fclose(fid);
-forBoxplot(:, 8) = cellArray{4}(cellArray{105} == 20 & strcmp(cellArray{106}, 'linear_ramp'));
+allAccuracies = cat(2, cellArray{5:104});
+forBoxplot(:, 8) = allAccuracies(cellArray{105} == 20 & strcmp(cellArray{106}, 'linear_ramp'), :);
 forBoxplotTime(:, 8) = cellArray{3}(cellArray{105} == 20 & strcmp(cellArray{106}, 'linear_ramp'));
 pfv = zeros(1, 5);
 for c = 10:10:50
@@ -148,9 +157,10 @@ yticklabels({''});
 fid = fopen([expPath, 'results_', algorithm, '_pds.txt'], 'r');
 cellArray = textscan(fid, [basicLine, '%d %f %d'], 'delimiter', ';');
 fclose(fid);
-forBoxplot(:, 9) = cellArray{4}(cellArray{105} == 20 & ...
+allAccuracies = cat(2, cellArray{5:104});
+forBoxplot(:, 9) = allAccuracies(cellArray{105} == 20 & ...
   round(cellArray{106} / 0.1) == round(0.2 / 0.1) & ...
-  cellArray{107} == 25);
+  cellArray{107} == 25, :);
 forBoxplotTime(:, 9) = cellArray{3}(cellArray{105} == 20 & ...
   round(cellArray{106} / 0.1) == round(0.2 / 0.1) & ...
   cellArray{107} == 25);
@@ -163,7 +173,7 @@ for s = 0.1:0.1:0.3
       cellArray{107} == d));
   end
 end
-subplot(rrr, ccc, 9); imagesc(pds, clim); title('pds (resolution = 20)');
+subplot(rrr, ccc, 9); imagesc(pds, clim); title('riemann (resolution = 20)');
 xlabel('dim'); xticks([1, 2, 3, 4]); xticklabels({'25', '50', '75', '100'});
 ylabel('sigma'); yticks([1, 2, 3]); yticklabels({'0.1', '0.2', '0.3'});
 
@@ -175,20 +185,22 @@ labels = {'pi (resolution = 40, sigma = 0.1, no weighting)', ...
   'pbow (k = 40, weighting)', ...
   'pvlad (k = 50, no weighting)', ...
   'pvlad (k = 50, weighting)', ...
-  'fv (k = 50, no weighting)', ...
-  'fv (k = 20, weighting)', ...
-  'pds (r = 20, sigma = 0.2, dim = 25)'};
+  'pfv (k = 50, no weighting)', ...
+  'pfv (k = 20, weighting)', ...
+  'riemman (r = 20, sigma = 0.2, dim = 25)'};
 
-figure;
-plot(forBoxplot, 'r*');
+figure('Name', 'Accuracy for experiment 2 (optimal parameters)');
+boxplot(forBoxplot);
 xtickangle(30);
 xticklabels(labels);
+ylabel('accuracy');
 
-figure;
+figure('Name', 'Mean time for experiment 2 (optimal parameters)');
 plot(forBoxplotTime, 'r*');
 xtickangle(30);
 xticklabels(labels);
+ylabel('time (s)');
 
 for i = 1:numel(labels)
-  fprintf('%s & %f & %f\n', labels{i}, mean(forBoxplot(:, i)), mean(forBoxplotTime(:, i)));
+  fprintf('%s & %f & %f & %f\n', labels{i}, mean(forBoxplot(:, i)), std(forBoxplot(:, i)), mean(forBoxplotTime(:, i)));
 end
