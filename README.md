@@ -33,15 +33,19 @@ B. Instalation steps:
       make
 
 C. Testing persistence codebooks:
+
   1. I order to test only the persistence codebooks, you can run:
+
     test();
 
 D. Running experiments:
 
   1. In order to recompute the results from Table 1, please run the following in Matlab:
+
     experiment01();
     result01();
 
   2. In order to recompute the results from Table 2, please run the following in Matlab:
+
     experiment02();
     result02();
