@@ -23,7 +23,7 @@ function experiment01()
 
     objs = {};
     objs{end + 1} = {PersistenceWasserstein(), {'pw', 'pw'}};
-    objs{end + 1} = {PersistenceKernelOne(), {'pk1', 'pk1'}};
+    objs{end + 1} = {PersistenceKernelOne(1), {'pk1', 'pk1'}};
     objs{end + 1} = {PersistenceKernelTwo(1, -1), {'pk2e', 'pk2e'}};
     for a = 50:50:250
       objs{end + 1} = {PersistenceKernelTwo(0, a), {'pk2a', ['pk2a_', num2str(a)]}};
@@ -75,7 +75,6 @@ function experiment01()
       [accuracy, preciseAccuracy, time] = computeAccuracy(obj, pds, diagramLimits, ...
         algorithm, expPath, prop{1}, prop{2}, seedBig);
 
-      % TODO: save time
       fid = fopen([expPath, 'results_', algorithm, '_', prop{1}, '.txt'], 'a');
       % type;repetition;time;accuracy;preciseAccuracy
       basicLine = sprintf('%s;%d;%f;%f;%f;%f;%f;%f;%f;%f', ...

@@ -2,9 +2,16 @@ classdef PersistenceKernelOne < PersistenceRepresentation
   %PERSISTENCEKERNELONE
   
   properties
+    sigma
   end
   
   methods
+    function obj = PersistenceKernelOne(sigma)
+      obj = obj@PersistenceRepresentation();
+
+      obj.sigma = sigma;
+    end
+    
     function setup(obj)
       addpath('../persistence-learning/code/matlab/');
       pl_setup();
@@ -51,7 +58,7 @@ classdef PersistenceKernelOne < PersistenceRepresentation
           gram_matrix_file_wIFGT = fullfile(outDir, ...
               sprintf('K_wIFGT.txt'));
 
-          options = ['--time ', num2str(1, '%e'), ...
+          options = ['--time ', num2str(obj.sigma), ...
               ...%' --use_fgt ', ...
               ' --dim ', num2str(dim) ' '];
           exec = [diagram_distance ' ' options listFile ' > ' gram_matrix_file_wIFGT];

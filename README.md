@@ -1,5 +1,5 @@
-# sonata01
-Persistence BOW
+# pcodebooks
+Persistence Codebooks
 
 A. This code was tested on macOS High Sierra 10.13.3 and Linux Ubuntu 16.04 LTS.
 
@@ -12,26 +12,31 @@ B. Instalation steps:
       For PersistenceLandscape: https://github.com/queenBNE/Persistent-Landscape-Wrapper
       For PersistenceImage: https://github.com/CSU-TDA/PersistenceImages
       For PersistenceBow & PersistenceFV: https://github.com/vlfeat/vlfeat
-      For PersistencePds (Carriere et al): https://github.com/rushilanirudh/pdsphere/
+      For PersistencePds (Carriere et al.): https://github.com/rushilanirudh/pdsphere/
 
     b) The mail folder of the project should contain the following files:
+      pcodebooks
       pdsphere
       PersistenceImages
       persistence-learning
       Persistent-Landscape-Wrapper
-      sonata01
       vlfeat
 
   Step 2. Compile dependency libraries
 
     a ) Run the following commands:
       cd ./persistence-learning/code/dipha-pss/
+      rm -rf build
       mkdir build
       cd build
       cmake ..
       make
 
-C. Running experiments:
+C. Testing persistence codebooks:
+  1. I order to test only the persistence codebooks, you can run:
+    test();
+
+D. Running experiments:
 
   1. In order to recompute the results from Table 1, please run the following in Matlab:
     experiment01();
