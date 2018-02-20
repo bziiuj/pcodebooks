@@ -1,7 +1,8 @@
 # pcodebooks
 Persistence Codebooks
 
-A. This code was tested on macOS High Sierra 10.13.3 and Linux Ubuntu 16.04 LTS.
+A. This code contains experiments presented in "Persistence Codebooks for Topological Data Analysis" (https://arxiv.org/abs/1802.04852)
+   It was tested on macOS High Sierra 10.13.3 and Linux Ubuntu 16.04 LTS.
 
 B. Instalation steps:
 
