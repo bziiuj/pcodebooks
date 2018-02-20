@@ -5,7 +5,7 @@ A. This code was tested on macOS High Sierra 10.13.3 and Linux Ubuntu 16.04 LTS.
 
 B. Instalation steps:
 
-  1. Downloading libraries (already downloaded in case of double review process)
+  1. Download libraries
 
     a) You have to download the following dependencies:
 
@@ -24,24 +24,15 @@ B. Instalation steps:
       Persistent-Landscape-Wrapper
       vlfeat
 
-  2. Compile dependency libraries
+  2. Build and install dependency libraries
 
-    a) Run the following commands:
+C. Test persistence codebooks (only vlfeat library needed):
 
-      cd ./persistence-learning/code/dipha-pss/
-      rm -rf build
-      mkdir build
-      cd build
-      cmake ..
-      make
-
-C. Testing persistence codebooks:
-
-  1. I order to test only the persistence codebooks, you can run:
+  1. In order to test only the persistence codebooks, you can run:
 
     test();
 
-D. Running experiments:
+D. Run experiments (all libraries needed):
 
   1. In order to recompute the results from Table 1, please run the following in Matlab:
 
