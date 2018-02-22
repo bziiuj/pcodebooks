@@ -43,3 +43,6 @@ D. Run experiments (all libraries needed):
 
     experiment02();
     result02();
+
+E. Notice, that SW.h was extracted from the GUDHI open source library:
+   http://gudhi.gforge.inria.fr/
