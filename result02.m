@@ -24,16 +24,16 @@ fclose(fid);
 allAccuracies = cat(2, cellArray{5:104});
 forBoxplot(:, 1) = allAccuracies(cellArray{105} == 40 & ...
   round(cellArray{106} / 0.05) == round(0.1 / 0.05) & ...
-  strcmp(cellArray{107}, 'one_ramp'), :);
+  strcmp(cellArray{107}, 'constant_one'), :);
 forBoxplotTime(:, 1) = cellArray{3}(cellArray{105} == 40 & ...
   round(cellArray{106} / 0.05) == round(0.1 / 0.05) & ...
-  strcmp(cellArray{107}, 'one_ramp'));
+  strcmp(cellArray{107}, 'constant_one'));
 pi = zeros(5, 5);
 for r = 10:10:50
   for s = 0.05:0.05:0.25
     pi(r / 10, round(s / 0.05)) = mean(cellArray{4}(cellArray{105} == r & ...
       round(cellArray{106} / 0.05) == round(s / 0.05) & ...
-      strcmp(cellArray{107}, 'one_ramp')));
+      strcmp(cellArray{107}, 'constant_one')));
   end
 end
 subplot(rrr, ccc, 1); imagesc(pi, clim); title('pi'); xlabel('resolution');
@@ -68,11 +68,11 @@ fid = fopen([expPath, 'results_', algorithm, '_pbow.txt'], 'r');
 cellArray = textscan(fid, [basicLine, '%d %s'], 'delimiter', ';');
 fclose(fid);
 allAccuracies = cat(2, cellArray{5:104});
-forBoxplot(:, 3) = allAccuracies(cellArray{105} == 10 & strcmp(cellArray{106}, 'one_ramp'), :);
-forBoxplotTime(:, 3) = cellArray{3}(cellArray{105} == 10 & strcmp(cellArray{106}, 'one_ramp'));
+forBoxplot(:, 3) = allAccuracies(cellArray{105} == 10 & strcmp(cellArray{106}, 'constant_one'), :);
+forBoxplotTime(:, 3) = cellArray{3}(cellArray{105} == 10 & strcmp(cellArray{106}, 'constant_one'));
 pbow = zeros(1, 5);
 for c = 10:10:50
-  pbow(c / 10) = mean(cellArray{4}(cellArray{105} == c & strcmp(cellArray{106}, 'one_ramp')));
+  pbow(c / 10) = mean(cellArray{4}(cellArray{105} == c & strcmp(cellArray{106}, 'constant_one')));
 end
 subplot(rrr, ccc, 3); imagesc(pbow, clim); title('pbow');
 xlabel('k'); xticks([1, 2, 3, 4, 5]); xticklabels({'10', '20', '30', '40', '50'});
@@ -98,11 +98,11 @@ fid = fopen([expPath, 'results_', algorithm, '_pvlad.txt'], 'r');
 cellArray = textscan(fid, [basicLine, '%d %s'], 'delimiter', ';');
 fclose(fid);
 allAccuracies = cat(2, cellArray{5:104});
-forBoxplot(:, 5) = allAccuracies(cellArray{105} == 50 & strcmp(cellArray{106}, 'one_ramp'), :);
-forBoxplotTime(:, 5) = cellArray{3}(cellArray{105} == 50 & strcmp(cellArray{106}, 'one_ramp'));
+forBoxplot(:, 5) = allAccuracies(cellArray{105} == 50 & strcmp(cellArray{106}, 'constant_one'), :);
+forBoxplotTime(:, 5) = cellArray{3}(cellArray{105} == 50 & strcmp(cellArray{106}, 'constant_one'));
 pfv = zeros(1, 5);
 for c = 10:10:50
-  pfv(c / 10) = mean(cellArray{4}(cellArray{105} == c & strcmp(cellArray{106}, 'one_ramp')));
+  pfv(c / 10) = mean(cellArray{4}(cellArray{105} == c & strcmp(cellArray{106}, 'constant_one')));
 end
 subplot(rrr, ccc, 5); imagesc(pfv, clim); title('pvlad'); xlabel('k');
 xticks([1, 2, 3, 4, 5]); xticklabels({'10', '20', '30', '40', '50'});
@@ -128,11 +128,11 @@ fid = fopen([expPath, 'results_', algorithm, '_pfv.txt'], 'r');
 cellArray = textscan(fid, [basicLine, '%d %s'], 'delimiter', ';');
 fclose(fid);
 allAccuracies = cat(2, cellArray{5:104});
-forBoxplot(:, 7) = allAccuracies(cellArray{105} == 50 & strcmp(cellArray{106}, 'one_ramp'), :);
-forBoxplotTime(:, 7) = cellArray{3}(cellArray{105} == 50 & strcmp(cellArray{106}, 'one_ramp'));
+forBoxplot(:, 7) = allAccuracies(cellArray{105} == 50 & strcmp(cellArray{106}, 'constant_one'), :);
+forBoxplotTime(:, 7) = cellArray{3}(cellArray{105} == 50 & strcmp(cellArray{106}, 'constant_one'));
 pfv = zeros(1, 5);
 for c = 10:10:50
-  pfv(c / 10) = mean(cellArray{4}(cellArray{105} == c & strcmp(cellArray{106}, 'one_ramp')));
+  pfv(c / 10) = mean(cellArray{4}(cellArray{105} == c & strcmp(cellArray{106}, 'constant_one')));
 end
 subplot(rrr, ccc, 7); imagesc(pfv, clim); title('pfv'); xlabel('k');
 xticks([1, 2, 3, 4, 5]); xticklabels({'10', '20', '30', '40', '50'});

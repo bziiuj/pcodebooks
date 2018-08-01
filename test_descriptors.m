@@ -40,31 +40,34 @@ pds_obj = PersistencePds(32, 0.1, 40);
 % compute clusters for given training persistence diagrams
 riem_pds = pds_obj.train(pds(:), diagramLimits);
 
-% % compute kernel based on the vectors
-% % (instead of computing kernel, representation vectors can be used in any ML method)
-% K = pbow.generateKernel(cat(1, reprNonCell));
-% 
-% % in this kernel, rows (and columns) from 1-50 represents random noise,
-% % 51-100 circle, etc.
-% f = figure('visible', 'off');
-% imagesc(K);
-% print -djpeg example_pbow.jpg
-% close(f)
+%TODO: example of an output of Riemanian representation of PD?
 
 %%%%%%%%
 %%%%% PERSISTENCE IMAGE
 % Create new Persistence Image instance
-% pi_descr = PersistenceImage(32, 0.01, @constant_one);
+
+% pi_obj = PersistenceImage(32, 0.01, @constant_one);
 % By setting -1, default sigma is computed (half of a pixel size).
 pi_obj = PersistenceImage(64, -1, @linear_ramp);
 
+% %% Persistence images can be computed in parallel, if Parallel computing ... 
+% %%	package is present.
+% cluster = parcluster('local');
+% workers = 4;
+% cluster.NumWorkers = workers;
+% saveProfile(cluster);
+% pool = parpool(workers);
+% pi_obj.parallel = true;
+
 PIs = pi_obj.test(pds(:), diagramLimits);
+% %% dimiss workers
+% delete(pool);
 
 save('example_PIs.mat', 'PIs');
 f = figure('visible', 'off');
-for i = 1:25
-	subplot(5,5,i);
-	image(PIs{i*12}, 'CDataMapping', 'scaled');
+for i = 1:30
+	subplot(6,5,i);
+	image(PIs{i*10}, 'CDataMapping', 'scaled');
 	% colorbar;
 end
 print -djpeg example_pis.jpg

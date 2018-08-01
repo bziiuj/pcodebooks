@@ -56,13 +56,13 @@ cellArray = textscan(fid, '%s %d %f %f %f %f %f %f %f %f %d %f %s %f %f', 'delim
 fclose(fid);
 forBoxplot(:, 6) = cellArray{4}(cellArray{11} == 10 & ...
   round(cellArray{12} / 0.05) == round(0.05 / 0.05) & ...
-  strcmp(cellArray{13}, 'one_ramp'));
+  strcmp(cellArray{13}, 'constant_one'));
 pi = zeros(5, 5);
 for r = 10:10:50
   for s = 0.05:0.05:0.25
     pi(r / 10, round(s / 0.05)) = mean(cellArray{4}(cellArray{11} == r & ...
       round(cellArray{12} / 0.05) == round(s / 0.05) & ...
-      strcmp(cellArray{13}, 'one_ramp')));
+      strcmp(cellArray{13}, 'constant_one')));
   end
 end
 subplot(rrr, ccc, 6); imagesc(pi, clim); title('pi'); xlabel('resolution');
@@ -92,10 +92,10 @@ yticks([1, 2, 3, 4, 5]); yticklabels({'0.05', '0.10', '0.15', '0.20', '0.25'});
 fid = fopen([expPath, 'results_', algorithm, '_pbow.txt'], 'r');
 cellArray = textscan(fid, '%s %d %f %f %f %f %f %f %f %f %d %s %f %f', 'delimiter', ';');
 fclose(fid);
-forBoxplot(:, 8) = cellArray{4}(cellArray{11} == 40 & strcmp(cellArray{12}, 'one_ramp'));
+forBoxplot(:, 8) = cellArray{4}(cellArray{11} == 40 & strcmp(cellArray{12}, 'constant_one'));
 pbow = zeros(1, 5);
 for c = 10:10:50
-  pbow(c / 10) = mean(cellArray{4}(cellArray{11} == c & strcmp(cellArray{12}, 'one_ramp')));
+  pbow(c / 10) = mean(cellArray{4}(cellArray{11} == c & strcmp(cellArray{12}, 'constant_one')));
 end
 subplot(rrr, ccc, 8); imagesc(pbow, clim); title('pbow');
 xlabel('k'); xticks([1, 2, 3, 4, 5]); xticklabels({'10', '20', '30', '40', '50'});
@@ -118,10 +118,10 @@ yticklabels({''});
 fid = fopen([expPath, 'results_', algorithm, '_pvlad.txt'], 'r');
 cellArray = textscan(fid, '%s %d %f %f %f %f %f %f %f %f %d %s %f %f', 'delimiter', ';');
 fclose(fid);
-forBoxplot(:, 10) = cellArray{4}(cellArray{11} == 10 & strcmp(cellArray{12}, 'one_ramp'));
+forBoxplot(:, 10) = cellArray{4}(cellArray{11} == 10 & strcmp(cellArray{12}, 'constant_one'));
 pfv = zeros(1, 5);
 for c = 10:10:50
-  pfv(c / 10) = mean(cellArray{4}(cellArray{11} == c & strcmp(cellArray{12}, 'one_ramp')));
+  pfv(c / 10) = mean(cellArray{4}(cellArray{11} == c & strcmp(cellArray{12}, 'constant_one')));
 end
 subplot(rrr, ccc, 10); imagesc(pfv, clim); title('pvlad'); xlabel('k');
 xticks([1, 2, 3, 4, 5]); xticklabels({'10', '20', '30', '40', '50'});
@@ -144,10 +144,10 @@ yticklabels({''});
 fid = fopen([expPath, 'results_', algorithm, '_pfv.txt'], 'r');
 cellArray = textscan(fid, '%s %d %f %f %f %f %f %f %f %f %d %s %f %f', 'delimiter', ';');
 fclose(fid);
-forBoxplot(:, 12) = cellArray{4}(cellArray{11} == 10 & strcmp(cellArray{12}, 'one_ramp'));
+forBoxplot(:, 12) = cellArray{4}(cellArray{11} == 10 & strcmp(cellArray{12}, 'constant_one'));
 pfv = zeros(1, 5);
 for c = 10:10:50
-  pfv(c / 10) = mean(cellArray{4}(cellArray{11} == c & strcmp(cellArray{12}, 'one_ramp')));
+  pfv(c / 10) = mean(cellArray{4}(cellArray{11} == c & strcmp(cellArray{12}, 'constant_one')));
 end
 subplot(rrr, ccc, 12); imagesc(pfv, clim); title('pfv'); xlabel('k');
 xticks([1, 2, 3, 4, 5]); xticklabels({'10', '20', '30', '40', '50'});

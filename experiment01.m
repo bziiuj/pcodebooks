@@ -45,17 +45,17 @@ function experiment01()
     end
     for r = 10:10:50
       for s = 0.05:0.05:0.25
-        objs{end + 1} = {PersistenceImage(r, s, @one_ramp), {'pi', ['pi_', num2str(r), '_', num2str(s)]}};
+        objs{end + 1} = {PersistenceImage(r, s, @constant_one), {'pi', ['pi_', num2str(r), '_', num2str(s)]}};
       end
     end
     for c = 10:10:50
-      objs{end + 1} = {PersistenceBow(c, @one_ramp), {'pbow', ['pbow_', num2str(c)]}};
+      objs{end + 1} = {PersistenceBow(c, @constant_one), {'pbow', ['pbow_', num2str(c)]}};
     end
     for c = 10:10:50
-      objs{end + 1} = {PersistenceVLAD(c, @one_ramp), {'pvlad', ['pvlad_', num2str(c)]}};
+      objs{end + 1} = {PersistenceVLAD(c, @constant_one), {'pvlad', ['pvlad_', num2str(c)]}};
     end
     for c = 10:10:50
-      objs{end + 1} = {PersistenceFV(c, @one_ramp), {'pfv', ['pfv_', num2str(c)]}};
+      objs{end + 1} = {PersistenceFV(c, @constant_one), {'pfv', ['pfv_', num2str(c)]}};
     end
     for r = [20, 40]
       for s = 0.1:0.1:0.3
