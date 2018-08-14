@@ -34,7 +34,7 @@ classdef PersistenceImage < PersistenceRepresentation
 		% diagramLimitsPersist = [0, diagramLimits(2) - diagramLimits(1)];
 		% Parameters for weight function
 		% weightsLimits = [0, diagramLimits(2) - diagramLimits(1)];
-		weightsLimits = [diagramLimits(1)/2, diagramLimits(2) - diagramLimits(1)];
+		weightsLimits = [diagramLimits(1), diagramLimits(2) - diagramLimits(1)];
 		% Lower bound for birth and upper bound for persistence. Other points will be rejected.
 		diagramLimitsPersist = [diagramLimits(1), ...
 			diagramLimits(2) - diagramLimits(1)];

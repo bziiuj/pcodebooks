@@ -1,31 +1,41 @@
 classdef PersistenceBow < PersistenceRepresentation
-  %PERSISTENCEBOW
-  
+%%%%% PERSISTENCEBOW
+% Currently use of PersistenceBow is different from the other classes, the train method does not returns 
+% a represetation of train data but prepares the PersistenceBow object, use test to get representation.
+
   properties
-    numWords
-    weightingFunction
-    kdwords
-    kdtree
+	numWords
+	weightingFunction
+	sampleSize
+	kdwords
+	kdtree
   end
   
   methods
-    function obj = PersistenceBow(numWords, weightingFunction)
-      obj = obj@PersistenceRepresentation();
+	function obj = PersistenceBow(numWords, weightingFunction, sampleSize)
+		obj = obj@PersistenceRepresentation();
 
-      obj.numWords = numWords;
-      obj.weightingFunction = weightingFunction;
+		obj.numWords = numWords;
+		obj.weightingFunction = weightingFunction;
+		if nargin == 3
+			obj.sampleSize = sampleSize;
+		else
+			obj.sampleSize = 10000;
+		end
     end
     
     function setup(obj)
-      run('../vlfeat/toolbox/vl_setup')
-      addpath('../vlfeat/toolbox')
-      addpath('../vlfeat/toolbox/misc')
-      addpath('../vlfeat/toolbox/mex')
-      if ismac
-        addpath('../vlfeat/toolbox/mex/mexmaci64')
-      elseif isunix
-        addpath('../vlfeat/toolbox/mex/mexa64')
-      end
+		pbow_path = which('PersistenceBow');
+		[filepath, name, ext] = fileparts(pbow_path);
+		run(strcat(filepath,'/../../vlfeat/toolbox/vl_setup'))
+		addpath(strcat(filepath,'/../../vlfeat/toolbox'))
+		addpath(strcat(filepath,'/../../vlfeat/toolbox/misc'))
+		addpath(strcat(filepath,'/../../vlfeat/toolbox/mex'))
+		if ismac
+		  addpath(strcat(filepath,'/../../vlfeat/toolbox/mex/mexmaci64'))
+		elseif isunix
+		  addpath(strcat(filepath,'/../../vlfeat/toolbox/mex/mexa64'))
+		end
     end
 
     function samplePointsPersist = getSample(obj, allPointsPersist, diagramLimitsPersist)
@@ -33,13 +43,13 @@ classdef PersistenceBow < PersistenceRepresentation
         weights = arrayfun(@(row) ...
           obj.weightingFunction(allPointsPersist(row,:), diagramLimitsPersist), 1:size(allPointsPersist,1))';
         weights = weights / sum(weights);
-        samplePointsPersist = allPointsPersist(randsample(1:size(allPointsPersist, 1), 10000, true, weights), :);
+        samplePointsPersist = allPointsPersist(randsample(1:size(allPointsPersist, 1), obj.sampleSize, true, weights), :);
       else
-        samplePointsPersist = allPointsPersist(randsample(1:size(allPointsPersist, 1), 10000), :);
+        samplePointsPersist = allPointsPersist(randsample(1:size(allPointsPersist, 1), obj.sampleSize), :);
       end
     end
 
-    function repr = train(obj, diagrams, diagramLimits)
+    function obj = train(obj, diagrams, diagramLimits)
       allPoints = cat(1, diagrams{:});
       allPointsPersist = [allPoints(:, 1), allPoints(:, 2) - allPoints(:, 1)];
       diagramLimitsPersist = [0, diagramLimits(2) - diagramLimits(1)];
@@ -50,7 +60,7 @@ classdef PersistenceBow < PersistenceRepresentation
         'verbose', 'algorithm', 'ann') ;
       obj.kdtree = vl_kdtreebuild(obj.kdwords, 'numTrees', 2) ;
 
-      repr = obj.test(diagrams);
+%      [obj, repr] = obj.test(diagrams);
     end
 
     function repr = test(obj, diagrams)
@@ -69,5 +79,23 @@ classdef PersistenceBow < PersistenceRepresentation
         repr{i} = z;
       end
     end
-  end
-end
+
+	function pbow = saveobj(obj)
+		pbow.numWords = obj.numWords;
+		pbow.weightingFunction = obj.weightingFunction;
+		pbow.sampleSize = obj.sampleSize;
+		pbow.kdwords = obj.kdwords;
+		pbow.kdtree = obj.kdtree;
+	end
+  end %methods
+ 
+  methods (Static)
+
+	function obj = loadobj(pbow)
+		obj = PersistenceBow(pbow.numWords, pbow.weightingFunction, pbow.sampleSize);
+		obj.kdwords = pbow.kdwords;
+		obj.kdtree = pbow.kdtree;
+	end
+
+  end %methods (Static)
+end %classdef
