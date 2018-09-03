@@ -1,5 +1,7 @@
 classdef PersistenceFV < PersistenceBow
-  %PERSISTENCEFV
+%%%%%%PERSISTENCEFV
+% Currently use of PersistenceBow is different from the other classes, the train method does not returns 
+% a represetation of train data but prepares the PersistenceBow object, use test to get representation.
   
   properties
     means
@@ -10,9 +12,10 @@ classdef PersistenceFV < PersistenceBow
   methods
     function obj = PersistenceFV(numWords, weightingFunction)
       obj = obj@PersistenceBow(numWords, weightingFunction);
+      obj.feature_size = obj.numWords * 4;
     end
     
-    function repr = train(obj, diagrams, diagramLimits)
+    function obj = train(obj, diagrams, diagramLimits)
       allPoints = cat(1, diagrams{:});
       allPointsPersist = [allPoints(:, 1), allPoints(:, 2) - allPoints(:, 1)];
       diagramLimitsPersist = [0, diagramLimits(2) - diagramLimits(1)];
@@ -26,7 +29,7 @@ classdef PersistenceFV < PersistenceBow
             'CovarianceBound', double(max(v)*0.0001), ...
             'NumRepetitions', 1);
 
-      repr = obj.test(diagrams);
+      % repr = obj.test(diagrams);
     end
 
     function repr = test(obj, diagrams)

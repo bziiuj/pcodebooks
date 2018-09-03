@@ -21,7 +21,8 @@ classdef PersistenceBow < PersistenceRepresentation
 			obj.sampleSize = sampleSize;
 		else
 			obj.sampleSize = 10000;
-		end
+        end
+        obj.feature_size = obj.numWords;
     end
     
     function setup(obj)

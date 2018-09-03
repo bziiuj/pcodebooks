@@ -3,6 +3,7 @@ classdef PersistenceRepresentation
 
   properties
     seed
+    feature_size
   end
   
   methods
@@ -33,6 +34,7 @@ classdef PersistenceRepresentation
       reprVect = cat(2, reprVect{:});
 
       K = pdist2(reprVect', reprVect');
+      % K = exp(pdist2(reprVect',reprVect','euclidean').^2);
     end
   end
 end

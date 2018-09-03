@@ -17,6 +17,7 @@ classdef PersistenceImage < PersistenceRepresentation
       obj.sigma = sigma;
       obj.weightingFunction = weightingFunction;
 	  obj.parallel = false;
+      obj.feature_size = obj.resolution^2;
     end
     
     function setup(obj)
@@ -31,23 +32,38 @@ classdef PersistenceImage < PersistenceRepresentation
     end
 
     function repr = test(obj, diagrams, diagramLimits)
-		% diagramLimitsPersist = [0, diagramLimits(2) - diagramLimits(1)];
-		% Parameters for weight function
-		% weightsLimits = [0, diagramLimits(2) - diagramLimits(1)];
-		weightsLimits = [diagramLimits(1), diagramLimits(2) - diagramLimits(1)];
-		% Lower bound for birth and upper bound for persistence. Other points will be rejected.
-		diagramLimitsPersist = [diagramLimits(1), ...
-			diagramLimits(2) - diagramLimits(1)];
 
-		useold = false;
+		useold = true;
+        % diagramLimitsPersist = [0, diagramLimits(2) - diagramLimits(1)];
+		% weightsLimits = [diagramLimits(1)/2, diagramLimits(2) - diagramLimits(1)];
+
 		if useold
+            % Parameters for weight function
+            weightsLimits = [0, diagramLimits(2) - diagramLimits(1)];
 			repr = newmake_PIs(diagrams, obj.resolution, obj.sigma, ...
 				obj.weightingFunction, weightsLimits, 1);
 		else
-			repr = new_make_PIs(diagrams, obj.resolution, obj.sigma, ...
+            % Parameters for weight function
+            weightsLimits = [0, diagramLimits(2) - diagramLimits(1)];
+        	% Lower bound for birth and upper bound for persistence. Other points will be rejected.
+    		diagramLimitsPersist = [diagramLimits(1), ...
+            	diagramLimits(2) - diagramLimits(1)];
+            
+            repr = new_make_PIs(diagrams, obj.resolution, obj.sigma, ...
 			obj.weightingFunction, weightsLimits, 1, ...
 			diagramLimitsPersist, obj.parallel);
 		end
     end
   end
+end
+
+function cutted = remove_exceeding_points(diagrams, limits)
+    % limits = [min_birth, max_pers];
+    n = length(diagrams);
+    for i=1:n
+        points = b_p_data{j,i,d};
+        points = points(find(points(:,1) >= type_params(d, 1)),:);
+        points = points(find(points(:,2) <= type_params(d, 2)),:);
+        b_p_data{j,i,d} = points;
+    end
 end

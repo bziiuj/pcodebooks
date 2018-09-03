@@ -51,6 +51,22 @@ if nargin<7
 	%TODO
 	type_params = [];
 end
+
+% remove b_p points exceeding new limits
+if length(type_params)~=0
+	for d=1:n_dims
+		for i=1:n_classes
+			for j=1:n_items
+				points = b_p_data{j,i,d};
+				points = points(find(points(:,1) >= type_params(d, 1)),:);
+				points = points(find(points(:,2) <= type_params(d, 2)),:);
+                points(:,1) = points(:,1) - type_params(d,1);
+				b_p_data{j,i,d} = points;
+			end
+		end
+	end
+end
+
 % set new limits for PI
 disp('Old max birth and persistence values:');
 disp(max_b_p_Hk);
@@ -58,7 +74,8 @@ if type==1
 	if size(type_params) == [n_dims 2]
 		% max_b_p_Hk = type_params;
 		% max_b_p_Hk = [max_b_p_Hk(:,1) type_params(:,2)];
-		max_b_p_Hk = [min([max_b_p_Hk(:,1) type_params(:,2)]) type_params(:,2)];
+		max_b_p_Hk = [max_b_p_Hk(:,1)-type_params(:,1) type_params(:,2)];
+% 		max_b_p_Hk = [min([max_b_p_Hk(:,1) type_params(:,2)]) type_params(:,2)];
 	elseif length(type_params) ~= 0
 		error('type_params argument is of wrong dimension');
 	end
@@ -70,19 +87,6 @@ disp(type_params);
 disp('Pixel resolution:')
 disp(max_b_p_Hk/res);
 
-% remove b_p points exceeding new limits
-if length(type_params)~=0
-	for d=1:n_dims
-		for i=1:n_classes
-			for j=1:n_items
-				points = b_p_data{j,i,d};
-				points = points(find(points(:,1) >= type_params(d, 1)),:);
-				points = points(find(points(:,2) <= type_params(d, 2)),:);
-				b_p_data{j,i,d} = points;
-			end
-		end
-	end
-end
 
 %first do a check to make sure all the points (birth,persistence) points
 %are viable.
