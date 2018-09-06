@@ -1,36 +1,28 @@
-function svmscore = new_PD_svmclassify(f, Label, type)
+function [accuracy, preciseAccuracy] = new_PD_svmclassify(f, labels, train_idx, test_idx, type)
 %%% type - 'vector' or 'kernel'
 
-nClass = length(unique(Label));
-
-teN = 5;
-teN = floor(0.2 * length(f)/nClass);
-
-for k = 1:100
-    rng(k);
-    trids = [];
-    teids = [];
-    for n = 1:nClass
-        id = find(Label==n);
-        teidx = randperm(length(id),teN);
-        tridx = id;
-        tridx(teidx) = [];
-        trids = [trids tridx'];
-        teids = [teids id(teidx)'];
-    end
-    
-    g = 1/size(f,1);
-    C = 1e1;
-    switch type
-        case 'vector'
-            model = svmtrain(Label(trids), f(:,trids)', ['-s 0 -c ',num2str(C),' -t 0 -g ',num2str(g)]);
-            [predict_label, accuracy, prob_values] = svmpredict(Label(teids), f(:,teids)', model);
-        case 'kernel'
-            K = [(1:length(trids))', f(trids, trids)];
-            KK = [(1:length(teids))', f(teids, trids)];
-            model = svmtrain(Label(trids), K, ['-s 0 -c ',num2str(C),' -t 4 -g ',num2str(g)]);
-            [predict_label, accuracy, prob_values] = svmpredict(Label(teids), KK, model);
-    end
-    svmscore(k) = accuracy(1);
+g = 1/size(f,1);
+C = 1e1;
+switch type
+    case 'vector'
+        model = svmtrain(Label(trids), f(:,trids)', ['-s 0 -c ',num2str(C),' -t 0 -g ',num2str(g)]);
+        [predict_label, accuracy, prob_values] = svmpredict(Label(teids), f(:,teids)', model);
+    case 'kernel'
+        K = [(1:length(train_idx))', f(train_idx, train_idx)];
+        KK = [(1:length(test_idx))', f(test_idx, train_idx)];
+        model = svmtrain(labels(train_idx), K, ['-s 0 -c ',num2str(C),' -t 4 -g ',num2str(g)]);
+        [predict_label, accuracy, prob_values] = svmpredict(labels(test_idx), KK, model);
 end
+
+guessed = labels(test_idx) == predict_label;
+
+nclass = length(unique(labels));
+
+preciseAccuracy = zeros(1, nclass);
+accuracy = 100. * sum(guessed)/length(test_idx);
+for n = 1:nclass
+    n_ids = labels(test_idx)==n;
+    preciseAccuracy(n) = sum(guessed(n_ids))/sum(n_ids);
+end
+preciseAccuracy = preciseAccuracy * 100.;
 end

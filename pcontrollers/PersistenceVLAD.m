@@ -7,6 +7,7 @@ classdef PersistenceVLAD < PersistenceBow
   methods
     function obj = PersistenceVLAD(numWords, weightingFunction)
       obj = obj@PersistenceBow(numWords, weightingFunction);
+      obj.feature_size = obj.numWords * 2;
     end
     
     function repr = test(obj, diagrams)
