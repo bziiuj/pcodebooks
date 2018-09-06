@@ -1,13 +1,14 @@
 import dionysus as d
 import numpy as np
 import multiprocessing as mp
+import time
 
 def wasserstein_dist_mat(pds):
     diag = pds2diagrams(pds);
     n = len(pds);
     K = np.zeros((n, n));
     for i in range(n):
-        print str(i) + '/' + str(n)
+        print(str(i) + '/' + str(n));
         for j in range(i, n):
             # print str(i) + '/' + str(n) + ' (' + str(j) + ')'
             K[i, j] = d.wasserstein_distance(diag[i], diag[j]);
@@ -15,7 +16,6 @@ def wasserstein_dist_mat(pds):
     return K;
 
 def pds2diagrams(pds):
-    print len(pds)
     diagrams = [];
     for i in range(0, len(pds)):
         #diagrams.append(i)
@@ -25,22 +25,28 @@ def pds2diagrams(pds):
 def comp_row(i, p, dic, out):
     n = dic['n'];
     diag = dic['diag'];
-    z = n/p + 1;
+    z = int(n/p) + 1;
 
     I = [x*p+i for x in range(z) if x*p+i < n];
+    # print(I);
+    start = 0;
+    end = 0;
     
     for r in I:
         row = np.zeros(n);
         lb = r*n;
         rb = (r+1)*n;
 
-        print str(r) + '/' + str(n)
+        print(str(r) + '/' + str(n) + '\t(' + str(end - start) + 's)')
+        start = time.time();
         for j in range(r, n):
+            # print(str(j) + '\t' + str(r) + '/' + str(n))
             row[j] = d.wasserstein_distance(diag[r], diag[j]);
         out[lb:rb] = row;
-        # print(row);
+        print(row);
+        end = time.time();
 
-def wasserstein_dist_mat_parallel(pds):
+def wasserstein_dist_mat_parallel(pds, cores):
     diag = pds2diagrams(pds);
     n = len(pds);
     K = np.zeros((n, n));
@@ -51,8 +57,7 @@ def wasserstein_dist_mat_parallel(pds):
     dic['n'] = n;
     out_arr = mp.Array('f', n*n, lock=False);
     
-    # p = mp.Pool(4);
-    pool = 4;
+    pool = cores;
     processes = [];
     for i in range(pool):
         p = mp.Process(target=comp_row, args=(i, pool, dic, out_arr));
