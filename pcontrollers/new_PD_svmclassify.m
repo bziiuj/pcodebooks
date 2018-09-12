@@ -5,8 +5,8 @@ g = 1/size(f,1);
 C = 1e1;
 switch type
     case 'vector'
-        model = svmtrain(Label(trids), f(:,trids)', ['-s 0 -c ',num2str(C),' -t 0 -g ',num2str(g)]);
-        [predict_label, accuracy, prob_values] = svmpredict(Label(teids), f(:,teids)', model);
+        model = svmtrain(labels(train_idx), f(:,train_idx)', ['-s 0 -c ',num2str(C),' -t 0 -g ',num2str(g)]);
+        [predict_label, accuracy, prob_values] = svmpredict(labels(test_idx), f(:,test_idx)', model);
     case 'kernel'
         K = [(1:length(train_idx))', f(train_idx, train_idx)];
         KK = [(1:length(test_idx))', f(test_idx, train_idx)];

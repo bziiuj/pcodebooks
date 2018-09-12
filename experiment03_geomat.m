@@ -1,10 +1,12 @@
-% First experiment
+% GeoMat experiment
 function experiment03_geomat()
 	addpath('pcontrollers');
 	addpath('../pdsphere/matlab');
 	addpath('../pdsphere/matlab/libsvm-3.21/matlab');
 	
 	expPath = 'exp03_geomat/';
+	pbowsPath = strcat(expPath, 'pbows/');
+	mkdir(pbowsPath);
 	
 	dim = 1;
 	scale = '400';
@@ -27,9 +29,9 @@ function experiment03_geomat()
 	diagramLimits = [quantile(allPoints(:, 1), 0.01), ...
 	  quantile(allPoints(:, 2), 0.99)];
 	
-	algorithm = 'linearSVM'; %small
+	algorithm = 'linearSVM-kernel'; %small
 	
-	N = 25;
+	N = 3;
 	
 	objs = {};
 	objs{end + 1} = {PersistenceWasserstein(2), {'pw', 'pw'}};
@@ -82,14 +84,21 @@ function experiment03_geomat()
 			seedBig = i * 10000;
 			obj = objs{o}{1};
 			prop = objs{o}{2};
-			fprintf('Computing: %s\n, repetition %d\n', prop{2}, i);
+			fprintf('Computing: %s\t, repetition %d\n', prop{2}, i);
 			
 			labels = reshape(repmat(1:nclasses, [nexamples, 1]), [nclasses*nexamples, 1]);
 			
-			[accuracy, preciseAccuracy, time] = compute_accuracy(obj, pds, ...
+			[accuracy, preciseAccuracy, time, obj] = compute_accuracy(obj, pds, ...
 				labels, nclasses, diagramLimits, algorithm, prop{1}, ...
 				strcat(basename, '_', prop{2}), expPath, seedBig);
 			acc(i, :) = [accuracy, preciseAccuracy]';
+
+			if strcmp(prop{1}, 'pbow') || strcmp(prop{1}, 'pfv') || strcmp(prop{1}, 'pvlad')
+				repr = obj.test(pds(:));
+				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_book.mat'), 'obj');
+				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_data.mat'), 'repr');
+				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_lbls.mat'), 'labels');
+			end
 		end
 
 		fid = fopen([expPath, 'results_', num2str(dim), '_', scale, '_', ...
@@ -132,9 +141,9 @@ function experiment03_geomat()
 			    throw(MException('Error', 'Representation is not saved'));
 			end
 		end
-		basicLine = sprintf(['%s; ; ;%f', ...
+		basicLine = sprintf(['%s;std:;%f;%f', ...
 				';%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f'], ...
-				prop{1}, mean(acc));
+				prop{1}, std(acc(:,1)), mean(acc));
 		fprintf(fid, '%s\n', basicLine);
 		fclose(fid);
 	end
