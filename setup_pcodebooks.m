@@ -20,4 +20,4 @@ cd ../pdsphere/matlab/libsvm-3.21
 system('make')
 cd matlab
 make
-cd ../../../../pcodebook
+cd ../../../../pcodebooks

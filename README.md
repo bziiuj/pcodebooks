@@ -5,32 +5,13 @@ A. This code contains experiments presented in "Persistence Codebooks for Topolo
 
 B. Instalation steps:
 
-  1. Download libraries
-
-    a) You have to download the following dependencies:
-
-      For PersistenceKernelOne (Reininghaus et al.): https://github.com/rkwitt/persistence-learning
-      For PersistenceLandscape: https://github.com/queenBNE/Persistent-Landscape-Wrapper
-      For PersistenceImage: https://github.com/CSU-TDA/PersistenceImages
-      For PersistenceBow & PersistenceFV: https://github.com/vlfeat/vlfeat
-      For PersistencePds (Carriere et al.): https://github.com/rushilanirudh/pdsphere/
-
-    b) The mail folder of the project should contain the following files:
-
-      pcodebooks
-      pdsphere
-      PersistenceImages
-      persistence-learning
-      Persistent-Landscape-Wrapper
-      vlfeat
-
-  2. Build and install dependency libraries
+  1. All needed dependencies should download and build automatically by running setup_pcodebook.m matlab script.
 
 C. Test persistence codebooks (only vlfeat library needed):
 
   1. In order to test only the persistence codebooks, you can run:
 
-    test();
+    simple_test();
 
 D. Run experiments (all libraries needed):
 
