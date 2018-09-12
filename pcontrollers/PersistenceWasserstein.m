@@ -17,9 +17,6 @@ classdef PersistenceWasserstein < PersistenceRepresentation
     end
 
     function setup(obj)
-		pbow_path = which('PersistenceWasserstein');
-		[filepath, name, ext] = fileparts(pbow_path);
-		addpath(strcat(filepath,'/../wasserstein'))
     end
 
     function [obj, repr] = train(obj, diagrams)
@@ -31,15 +28,6 @@ classdef PersistenceWasserstein < PersistenceRepresentation
     end
 
     function K = generateKernel(obj, repr)
-		n = length(repr);
-		K = zeros(n);
-		for i = 1:n
-			disp(strcat(num2str(i),'/',num2str(n)));
-			for j = i+1:n
-				K(i,j) = pd_wasserstein(repr{i}, repr{j}, obj.q);
-				K(j,i) = K(i, j);
-			end
-		end
 	end
   end
   
