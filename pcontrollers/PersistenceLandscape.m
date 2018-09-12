@@ -26,9 +26,9 @@ classdef PersistenceLandscape < PersistenceRepresentation
     end
 
     function K = generateKernel(obj, repr)
-      K = zeros(300);
-      for i = 1:300
-        for j = 1:300
+      K = zeros(length(repr));
+      for i = 1:length(repr)
+        for j = 1:length(repr)
           K(i, j) = landscapeDistance(repr{i}, repr{j}, 2);
         end
       end

@@ -1,4 +1,4 @@
-function [accuracy, preciseAccuracy, time] = compute_accuracy(obj, pds, ...
+function [accuracy, preciseAccuracy, time, obj] = compute_accuracy(obj, pds, ...
 	  labels, nclass, diagramLimits, algorithm, name, detailName, ...
 	  expPath, seed)
 	  
@@ -30,31 +30,18 @@ function [accuracy, preciseAccuracy, time] = compute_accuracy(obj, pds, ...
 			tic;
 			
 			if strcmp(name, 'pi')
-				repr = obj.train(pds(:), diagramLimits);
+				reprCell = obj.train(pds(:), diagramLimits);
 			else
 				tr_pds = pds(tridx);
-			te_pds = pds(teidx);
-			obj = obj.train(tr_pds, diagramLimits);
-			repr = obj.test(pds(:));
-%   		obj = obj.train(pds(:), diagramLimits);
-%   		repr = obj.test(pds(:));
+                te_pds = pds(teidx);
+                obj = obj.train(tr_pds, diagramLimits);
+                reprCell = obj.test(pds(:));
 			end
-			K = obj.generateKernel(repr);
-			features = zeros(obj.feature_size, length(repr));
+			K = obj.generateKernel(reprCell);
+			features = zeros(obj.feature_size, length(reprCell));
 			for i = 1:size(pds(:), 1)
-				features(:, i) = repr{i}(:)';
-			end
-%   		reprCell = cell(size(pds, 1), size(pds, 2));
-%   		for i = 1:size(pds, 2)
-%   		  reprCell(:, i) = obj.train(pds(:, i), diagramLimits{i});
-%   		  for j = 1:size(reprCell, 1)
-%   		    reprCell{j, i} = reprCell{j, i}(:);
-%   		  end
-%   		end
-%   		repr = zeros(size(reprCell, 2) * numel(reprCell{1, 1}), size(reprCell, 1));
-%   		for i = 1:size(pds, 1)
-%   		  repr(:, i) = cat(1, reprCell{i, :});
-%   		end
+				features(:, i) = reprCell{i}(:)';
+            end
 			time = toc;
 		case {'pds'}
 			tic;
@@ -71,8 +58,11 @@ function [accuracy, preciseAccuracy, time] = compute_accuracy(obj, pds, ...
 	end
 	
 	switch algorithm
-		case 'linearSVM'
+		case 'linearSVM-kernel'
 		  [accuracy, preciseAccuracy] = new_PD_svmclassify(1-K, labels, tridx, teidx, ...
 		        'kernel');
+		case 'linearSVM-vector'
+		  [accuracy, preciseAccuracy] = new_PD_svmclassify(features, labels, tridx, teidx, ...
+		        'vector');
 	end
 end

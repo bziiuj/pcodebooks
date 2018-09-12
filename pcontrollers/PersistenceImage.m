@@ -33,7 +33,7 @@ classdef PersistenceImage < PersistenceRepresentation
 
     function repr = test(obj, diagrams, diagramLimits)
 
-		useold = true;
+		useold = false;
         % diagramLimitsPersist = [0, diagramLimits(2) - diagramLimits(1)];
 		% weightsLimits = [diagramLimits(1)/2, diagramLimits(2) - diagramLimits(1)];
 
