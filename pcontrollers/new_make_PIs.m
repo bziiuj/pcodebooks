@@ -14,7 +14,7 @@ function [ PIs ] = new_make_PIs(interval_data, res, sig, weight_func, params, ty
 %					particular point clouds 
 %			-res: the desired resolution of the image
 %			-sig: is the desired variance of the Gaussians used to compute
-%			the images (set -1 for default sigma)
+%			the images (sigma is relative to pixel size)
 %			-weight_function: the name of the weighting function to be
 %			called to generate the weightings for the bars. ex
 %			@linear_ramp. The weight function needs to be a function only
@@ -73,9 +73,7 @@ disp(max_b_p_Hk);
 if type==1       
 	if size(type_params) == [n_dims 2]
 		% max_b_p_Hk = type_params;
-		% max_b_p_Hk = [max_b_p_Hk(:,1) type_params(:,2)];
 		max_b_p_Hk = [max_b_p_Hk(:,1)-type_params(:,1) type_params(:,2)];
-% 		max_b_p_Hk = [min([max_b_p_Hk(:,1) type_params(:,2)]) type_params(:,2)];
 	elseif length(type_params) ~= 0
 		error('type_params argument is of wrong dimension');
 	end
@@ -106,10 +104,14 @@ if nargin<2
 	disp(strcat('Default resolution: ', num2str(res)));
 end
 % set default sigma
-if nargin<3 || sig == -1
+if nargin<3 
 	sig = default_sigma(res, max_b_p_Hk);
-	disp(strcat('Default sigma: ', num2str(sig)));
+	sig = [sig, sig];
+	% disp(strcat('Default sigma: ', num2str(sig)));
+else
+	sig = relative_sigma(res, max_b_p_Hk) * 2 * sig;
 end
+disp(strcat('Sigmas: ', num2str(sig(1)), ', ', num2str(sig(2))));
 % set default weighten function
 if nargin<4
     weight_func=@linear_ramp; %default setting is a linear weighting function
@@ -134,6 +136,13 @@ function sigma = default_sigma(res, max_b_p_Hk)
 	% the default setting for the variance of the gaussians is equal to one half 
 	% the height of a pixel.
 	sigma = .5*(max(max(max_b_p_Hk(:,2)))/res);
+end
+
+function sigmas = relative_sigma(res, max_b_p_Hk, s)
+	% sigma relative to pixel size
+	sigb = .5*(max(max(max_b_p_Hk(:,1)))/res);
+	sigp = .5*(max(max(max_b_p_Hk(:,2)))/res);
+	sigmas = [sigb, sigp];
 end
 
 function [ b_p_data, max_b_p_Hk, problems] = birth_persistence_coordinates(interval_data)
@@ -226,10 +235,12 @@ function [ data_images ] = hard_bound_PIs( b_p_data, max_b_p_Hk, weight_func, pa
 	for k=1:o  
 		Hk_max_b=max_b_p_Hk(k,1);
 		Hk_max_p=max_b_p_Hk(k,2);    
-		sigma=[sig,sig]; %duplicate the variance for the PIs      
+		sigma = sig;
+		% sigma=[sig,sig]; %duplicate the variance for the PIs      
 		%set up gridding for Hk
 		birth_stepsize_Hk=Hk_max_b/res; %the x-width of a pixel
 		persistence_stepsize_Hk=Hk_max_p/res; %the y-height of a pixel
+		disp(strcat('Pixel sizes: ', num2str(birth_stepsize_Hk), ', ', num2str(persistence_stepsize_Hk)));
 		grid_values1_Hk=0:birth_stepsize_Hk:Hk_max_b; %must be increasing from zero to max_dist
 		grid_values2_Hk=Hk_max_p:-persistence_stepsize_Hk:0; %must be decreasing from max_dist to zero
 
@@ -290,7 +301,8 @@ function [ data_images ] = soft_bound_PIs( b_p_data, max_b_p_Hk, weight_func, pa
 	for k=1:o    
 		Hk_max_b=max_b_p_Hk(k,1);
 		Hk_max_p=max_b_p_Hk(k,2);    
-		sigma=[sig,sig]; %duplicate the variance for the PIs      
+		sigma=sig; 
+		% sigma=[sig,sig]; %duplicate the variance for the PIs      
 		%set up gridding for Hk
 		birth_stepsize_Hk=(Hk_max_b+3*sig)/res; %the x-width of a pixel
 		persistence_stepsize_Hk=(Hk_max_p+3*sig)/res; %the y-height of a pixel

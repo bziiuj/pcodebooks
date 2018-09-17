@@ -1,7 +1,14 @@
-function [accuracy, preciseAccuracy, time, obj] = compute_accuracy(obj, pds, ...
+function [accuracy, preciseAccuracy, times, obj] = compute_accuracy(obj, pds, ...
 	  labels, nclass, diagramLimits, algorithm, name, detailName, ...
 	  expPath, seed)
-	  
+  %%% OUTPUT:
+  %     accuracy - overall accuracy
+  %     preciseAccuracy - accuracy for every class
+  %     times - cell array {descriptor creation time, kernel creation time}
+  %     obj   - 
+	
+    
+	times = [-1, -1];
 	kernelPath = [expPath, detailName, '.mat'];
 	[tridx, teidx] = train_test_indices(labels, nclass, 0.2, seed);
 	switch name
@@ -11,7 +18,6 @@ function [accuracy, preciseAccuracy, time, obj] = compute_accuracy(obj, pds, ...
 			else
 			    load(kernelPath);
 			    K = double(K);
-			    time = -1;
 			end
 		case {'pk1', 'pk2e', 'pk2a', 'pl'}
 			if ~exist(kernelPath, 'file')
@@ -19,42 +25,46 @@ function [accuracy, preciseAccuracy, time, obj] = compute_accuracy(obj, pds, ...
 				repr = obj.train(pds(:));
 			
 				K = obj.generateKernel(repr);
-				time = toc;
+				times(2) = toc;
 				save(kernelPath, 'K', 'time');
 			else
 				load(kernelPath);
 			end
 			% K is uppertriangular, so ...
 			K = K + K';
-		case {'pi', 'pbow', 'pvlad', 'pfv'}
+		case {'pi', 'pbow', 'pvlad', 'pfv', 'pbow_st', 'svlad'}
 			tic;
 			
 			if strcmp(name, 'pi')
 				reprCell = obj.train(pds(:), diagramLimits);
 			else
 				tr_pds = pds(tridx);
-                te_pds = pds(teidx);
-                obj = obj.train(tr_pds, diagramLimits);
-                reprCell = obj.test(pds(:));
+				te_pds = pds(teidx);
+				obj = obj.train(tr_pds, diagramLimits);
+				reprCell = obj.test(pds(:));
 			end
+			times(1) = toc;
+			tic;
 			K = obj.generateKernel(reprCell);
+			times(2) = toc;
 			features = zeros(obj.feature_size, length(reprCell));
 			for i = 1:size(pds(:), 1)
 				features(:, i) = reprCell{i}(:)';
             end
-			time = toc;
 		case {'pds'}
 			tic;
 			% compute diagram limits
 			reprNonCell = obj.train(pds(:), diagramLimits);
+			times(1) = toc;
 			% this is hack - modify it in the future, so that all representations
 			% return the same thing
-			repr = cell(1, size(reprNonCell, 2));
+			features = cell(1, size(reprNonCell, 2));
 			for i = 1:size(reprNonCell, 2)
-			  repr{i} = reprNonCell(:, i);
+			  features{i} = reprNonCell(:, i);
 			end
-			K = obj.generateKernel(cat(1, repr));
-			time = toc;
+			tic;
+			K = obj.generateKernel(cat(1, features));
+			times(2) = toc;
 	end
 	
 	switch algorithm

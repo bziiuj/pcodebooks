@@ -18,67 +18,95 @@ function experiment01_svm()
 	algorithm = 'linearSVM-kernel'; %small
 % 	algorithm = 'linearSVM-vector'; %small
 
-	N = 25;
-    
 	types = {'Random Cloud', 'Circle', 'Sphere', 'Clusters', ...
 	    'Clusters within Clusters', 'Torus'};
+
+	N = 30;
+	test_kernel = false;
+	test_vector = false;
+	test_pdcodebooks = true;
+	test_stable_pdcodebooks = false;
+	test_all = false;
+    
+	% PI tested resolutions and relative sigmas
+	pi_r = 10:10:50;
+	pi_s = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2];
+	% tested codebook sizes
+	bow_sizes = 10:10:100;
 	
 	objs = {};
-	objs{end + 1} = {PersistenceWasserstein(2), {'pw', 'pw'}};
-    for c = [0.5, 1., 1.5]
-        objs{end + 1} = {PersistenceKernelOne(c), {'pk1', ['pk1_', num2str(c)]}};
-%         objs{end + 1} = {PersistenceKernelOne(c), {'pk1', 'pk1'}};
-    end
-	objs{end + 1} = {PersistenceKernelTwo(1, -1), {'pk2e', 'pk2e'}};
-	for a = 50:50:250
-		objs{end + 1} = {PersistenceKernelTwo(0, a), {'pk2a', ['pk2a_', num2str(a)]}};
-	end
-	objs{end + 1} = {PersistenceLandscape(), {'pl', 'pl'}};
-	for r = 10:10:20
-		for s = 0.05:0.05:0.10
-	for r = 10:10:50
-		for s = 0.05:0.05:0.25
-			objs{end + 1} = {PersistenceImage(r, s, @linear_ramp), {'pi', ['pi_', num2str(r), '_', num2str(s)]}};
+	%%% KERNEL APPROACHES
+	if test_kernel || test_all
+		objs{end + 1} = {PersistenceWasserstein(2), {'pw', 'pw'}};
+		for c = [0.5, 1., 1.5]
+			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', ['pk1_', num2str(c)]}};
+			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', 'pk1'}};
 		end
-	end
-	for c = 10:10:50
-		objs{end + 1} = {PersistenceBow(c, @linear_ramp), {'pbow', ['pbow_', num2str(c)]}};
-	end
-	for c = 10:10:50
-		objs{end + 1} = {PersistenceVLAD(c, @linear_ramp), {'pvlad', ['pvlad_', num2str(c)]}};
-	end
-	for c = 10:10:50
-		objs{end + 1} = {PersistenceFV(c, @linear_ramp), {'pfv', ['pfv_', num2str(c)]}};
-	end
-	for r = 10:10:50
-		for s = 0.05:0.05:0.25
-			objs{end + 1} = {PersistenceImage(r, s, @constant_one), {'pi', ['pi_', num2str(r), '_', num2str(s)]}};
+		objs{end + 1} = {PersistenceKernelTwo(1, -1), {'pk2e', 'pk2e'}};
+		for a = 50:50:250
+			objs{end + 1} = {PersistenceKernelTwo(0, a), {'pk2a', ['pk2a_', num2str(a)]}};
 		end
+		objs{end + 1} = {PersistenceLandscape(), {'pl', 'pl'}};
 	end
-	for c = 10:10:50
-		objs{end + 1} = {PersistenceBow(c, @constant_one), {'pbow', ['pbow_', num2str(c)]}};
-	end
-	for c = 10:10:50
-		objs{end + 1} = {PersistenceVLAD(c, @constant_one), {'pvlad', ['pvlad_', num2str(c)]}};
-	end
-	for c = 10:10:50
-		objs{end + 1} = {PersistenceFV(c, @constant_one), {'pfv', ['pfv_', num2str(c)]}};
-	end
-	for r = [20, 40]
-		for s = 0.1:0.1:0.3
-			for d = 25:25:100
-				objs{end + 1} = {PersistencePds(r, s, d), {'pds', ['pds_', num2str(r), ...
-					'_', num2str(s), '_', num2str(d)]}};
+	%%% OTHER VECTORIZED APPROACHES
+	if test_vector || test_all
+		for r = pi_r
+			for s = pi_s
+				objs{end + 1} = {PersistenceImage(r, s, @linear_ramp), {'pi', ['pi_', num2str(r), '_', num2str(s)]}};
+				objs{end}{1}.parallel = true;
 			end
+		end
+		for r = pi_r
+			for s = pi_s
+				objs{end + 1} = {PersistenceImage(r, s, @constant_one), {'pi', ['pi_', num2str(r), '_', num2str(s)]}};
+				objs{end}{1}.parallel = true;
+			end
+		end
+		for r = [20, 40]
+			for s = 0.1:0.1:0.3
+				for d = 25:25:100
+					objs{end + 1} = {PersistencePds(r, s, d), {'pds', ['pds_', num2str(r), ...
+						'_', num2str(s), '_', num2str(d)]}};
+				end
+			end
+		end
+	end
+	%%% PERSISTENCE CODEBOOKS
+	if test_pdcodebooks || test_all
+		for c = bow_sizes
+			objs{end + 1} = {PersistenceBow(c, @linear_ramp), {'pbow', ['pbow_', num2str(c)]}};
+		end
+		for c = bow_sizes
+			objs{end + 1} = {PersistenceBow(c, @linear_ramp, @linear_ramp), {'pbow', ['pbow_weight_', num2str(c)]}};
+		end
+		for c = bow_sizes
+			objs{end + 1} = {PersistenceBow(c, @constant_one), {'pbow', ['pbow_', num2str(c)]}};
+		end
+		for c = bow_sizes
+			objs{end + 1} = {PersistenceBow(c, @constant_one, @linear_ramp), {'pbow', ['pbow_weight_', num2str(c)]}};
+		end
+		for c = bow_sizes
+			objs{end + 1} = {PersistenceVLAD(c, @linear_ramp), {'pvlad', ['pvlad_', num2str(c)]}};
+		end
+		for c = bow_sizes
+			objs{end + 1} = {PersistenceFV(c, @linear_ramp), {'pfv', ['pfv_', num2str(c)]}};
+		end
+		for c = bow_sizes
+			objs{end + 1} = {PersistenceVLAD(c, @constant_one), {'pvlad', ['pvlad_', num2str(c)]}};
+		end
+		for c = bow_sizes
+			objs{end + 1} = {PersistenceFV(c, @constant_one), {'pfv', ['pfv_', num2str(c)]}};
 		end
 	end
 
 	for o = 1:numel(objs)
 		acc = zeros(N, 7);
+		all_times = zeros(N, 2);
+		obj = objs{o}{1};
+		prop = objs{o}{2};
+
 		for i = 1:N
 			seedBig = i * 10000;
-			obj = objs{o}{1};
-			prop = objs{o}{2};
 			fprintf('Computing: %s\t, repetition %d\n', prop{2}, i);
 			
 			labels = [repmat(1, [1, 50]), ...
@@ -87,10 +115,11 @@ function experiment01_svm()
 			    repmat(4, [1, 50]), ...
 			    repmat(5, [1, 50]), ...
 			    repmat(6, [1, 50])]';
-			[accuracy, preciseAccuracy, time, obj] = compute_accuracy(obj, pds, ...
+			[accuracy, preciseAccuracy, times, obj] = compute_accuracy(obj, pds, ...
 			    labels, 6, diagramLimits, algorithm, prop{1}, prop{2}, ...
 			    expPath, seedBig);
 			acc(i, :) = [accuracy, preciseAccuracy]';
+			all_times(i, :) = times;
 
 % 			if strcmp(prop{1}, 'pbow')
 % 				repr = obj.test(pds(:));
@@ -100,54 +129,8 @@ function experiment01_svm()
 % 			end
 		end
 		
-		fid = fopen([expPath, 'results_', algorithm, '_', prop{1}, '.txt'], 'a');
-		basicLine = sprintf(['%s;%s;%s;%s', ...
-		        ';%s;%s;%s;%s;%s;%s'], ...
-		    prop{1}, 'iter', 'time', 'acc', types{1}, types{2}, types{3}, ...
-		    types{4}, types{5}, types{6});
-		fprintf(fid, '%s\n', basicLine);
-		
-		for i = 1:N
-			% type;repetition;time;accuracy;preciseAccuracy
-			  basicLine = sprintf(['%s;%d;%f;%f', ...
-			      ';%f;%f;%f;%f;%f;%f'], ...
-			  prop{1}, i, time, acc(i,:));
-			
-			switch prop{1}
-				case {'pw', 'pk1'}
-				  % basicLine
-				  fprintf(fid, '%s\n', basicLine);
-				case {'pk2e', 'pk2a'}
-				  % basicLine;exact;n
-				  fprintf(fid, '%s;%d;%d\n', basicLine, obj.exact, obj.n);
-				case 'pl'
-				  % basicLine
-				  fprintf(fid, '%s\n', basicLine);
-				case 'pi'
-				  % basicLine;resolution;sigma;weightingFunction
-				  f = functions(obj.weightingFunction);
-				  fprintf(fid, '%s;%d;%f;%s\n', basicLine, obj.resolution, obj.sigma, ...
-				    f.function);
-				case {'pbow', 'pvlad', 'pfv'}
-				  f = functions(obj.weightingFunction);
-				  % basicLine;numWords;weightingFunction
-				  fprintf(fid, '%s;%d;%s\n', basicLine, obj.numWords, ...
-				    f.function);
-				case 'pds'
-				  % basicLine;resolution;sigma;dim
-				  fprintf(fid, '%s;%d;%f;%d\n', basicLine, obj.resolution, obj.sigma, ...
-				    obj.dim);
-				otherwise
-				  throw(MException('Error', 'Representation is not saved'));
-			end
-		end
-		basicLine = sprintf(['%s;std:;%f;%f', ...
-		        ';%f;%f;%f;%f;%f;%f'], ...
-		    prop{1}, std(acc(:,1)), mean(acc));
-		fprintf(fid, '%s\n', basicLine);
-		
-		fclose(fid);
-		end
+		print_results(expPath, obj, N, algorithm, '', types, prop, all_times, acc);
+	end
 end
 
 function pds = prepareDiagrams(rawPath, expPath)

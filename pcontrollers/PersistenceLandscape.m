@@ -28,6 +28,7 @@ classdef PersistenceLandscape < PersistenceRepresentation
     function K = generateKernel(obj, repr)
       K = zeros(length(repr));
       for i = 1:length(repr)
+		  disp(strcat(num2str(i),'/',num2str(length(repr))));
         for j = 1:length(repr)
           K(i, j) = landscapeDistance(repr{i}, repr{j}, 2);
         end

@@ -47,6 +47,7 @@ classdef PersistenceKernelOne < PersistenceRepresentation
 
       K = zeros(numel(repr));
       for i=1:numel(repr)
+          disp(strcat('krenel one: ', num2str(i), '/', num2str(numel(repr))));
         for j=i+1:numel(repr)
           listFile = fullfile(outDir, 'list.txt');
           fid = fopen(listFile, 'w');

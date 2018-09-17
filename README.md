@@ -5,7 +5,8 @@ A. This code contains experiments presented in "Persistence Codebooks for Topolo
 
 B. Instalation steps:
 
-  1. All needed dependencies should download and build automatically by running setup_pcodebook.m matlab script.
+  1. All needed dependencies should download and build automatically by running setup_pcodebook.m matlab script
+     (in cases of some environments, it is necessary to run ./get_dependencies.sh script directly from the console).
 
 C. Test persistence codebooks (only vlfeat library needed):
 

@@ -11,16 +11,16 @@ classdef PersistenceImage < PersistenceRepresentation
   methods
     function obj = PersistenceImage(resolution, sigma, ...
         weightingFunction)
-      obj = obj@PersistenceRepresentation();
+		obj = obj@PersistenceRepresentation();
 
-      obj.resolution = resolution;
-      obj.sigma = sigma;
-      obj.weightingFunction = weightingFunction;
-	  obj.parallel = false;
-      obj.feature_size = obj.resolution^2;
+		obj.resolution = resolution;
+		obj.sigma = sigma;
+		obj.weightingFunction = weightingFunction;
+		obj.parallel = false;
+		obj.feature_size = obj.resolution^2;
     end
     
-    function setup(obj)
+	function setup(obj)
 		PI_path = which('PersistenceImage');
 		[filepath, name, ext] = fileparts(PI_path);
 		addpath(strcat(filepath,'/../../PersistenceImages/matlab_code'));
@@ -43,13 +43,13 @@ classdef PersistenceImage < PersistenceRepresentation
 			repr = newmake_PIs(diagrams, obj.resolution, obj.sigma, ...
 				obj.weightingFunction, weightsLimits, 1);
 		else
-            % Parameters for weight function
-            weightsLimits = [0, diagramLimits(2) - diagramLimits(1)];
-        	% Lower bound for birth and upper bound for persistence. Other points will be rejected.
-    		diagramLimitsPersist = [diagramLimits(1), ...
-            	diagramLimits(2) - diagramLimits(1)];
-            
-            repr = new_make_PIs(diagrams, obj.resolution, obj.sigma, ...
+			% Parameters for weight function
+			weightsLimits = [0, diagramLimits(2) - diagramLimits(1)];
+			% Lower bound for birth and upper bound for persistence. Other points will be rejected.
+			diagramLimitsPersist = [diagramLimits(1), ...
+				diagramLimits(2) - diagramLimits(1)];
+
+			repr = new_make_PIs(diagrams, obj.resolution, obj.sigma, ...
 			obj.weightingFunction, weightsLimits, 1, ...
 			diagramLimitsPersist, obj.parallel);
 		end
