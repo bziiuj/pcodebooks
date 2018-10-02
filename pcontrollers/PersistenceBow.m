@@ -1,7 +1,5 @@
 classdef PersistenceBow < PersistenceRepresentation
 %%%%% PERSISTENCEBOW
-% Currently use of PersistenceBow is different from the other classes, the train method does not returns 
-% a represetation of train data but prepares the PersistenceBow object, use test to get representation.
 
   properties
 	numWords
@@ -48,14 +46,14 @@ classdef PersistenceBow < PersistenceRepresentation
 	end
 
 	function samplePointsPersist = getSample(obj, allPointsPersist, diagramLimitsPersist)
-	  if ~isempty(obj.weightingFunction)
-	    weights = arrayfun(@(row) ...
-	      obj.weightingFunction(allPointsPersist(row,:), diagramLimitsPersist), 1:size(allPointsPersist,1))';
-	    weights = weights / sum(weights);
-	    samplePointsPersist = allPointsPersist(randsample(1:size(allPointsPersist, 1), obj.sampleSize, true, weights), :);
-	  else
-	    samplePointsPersist = allPointsPersist(randsample(1:size(allPointsPersist, 1), obj.sampleSize), :);
-	  end
+		if ~isempty(obj.weightingFunction)
+			weights = arrayfun(@(row) ...
+			  obj.weightingFunction(allPointsPersist(row,:), diagramLimitsPersist), 1:size(allPointsPersist,1))';
+			weights = weights / sum(weights);
+			samplePointsPersist = allPointsPersist(randsample(1:size(allPointsPersist, 1), obj.sampleSize, true, weights), :);
+		else
+			samplePointsPersist = allPointsPersist(randsample(1:size(allPointsPersist, 1), obj.sampleSize), :);
+		end
 	end
 	
 	function obj = train(obj, diagrams, diagramLimits)
@@ -75,7 +73,7 @@ classdef PersistenceBow < PersistenceRepresentation
 		repr = cell(numel(diagrams), 1);
 		for i = 1:numel(diagrams)
 			if isempty(diagrams{i})
-				z = zeros(obj.numWords, 1);
+				z = zeros(obj.numWords, 1); 
 			else
 				bppoints = [diagrams{i}(:, 1), diagrams{i}(:, 2) - diagrams{i}(:, 1)];
 				[words, ~] = vl_kdtreequery(obj.kdtree, obj.kdwords, ...

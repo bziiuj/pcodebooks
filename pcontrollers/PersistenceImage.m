@@ -25,21 +25,21 @@ classdef PersistenceImage < PersistenceRepresentation
 		[filepath, name, ext] = fileparts(PI_path);
 		addpath(strcat(filepath,'/../../PersistenceImages/matlab_code'));
 		%addpath('../PersistenceImages/matlab_code')
-    end
-    
-    function repr = train(obj, diagrams, diagramLimits)
-      repr = obj.test(diagrams, diagramLimits);
-    end
+	end
 
-    function repr = test(obj, diagrams, diagramLimits)
+	function repr = train(obj, diagrams, diagramLimits)
+		repr = obj.test(diagrams, diagramLimits);
+	end
+
+	function repr = test(obj, diagrams, diagramLimits)
 
 		useold = false;
         % diagramLimitsPersist = [0, diagramLimits(2) - diagramLimits(1)];
 		% weightsLimits = [diagramLimits(1)/2, diagramLimits(2) - diagramLimits(1)];
 
 		if useold
-            % Parameters for weight function
-            weightsLimits = [0, diagramLimits(2) - diagramLimits(1)];
+			% Parameters for weight function
+			weightsLimits = [0, diagramLimits(2) - diagramLimits(1)];
 			repr = newmake_PIs(diagrams, obj.resolution, obj.sigma, ...
 				obj.weightingFunction, weightsLimits, 1);
 		else

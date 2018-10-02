@@ -43,7 +43,7 @@ def comp_row(i, p, dic, out):
             # print(str(j) + '\t' + str(r) + '/' + str(n))
             row[j] = d.wasserstein_distance(diag[r], diag[j]);
         out[lb:rb] = row;
-        print(row);
+        # print(row);
         end = time.time();
 
 def wasserstein_dist_mat_parallel(pds, cores):
@@ -61,11 +61,12 @@ def wasserstein_dist_mat_parallel(pds, cores):
     processes = [];
     for i in range(pool):
         p = mp.Process(target=comp_row, args=(i, pool, dic, out_arr));
-        processes.append(p)
+        processes.append(p);
     [x.start() for x in processes]
 
     for proc in processes:
         proc.join()
+    print('ready');
     K = np.array(out_arr);
     K = K.reshape((n, n));
     for i in range(n):

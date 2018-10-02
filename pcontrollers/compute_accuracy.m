@@ -12,59 +12,111 @@ function [accuracy, preciseAccuracy, times, obj] = compute_accuracy(obj, pds, ..
 	kernelPath = [expPath, detailName, '.mat'];
 	[tridx, teidx] = train_test_indices(labels, nclass, 0.2, seed);
 	switch name
-		case {'pw'}
-			if ~exist(kernelPath, 'file')
-			    throw(MException('Error', 'Wasserstein distance is currently not implemented'));
-			else
-			    load(kernelPath);
-			    K = double(K);
-			end
-		case {'pk1', 'pk2e', 'pk2a', 'pl'}
-			if ~exist(kernelPath, 'file')
-				tic;
-				repr = obj.train(pds(:));
-			
-				K = obj.generateKernel(repr);
-				times(2) = toc;
-				save(kernelPath, 'K', 'time');
-			else
-				load(kernelPath);
-			end
-			% K is uppertriangular, so ...
-			K = K + K';
-		case {'pi', 'pbow', 'pvlad', 'pfv', 'pbow_st', 'svlad'}
+	case {'pw'}
+		if ~exist(kernelPath, 'file')
+		    throw(MException('Error', 'Wasserstein distance is currently not implemented'));
+		else
+		    load(kernelPath);
+		    K = double(K);
+		end
+	case {'pk1', 'pk2e', 'pk2a', 'pl'}
+		if ~exist(kernelPath, 'file')
 			tic;
-			
+			repr = obj.train(pds);
+		
+			K = obj.generateKernel(repr);
+			times(2) = toc;
+			save(kernelPath, 'K', 'times');
+		else
+			load(kernelPath);
+		end
+		% K is uppertriangular, so ...
+		K = K + K';
+	case {'pi', 'pbow', 'pvlad', 'pfv', 'pbow_st', 'svlad'}
+		tic;
+		if size(pds, 2) > 1
+			nelem = size(pds, 1);
+			% number of persistence diagrams representing an object
+			nsubpds = size(pds, 2);
+			% for each sub diagram do another classification
+			reprCell = cell(nelem, nsubpds);
+			for d = 1:nsubpds
+				if strcmp(name, 'pi') %|| strcmp(name, 'pds')
+					reprCell(:,d) = obj.test(pds(:,d), diagramLimits{d});
+				else
+					tr_pds = pds(tridx, d);
+% 					te_pds = pds(teidx, d);
+					obj = obj.train(tr_pds, diagramLimits{d});
+					reprCell(:,d) = obj.test(pds(:, d));
+				end
+			end
+			times(1) = toc;
+			features = zeros(obj.feature_size * nsubpds, nelem);
+			for i = 1:nelem
+				for d = 1:nsubpds
+					l = (d-1)*obj.feature_size+1;
+					r = d*obj.feature_size;
+					features(l:r, i) = reprCell{i, d}(:)';
+				end
+			end
+		else
 			if strcmp(name, 'pi')
-				reprCell = obj.train(pds(:), diagramLimits);
+				reprCell = obj.train(pds, diagramLimits);
 			else
 				tr_pds = pds(tridx);
-				te_pds = pds(teidx);
+% 				te_pds = pds(teidx);
 				obj = obj.train(tr_pds, diagramLimits);
-				reprCell = obj.test(pds(:));
+				reprCell = obj.test(pds);
 			end
 			times(1) = toc;
 			tic;
 			K = obj.generateKernel(reprCell);
 			times(2) = toc;
 			features = zeros(obj.feature_size, length(reprCell));
-			for i = 1:size(pds(:), 1)
+			for i = 1:size(pds, 1)
 				features(:, i) = reprCell{i}(:)';
-            end
-		case {'pds'}
-			tic;
+			end
+		end
+	case {'pds'}
+		tic;
+		if size(pds, 2) > 1
+			nelem = size(pds, 1);
+			% number of persistence diagrams representing an object
+			nsubpds = size(pds, 2);
+			% for each sub diagram do another classification
+			features = zeros(obj.feature_size * nsubpds, nelem);
+			for d = 1:nsubpds
+				l = (d-1)*obj.feature_size+1;
+				r = d*obj.feature_size;
+				repr = obj.test(pds(:,d), diagramLimits{d});
+				try
+					features(l:r, :) = repr;
+				catch
+					disp(size(repr));
+				end
+			end
+			times(1) = toc;
+% 			for i = 1:nelem
+% 				for d = 1:nsubpds
+% 					l = (d-1)*obj.feature_size+1;
+% 					r = d*obj.feature_size;
+% 					features(l:r, i) = reprCell{i, d}(:)';
+% 				end
+% 			end
+		else
 			% compute diagram limits
-			reprNonCell = obj.train(pds(:), diagramLimits);
+			features = obj.train(pds, diagramLimits);
 			times(1) = toc;
 			% this is hack - modify it in the future, so that all representations
 			% return the same thing
-			features = cell(1, size(reprNonCell, 2));
-			for i = 1:size(reprNonCell, 2)
-			  features{i} = reprNonCell(:, i);
+			reprNonCell = cell(1, size(features,2));
+			for i = 1:size(features, 2)
+			  reprNonCell{i} = features(:, i);
 			end
 			tic;
-			K = obj.generateKernel(cat(1, features));
+			K = obj.generateKernel(reprNonCell);
 			times(2) = toc;
+		end
 	end
 	
 	switch algorithm

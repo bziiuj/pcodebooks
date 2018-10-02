@@ -1,5 +1,5 @@
-% GeoMat textures experiment
-function experiment03_geomat(test_type, algorithm, init_parallel, subset)
+% Reddit12K experiment
+function experiment06_reddit12K(test_type, algorithm, init_parallel, subset)
 %%%	ARGS:
 %		test_type:	0-kernels, 1-vectors, 2-codebooks, 3-stable codebooks
 %		algorithm:	0-'linearSVM-kernel', 1-'linearSVM-vector'
@@ -19,47 +19,39 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 	addpath('pcontrollers');
 	addpath('../pdsphere/matlab');
 	addpath('../pdsphere/matlab/libsvm-3.21/matlab');
-	expPath = 'exp03_geomat/';
+	expPath = 'exp06_reddit12K/';
 	pbowsPath = strcat(expPath, 'pbows/');
 	mkdir(pbowsPath);
-	
-	dim = 1;
-	scale = '400';
+
 	if subset
-		subset = '_sub25';
+		sufix = 'sub50';
+		basename = strcat('pds_', sufix);
 	else
-		subset = '';
+		sufix = '';
+		basename = strcat('pds');
 	end
-	sufix = strcat(num2str(dim)', '_', scale, subset);
-	basename = strcat('pds_', sufix);
-	
+
 	load([expPath, basename, '.mat'], 'pds');
 	pds = pds';
-	
+
 	pds_size = size(pds);
 	nclasses = pds_size(2);
 	nexamples = pds_size(1);
 	
-	types = {'Asphalt', 'Brick', 'Cement - Granular', 'Cement - Smooth', ...
-	    'Concrete - Cast-in-Place', 'Concrete - Precast', 'Foliage', ...
-	    'Grass', 'Gravel', 'Marble', 'Metal - Grills', 'Paving', ...
-	    'Soil - Compact', 'Soil - Dirt and Vegetation', 'Soil - Loose', ...
-	    'Soil - Mulch', 'Stone - Granular', 'Stone - Limestone', 'Wood'};
+	types = {'cl1', 'cl2', 'cl3', 'cl4', 'cl5', 'cl6', 'cl7', 'cl8', 'cl9', ...
+		'cl10', 'cl11'};
 	
 	allPoints = cat(1, pds{:});
-	diagramLimits = [quantile(allPoints(:, 1), 0.005), ...
-	  quantile(allPoints(:, 2), 0.995)];
+	diagramLimits = [-0.1 1.1];
 
 	%%%%% EXPERIMENT PARAMETERS
-	% PI tested resolutions and relative sigmas
-	% number of trials
 	N = 25;
-	%pi_r = [10:10:50, 60:20:140, 170:30:200];
-	pi_r = 20:30:110;
-	pi_s = [0.1, 0.25, 0.5, 1, 1.5];
+	% PI tested resolutions and relative sigmas
+	pi_r = [5, 10:10:50, 60:20:100];%, 170:30:200];
+	pi_s = [0.1, 0.25, 0.5, 1, 1.5, 2];
 	% tested codebook sizes
-%	bow_sizes = [10:10:50, 70:20:150, 180:30:210];
-	bow_sizes = 20:30:200;
+%	bow_sizes = 150:20:210;
+	bow_sizes = [5, 10:10:50, 60:20:120];
 	sample_sizes = [10000, 50000];
 
 	objs = {};
@@ -87,10 +79,11 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 				objs{end}{1}.parallel = true;
 			end
 		end
-		for r = [5, 10, 20, 40]
-			for s = [0.01, 0.1, 0.2, 0.3]
+		for r = [10, 20, 40, 60]
+	 %		for s = 0.1:0.1:0.3
+			for s = [0.0001, 0.0005, 0.001, 0.005, 0.01, 0.1]
 				for d = 25:25:100
-					objs{end + 1} = {PersistencePds(r, s, d), {'pds', ['pds_', num2str(r), ...
+				objs{end + 1} = {PersistencePds(r, s, d), {'pds', ['pds_', num2str(r), ...
 					'_', num2str(s), '_', num2str(d)]}};
 				end
 			end
@@ -104,12 +97,12 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 				objs{end}{1}.sampleSize = s;
 			end
 		end
-		for c = bow_sizes
-			for s = sample_sizes
-				objs{end + 1} = {PersistenceBow(c, @linear_ramp, @linear_ramp), {'pbow', ['pbow_weight_', num2str(c)]}};
-				objs{end}{1}.sampleSize = s;
-			end
+	for c = bow_sizes
+		for s = sample_sizes
+			objs{end + 1} = {PersistenceBow(c, @linear_ramp, @linear_ramp), {'pbow', ['pbow_weight_', num2str(c)]}};
+			objs{end}{1}.sampleSize = s;
 		end
+	end
 		for c = bow_sizes
 			for s = sample_sizes
 				objs{end + 1} = {PersistenceBow(c, @constant_one), {'pbow', ['pbow_', num2str(c)]}};

@@ -109,7 +109,7 @@ if nargin<3
 	sig = [sig, sig];
 	% disp(strcat('Default sigma: ', num2str(sig)));
 else
-	sig = relative_sigma(res, max_b_p_Hk) * 2 * sig;
+	sig = relative_sigma(res, max_b_p_Hk, sig);
 end
 disp(strcat('Sigmas: ', num2str(sig(1)), ', ', num2str(sig(2))));
 % set default weighten function
@@ -140,8 +140,8 @@ end
 
 function sigmas = relative_sigma(res, max_b_p_Hk, s)
 	% sigma relative to pixel size
-	sigb = .5*(max(max(max_b_p_Hk(:,1)))/res);
-	sigp = .5*(max(max(max_b_p_Hk(:,2)))/res);
+	sigb = s*(max(max(max_b_p_Hk(:,1)))/res);
+	sigp = s*(max(max(max_b_p_Hk(:,2)))/res);
 	sigmas = [sigb, sigp];
 end
 
@@ -248,11 +248,15 @@ function [ data_images ] = hard_bound_PIs( b_p_data, max_b_p_Hk, weight_func, pa
 			parfor p=1:m
 				for t=1:n
 					Hk=b_p_data{p,t,k}; %Hk birth persistence data
-					%CHANGES TO THE WIEGHT FUNCTION INPUTS HAPPEN IN THE ROW
-					%BELOW
-					[weights]=arrayfun(@(row) weight_func(Hk(row,:), params), 1:size(Hk,1))';
-					%call the function that makes the image
-					[I_Hk] = grid_gaussian_bump(Hk, grid_values1_Hk, grid_values2_Hk, sigma,weights);  
+					if ~isempty(Hk)
+						%CHANGES TO THE WIEGHT FUNCTION INPUTS HAPPEN IN THE ROW
+						%BELOW
+						[weights]=arrayfun(@(row) weight_func(Hk(row,:), params), 1:size(Hk,1))';
+						%call the function that makes the image
+						[I_Hk] = grid_gaussian_bump(Hk, grid_values1_Hk, grid_values2_Hk, sigma,weights);  
+					else
+						I_Hk = zeros(res);
+					end
 					data_images{p,t,k}=I_Hk;
 				end
 			end   
@@ -260,11 +264,15 @@ function [ data_images ] = hard_bound_PIs( b_p_data, max_b_p_Hk, weight_func, pa
 			for p=1:m
 				for t=1:n
 					Hk=b_p_data{p,t,k}; %Hk birth persistence data
-					%CHANGES TO THE WIEGHT FUNCTION INPUTS HAPPEN IN THE ROW
-					%BELOW
-					[weights]=arrayfun(@(row) weight_func(Hk(row,:), params), 1:size(Hk,1))';
-					%call the function that makes the image
-					[I_Hk] = grid_gaussian_bump(Hk, grid_values1_Hk, grid_values2_Hk, sigma,weights);  
+					if ~isempty(Hk)
+						%CHANGES TO THE WIEGHT FUNCTION INPUTS HAPPEN IN THE ROW
+						%BELOW
+						[weights]=arrayfun(@(row) weight_func(Hk(row,:), params), 1:size(Hk,1))';
+						%call the function that makes the image
+						[I_Hk] = grid_gaussian_bump(Hk, grid_values1_Hk, grid_values2_Hk, sigma,weights);  
+					else
+						I_Hk = zeros(res);
+					end
 					data_images{p,t,k}=I_Hk;
 				end
 			end   

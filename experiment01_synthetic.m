@@ -1,8 +1,23 @@
-% First experiment
-function experiment01_svm()
+% Synthetic shapes experiment
+function experiment01_synthetic(test_type, algorithm, init_parallel)
+%%%	ARGS:
+%		test_type:	0-kernels, 1-vectors, 2-codebooks, 3-stable codebooks
+%		algorithm:	0-'linearSVM-kernel', 1-'linearSVM-vector'
+	switch algorithm
+	case 0
+		algorithm = 'linearSVM-kernel'; 
+	case 1
+		algorithm = 'linearSVM-vector';
+	end
+
+	par = 0;
+	if nargin == 3
+		par = init_parallel;
+	end
+
 	addpath('pcontrollers');
-	rawPath = 'rawdata/exp01_svm/';
-	expPath = 'exp01_svm/';
+	rawPath = 'rawdata/exp01_synthetic/';
+	expPath = 'exp01_synthetic/';
 	addpath('../pdsphere/matlab/libsvm-3.21/matlab');
 	addpath('../pdsphere/matlab');
 	pbowsPath = strcat(expPath, 'pbows/');
@@ -15,28 +30,31 @@ function experiment01_svm()
 	diagramLimits = [quantile(allPoints(:, 1), 0.001), ...
     quantile(allPoints(:, 2), 0.999)];
 
-	algorithm = 'linearSVM-kernel'; %small
-% 	algorithm = 'linearSVM-vector'; %small
+	if par
+		cluster = parcluster('local');
+		workers = 32;
+		cluster.NumWorkers = workers;
+		saveProfile(cluster);
+		pool = parpool(workers);
+	end
 
 	types = {'Random Cloud', 'Circle', 'Sphere', 'Clusters', ...
 	    'Clusters within Clusters', 'Torus'};
 
-	N = 30;
-	test_kernel = false;
-	test_vector = false;
-	test_pdcodebooks = true;
-	test_stable_pdcodebooks = false;
-	test_all = false;
-    
+	%%%%% EXPERIMENT PARAMETERS
+	% number of trials
+	N = 25;
 	% PI tested resolutions and relative sigmas
-	pi_r = 10:10:50;
+	pi_r = 10:10:70;
 	pi_s = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2];
 	% tested codebook sizes
-	bow_sizes = 10:10:100;
+	bow_sizes = [5, 10:10:100];
 	
 	objs = {};
+	switch test_type
 	%%% KERNEL APPROACHES
-	if test_kernel || test_all
+	case 0
+		disp('Creating kernel descriptor objects');
 		objs{end + 1} = {PersistenceWasserstein(2), {'pw', 'pw'}};
 		for c = [0.5, 1., 1.5]
 			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', ['pk1_', num2str(c)]}};
@@ -47,9 +65,9 @@ function experiment01_svm()
 			objs{end + 1} = {PersistenceKernelTwo(0, a), {'pk2a', ['pk2a_', num2str(a)]}};
 		end
 		objs{end + 1} = {PersistenceLandscape(), {'pl', 'pl'}};
-	end
 	%%% OTHER VECTORIZED APPROACHES
-	if test_vector || test_all
+	case 1
+		disp('Creating vectorized descriptor objects');
 		for r = pi_r
 			for s = pi_s
 				objs{end + 1} = {PersistenceImage(r, s, @linear_ramp), {'pi', ['pi_', num2str(r), '_', num2str(s)]}};
@@ -62,17 +80,17 @@ function experiment01_svm()
 				objs{end}{1}.parallel = true;
 			end
 		end
-		for r = [20, 40]
+		for r = [10, 20, 40]
 			for s = 0.1:0.1:0.3
-				for d = 25:25:100
+				for d = 50:25:100
 					objs{end + 1} = {PersistencePds(r, s, d), {'pds', ['pds_', num2str(r), ...
 						'_', num2str(s), '_', num2str(d)]}};
 				end
 			end
 		end
-	end
 	%%% PERSISTENCE CODEBOOKS
-	if test_pdcodebooks || test_all
+	case 2 
+		disp('Creating codebooks objects');
 		for c = bow_sizes
 			objs{end + 1} = {PersistenceBow(c, @linear_ramp), {'pbow', ['pbow_', num2str(c)]}};
 		end
@@ -97,7 +115,24 @@ function experiment01_svm()
 		for c = bow_sizes
 			objs{end + 1} = {PersistenceFV(c, @constant_one), {'pfv', ['pfv_', num2str(c)]}};
 		end
+	%%% STABLE PERSISTENCE CODEBOOKS
+	case 3
+		disp('Creating stable codebooks objects');
+		for c = bow_sizes
+			objs{end + 1} = {PersistenceStableBow(c, @linear_ramp), {'pbow_st', ['pbow_st_', num2str(c)]}};
+		end
+		for c = bow_sizes
+			objs{end + 1} = {PersistenceStableBow(c, @constant_one), {'pbow_st', ['pbow_st_', num2str(c)]}};
+		end
+		for c = bow_sizes
+			objs{end + 1} = {PersistenceSoftVLAD(c, @linear_ramp), {'svlad', ['svlad_', num2str(c)]}};
+		end
+		for c = bow_sizes
+			objs{end + 1} = {PersistenceSoftVLAD(c, @constant_one), {'svlad', ['svlad_', num2str(c)]}};
+		end
 	end
+	%%%%%
+	disp('Descriptor objects created. Testing');
 
 	for o = 1:numel(objs)
 		acc = zeros(N, 7);
@@ -129,6 +164,7 @@ function experiment01_svm()
 % 			end
 		end
 		
+		fprintf('Saving results for: %s\n', prop{2});
 		print_results(expPath, obj, N, algorithm, '', types, prop, all_times, acc);
 	end
 end

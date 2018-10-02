@@ -13,12 +13,41 @@ function print_results(expPath, obj, N, algorithm_name, sufix, types, prop, time
 		sufix = [sufix, '_'];
 	end
 
-	fid = fopen([expPath, 'results_', sufix, ...
+	fid = fopen([expPath, 'results_allrepts_', sufix, ...
+			algorithm_name, '_', prop{1}, '.txt'], 'a');
+	fid_summary = fopen([expPath, 'results_', sufix, ...
 			algorithm_name, '_', prop{1}, '.txt'], 'a');
 
 	header = repmat('%s;', [1, 5+length(types)]);
 	header = sprintf(header, prop{1}, 'iter', 'descr_time', 'kern_time', 'acc', types{:});
 	fprintf(fid, '%s\n', header);
+
+	specs = ''; 
+	switch prop{1}
+		case {'pw', 'pk1', 'pl'}
+			specs = '';
+		case {'pk2e', 'pk2a'}
+			specs = [num2str(obj.exact), ';', num2str(obj.n)];
+		case 'pi'
+			% resolution;sigma;weightingFunction
+			f = functions(obj.weightingFunction);
+			specs = [num2str(obj.resolution), ';', num2str(obj.sigma), ';', f.function];
+		case {'pbow', 'pvlad', 'pfv', 'pbow_st', 'svlad'}
+			f = functions(obj.weightingFunction);
+			if isempty(obj.weightingFunctionPredict)
+				% numWords;sampleSize;weightingFunctionFit;weightingFunctionPredict
+				specs = [num2str(obj.numWords), ';', num2str(obj.sampleSize), ';', f.function];
+			else
+				fp = functions(obj.weightingFunctionPredict);
+				% numWords;sampleSize;weightingFunction
+				specs = [num2str(obj.numWords), ';', num2str(obj.sampleSize), ';', f.function, ';', fp.function];
+			end
+		case 'pds'
+			% resolution;sigma;dim
+			specs = [num2str(obj.resolution), ';', num2str(obj.sigma), ';', num2str(obj.dim)];
+		otherwise
+		  throw(MException('Error', 'Representation is not saved'));
+	end
 
 	template_line = ['%s;%d;%f;%f;%f', repmat(';%f',[1,length(types)])];
 	for i = 1:N
@@ -26,44 +55,13 @@ function print_results(expPath, obj, N, algorithm_name, sufix, types, prop, time
 		basicLine = sprintf(template_line, ...
 			prop{1}, i, times(i,1),times(i,2), acc(i,:));
 		
-		switch prop{1}
-			case {'pw', 'pk1'}
-			  % basicLine
-			  fprintf(fid, '%s\n', basicLine);
-			case {'pk2e', 'pk2a'}
-			  % basicLine;exact;n
-			  fprintf(fid, '%s;%d;%d\n', basicLine, obj.exact, obj.n);
-			case 'pl'
-			  % basicLine
-			  fprintf(fid, '%s\n', basicLine);
-			case 'pi'
-			  % basicLine;resolution;sigma;weightingFunction
-			  f = functions(obj.weightingFunction);
-			  fprintf(fid, '%s;%d;%f;%s\n', basicLine, obj.resolution, obj.sigma, ...
-			    f.function);
-			case {'pbow', 'pvlad', 'pfv'}
-				f = functions(obj.weightingFunction);
-				if isempty(obj.weightingFunctionPredict)
-					% basicLine;numWords;weightingFunction
-					fprintf(fid, '%s;%d;%s\n', basicLine, obj.numWords, ...
-						f.function);
-				else
-					fp = functions(obj.weightingFunctionPredict);
-					% basicLine;numWords;weightingFunction
-					fprintf(fid, '%s;%d;%s;%s\n', basicLine, obj.numWords, ...
-						f.function, fp.function);
-				end
-			case 'pds'
-			  % basicLine;resolution;sigma;dim
-			  fprintf(fid, '%s;%d;%f;%d\n', basicLine, obj.resolution, obj.sigma, ...
-			    obj.dim);
-			otherwise
-			  throw(MException('Error', 'Representation is not saved'));
-		end
+		fprintf(fid, '%s;%s\n', basicLine, specs);
 	end
 	basicLine = sprintf(['%s;%f;%f;%f;%f', repmat(';%f', [1, length(types)])], ...
 	    prop{1}, std(acc(:,1)), mean(times(:,1)), mean(times(:,2)), mean(acc));
 	fprintf(fid, '%s\n', basicLine);
 	
+	fprintf(fid_summary, '%s,%s\n', basicLine, specs);
+
 	fclose(fid);
 end

@@ -1,5 +1,9 @@
 function [accuracy, preciseAccuracy] = new_PD_svmclassify(f, labels, train_idx, test_idx, type)
-%%% type - 'vector' or 'kernel'
+%%% INPUT:
+%	f 		- features, for vector svm, matrix of size [feature vector size, num of examples],
+%			for kernel svm, square matrix of distances between elements
+%	type 	- 'vector' or 'kernel'
+%%% 
 
 g = 1/size(f,1);
 C = 1e1;
