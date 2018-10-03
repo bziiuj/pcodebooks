@@ -14,7 +14,7 @@ methods
 		obj.feature_size = obj.numWords * 2;
 	end
 
-	function obj = train(obj, diagrams, diagramLimits)
+	function obj = fit(obj, diagrams, diagramLimits)
 		allPoints = cat(1, diagrams{:});
 		allPointsPersist = [allPoints(:, 1), allPoints(:, 2) - allPoints(:, 1)];
 		diagramLimitsPersist = [0, diagramLimits(2) - diagramLimits(1)];
@@ -43,7 +43,7 @@ methods
 		end
 	end
 
-	function repr = test(obj, diagrams)
+	function repr = predict(obj, diagrams)
 		repr = cell(numel(diagrams), 1);
 		for i = 1:numel(diagrams)
 			if isempty(diagrams{i})

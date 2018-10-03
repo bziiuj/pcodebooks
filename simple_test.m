@@ -22,10 +22,10 @@ tr_pds = pds(tridx);
 te_pds = pds(teidx);
 limits = [min(min(cell2mat(tr_pds(:)))), max(max(cell2mat(tr_pds(:))))];
 % Train PBOW
-pbow = pbow.train(tr_pds, limits);
+pbow = pbow.fit(tr_pds, limits);
 
 % Get PBOWs representation for all examples
-reprCell = pbow.test(pds(:));
+reprCell = pbow.predict(pds(:));
 
 % Transform PBOW representation into feature vector
 features = zeros(pbow.feature_size, length(reprCell));

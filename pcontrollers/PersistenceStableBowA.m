@@ -1,21 +1,20 @@
-classdef PersistenceFV < PersistenceBow
-%%%%%%PERSISTENCEFV
-% Currently use of PersistenceBow is different from the other classes, the train method does not returns 
-% a represetation of train data but prepares the PersistenceBow object, use test to get representation.
+classdef PersistenceStableBowA < PersistenceBow
+%%%%%%PERSISTENCESTABLEBOWA
   
   properties
     means
     covariances
     priors
+    gm
   end
   
   methods
-    function obj = PersistenceFV(numWords, weightingFunction)
+    function obj = PersistenceStableBowA(numWords, weightingFunction)
       obj = obj@PersistenceBow(numWords, weightingFunction);
-      obj.feature_size = obj.numWords * 4;
+      obj.feature_size = obj.numWords;
     end
     
-    function obj = fit(obj, diagrams, diagramLimits)
+    function obj = train(obj, diagrams, diagramLimits)
       allPoints = cat(1, diagrams{:});
       allPointsPersist = [allPoints(:, 1), allPoints(:, 2) - allPoints(:, 1)];
       diagramLimitsPersist = [0, diagramLimits(2) - diagramLimits(1)];
@@ -28,20 +27,24 @@ classdef PersistenceFV < PersistenceBow
             'Initialization', 'kmeans', ...
             'CovarianceBound', double(max(v)*0.0001), ...
             'NumRepetitions', 1);
+
+      reshaped_covariances = reshape(obj.covariances, ...
+        [1, size(obj.covariances, 1), size(obj.covariances, 2)]);
+      obj.gm = gmdistribution(obj.means', reshaped_covariances, obj.priors);
     end
 
-    function repr = predict(obj, diagrams)
+    function repr = test(obj, diagrams)
       repr = cell(numel(diagrams), 1);
       for i = 1:numel(diagrams)
         if isempty(diagrams{i})
-          z = zeros(2 * size(obj.means, 1) * size(obj.means, 2), 1);
+          z = zeros(obj.numWords, 1);
         else
-          z = vl_fisher([diagrams{i}(:, 1), diagrams{i}(:, 2) - diagrams{i}(:, 1)]', ...
-            obj.means, ...
-            obj.covariances, ...
-            obj.priors, ...
-            'Improved') ;
+          x = [diagrams{i}(:, 1), diagrams{i}(:, 2) - diagrams{i}(:, 1)];
+          z = posterior(obj.gm, x);
+          z = sum(z);
         end
+        z = sign(z) .* sqrt(abs(z));
+        z = bsxfun(@times, z, 1./max(1e-12, sqrt(sum(z .^ 2))));
         repr{i} = z;
       end
     end

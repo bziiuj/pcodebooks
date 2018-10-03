@@ -14,11 +14,11 @@ classdef PersistenceLandscape < PersistenceRepresentation
       addpath('../Persistent-Landscape-Wrapper/lib');
     end
     
-    function repr = train(obj, diagrams)
-      repr = obj.test(diagrams);
+    function obj = fit(obj, diagrams)
+		disp('Persistence Landscape does not need fitting.');
     end
     
-    function repr = test(obj, diagrams)
+    function repr = predict(obj, diagrams)
       repr = cell(1, numel(diagrams));
       for i = 1:numel(diagrams)
         repr{i} = barcodeToLandscape(diagrams{i});

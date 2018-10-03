@@ -6,13 +6,12 @@ function [accuracy, preciseAccuracy, times, obj] = compute_accuracy(obj, pds, ..
   %     preciseAccuracy - accuracy for every class
   %     times - cell array {descriptor creation time, kernel creation time}
   %     obj   - 
-	
-    
 	times = [-1, -1];
 	kernelPath = [expPath, detailName, '.mat'];
 	[tridx, teidx] = train_test_indices(labels, nclass, 0.2, seed);
 	switch name
 	case {'pw'}
+		disp(kernelPath);
 		if ~exist(kernelPath, 'file')
 		    throw(MException('Error', 'Wasserstein distance is currently not implemented'));
 		else
@@ -22,7 +21,7 @@ function [accuracy, preciseAccuracy, times, obj] = compute_accuracy(obj, pds, ..
 	case {'pk1', 'pk2e', 'pk2a', 'pl'}
 		if ~exist(kernelPath, 'file')
 			tic;
-			repr = obj.train(pds);
+			repr = obj.predict(pds);
 		
 			K = obj.generateKernel(repr);
 			times(2) = toc;
@@ -42,12 +41,11 @@ function [accuracy, preciseAccuracy, times, obj] = compute_accuracy(obj, pds, ..
 			reprCell = cell(nelem, nsubpds);
 			for d = 1:nsubpds
 				if strcmp(name, 'pi') %|| strcmp(name, 'pds')
-					reprCell(:,d) = obj.test(pds(:,d), diagramLimits{d});
+					reprCell(:,d) = obj.predict(pds(:,d), diagramLimits{d});
 				else
 					tr_pds = pds(tridx, d);
-% 					te_pds = pds(teidx, d);
-					obj = obj.train(tr_pds, diagramLimits{d});
-					reprCell(:,d) = obj.test(pds(:, d));
+					obj = obj.fit(tr_pds, diagramLimits{d});
+					reprCell(:,d) = obj.predict(pds(:, d));
 				end
 			end
 			times(1) = toc;
@@ -61,12 +59,11 @@ function [accuracy, preciseAccuracy, times, obj] = compute_accuracy(obj, pds, ..
 			end
 		else
 			if strcmp(name, 'pi')
-				reprCell = obj.train(pds, diagramLimits);
+				reprCell = obj.predict(pds, diagramLimits);
 			else
 				tr_pds = pds(tridx);
-% 				te_pds = pds(teidx);
-				obj = obj.train(tr_pds, diagramLimits);
-				reprCell = obj.test(pds);
+				obj = obj.fit(tr_pds, diagramLimits);
+				reprCell = obj.predict(pds);
 			end
 			times(1) = toc;
 			tic;
@@ -88,7 +85,7 @@ function [accuracy, preciseAccuracy, times, obj] = compute_accuracy(obj, pds, ..
 			for d = 1:nsubpds
 				l = (d-1)*obj.feature_size+1;
 				r = d*obj.feature_size;
-				repr = obj.test(pds(:,d), diagramLimits{d});
+				repr = obj.predict(pds(:,d), diagramLimits{d});
 				try
 					features(l:r, :) = repr;
 				catch
@@ -105,7 +102,7 @@ function [accuracy, preciseAccuracy, times, obj] = compute_accuracy(obj, pds, ..
 % 			end
 		else
 			% compute diagram limits
-			features = obj.train(pds, diagramLimits);
+			features = obj.predict(pds, diagramLimits);
 			times(1) = toc;
 			% this is hack - modify it in the future, so that all representations
 			% return the same thing

@@ -48,7 +48,7 @@ function experiment01_synthetic(test_type, algorithm, init_parallel)
 	pi_r = 10:10:70;
 	pi_s = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2];
 	% tested codebook sizes
-	bow_sizes = [5, 10:10:100];
+	bow_sizes = [5, 10:10:70];
 	
 	objs = {};
 	switch test_type
@@ -150,7 +150,7 @@ function experiment01_synthetic(test_type, algorithm, init_parallel)
 			    repmat(4, [1, 50]), ...
 			    repmat(5, [1, 50]), ...
 			    repmat(6, [1, 50])]';
-			[accuracy, preciseAccuracy, times, obj] = compute_accuracy(obj, pds, ...
+			[accuracy, preciseAccuracy, times, obj] = compute_accuracy(obj, pds(:), ...
 			    labels, 6, diagramLimits, algorithm, prop{1}, prop{2}, ...
 			    expPath, seedBig);
 			acc(i, :) = [accuracy, preciseAccuracy]';

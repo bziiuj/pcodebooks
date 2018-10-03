@@ -27,11 +27,11 @@ classdef PersistenceImage < PersistenceRepresentation
 		%addpath('../PersistenceImages/matlab_code')
 	end
 
-	function repr = train(obj, diagrams, diagramLimits)
-		repr = obj.test(diagrams, diagramLimits);
+	function obj = fit(obj, diagrams, diagramLimits)
+		disp('Persistence Image does not need fitting.');
 	end
 
-	function repr = test(obj, diagrams, diagramLimits)
+	function repr = predict(obj, diagrams, diagramLimits)
 
 		useold = false;
         % diagramLimitsPersist = [0, diagramLimits(2) - diagramLimits(1)];

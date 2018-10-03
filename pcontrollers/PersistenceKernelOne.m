@@ -17,12 +17,12 @@ classdef PersistenceKernelOne < PersistenceRepresentation
       pl_setup();
     end
     
-    function repr = train(obj, diagrams)
-      repr = obj.test(diagrams);
+    function obj = fit(obj, diagrams)
+		disp('PersistenceKernelOne does not need fitting.');
     end
     
-    function repr = test(obj, diagrams)
-      repr = diagrams;
+    function repr = predict(obj, diagrams)
+		repr = diagrams;
     end
 
     function K = generateKernel(obj, repr)

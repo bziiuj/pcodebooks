@@ -10,7 +10,7 @@ classdef PersistenceVLAD < PersistenceBow
       obj.feature_size = obj.numWords * 2;
     end
     
-    function repr = test(obj, diagrams)
+    function repr = predict(obj, diagrams)
       repr = cell(numel(diagrams), 1);
       for i = 1:numel(diagrams)
         if isempty(diagrams{i})
