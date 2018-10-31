@@ -2,17 +2,16 @@ import scipy.io as sio
 from pd_wasserstein import wasserstein_dist_mat, wasserstein_dist_mat_parallel
 import time
 
-# path = '/home/cybjaz/workspace/pcodebooks/pcodebooks/rawdata/exp03_geomat';
-# filename = 'pds_1_400';
-# path = '/home/cybjaz/workspace/pcodebooks/pcodebooks/exp01_svm';
-# filename = 'pd';
-# path = '/home/lipinski/public_html/pcodebook_data/exp03_geomat';
-path = '/home/lipinski/public_html/pcodebook_data/exp06_reddit12K';
-cores = 64;
+experiments = ['exp01_synthetic', 'exp02_motion', 'exp03_geomat', 'exp04_petroglyphs', 'exp05_reddit5K', 'exp06_reddit12K'];
 
-# filename = 'pds_1_400';
+datapath = '/home/lipinski/public_html/pcodebook_data/';
+path = datapath + experiments[0];
+cores = 32;
+
 # filenames  = ['pds_1_400', 'pds_1_100', 'pds_0_200', 'pds_0_100']; 
 filenames  = ['pds_reddit12K_sub50']; 
+# filenames  = ['pd']; 
+
 for filename in filenames:
     fullname = path + '/' + filename + '.mat';
 
@@ -22,7 +21,9 @@ for filename in filenames:
 
     pds = data['pds'];
 
-#    pds = pds.transpose().flatten();
+#   pds array should be of shape (C, E), where C is number of classes and E number of examples
+#   transpose if needed
+#    pds = pds.transpose();
     pds = pds.flatten();
     start = time.time();
     K = wasserstein_dist_mat_parallel(pds, cores);

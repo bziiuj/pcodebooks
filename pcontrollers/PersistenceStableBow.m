@@ -15,6 +15,7 @@ classdef PersistenceStableBow < PersistenceBow
 	  end
 	  
 	  function obj = fit(obj, diagrams, diagramLimits)
+		disp('Fitting Stable Persistence BoW');
 		allPoints = cat(1, diagrams{:});
 		allPointsPersist = [allPoints(:, 1), allPoints(:, 2) - allPoints(:, 1)];
 		diagramLimitsPersist = [0, diagramLimits(2) - diagramLimits(1)];
@@ -49,6 +50,7 @@ classdef PersistenceStableBow < PersistenceBow
 			else
 				x = [diagrams{i}(:, 1), diagrams{i}(:, 2) - diagrams{i}(:, 1)];
 				z = posterior(obj.gm, x);
+				z = z .* repmat(pdf(obj.gm, x), [1, size(z, 2)]);
 				z = sum(z);
 			end
 			z = sign(z) .* sqrt(abs(z));

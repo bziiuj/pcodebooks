@@ -16,6 +16,7 @@ classdef PersistenceFV < PersistenceBow
     end
     
     function obj = fit(obj, diagrams, diagramLimits)
+		disp('Fitting Persistence FV');
       allPoints = cat(1, diagrams{:});
       allPointsPersist = [allPoints(:, 1), allPoints(:, 2) - allPoints(:, 1)];
       diagramLimitsPersist = [0, diagramLimits(2) - diagramLimits(1)];
