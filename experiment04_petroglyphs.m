@@ -8,16 +8,18 @@ function experiment04_petroglyphs(test_type, algorithm, init_parallel, subset)
 	switch algorithm
 	case 0
 		algorithm = 'linearSVM-kernel'; 
-		error('Kernel test is unavailable for this experiment!');
 	case 1
 		algorithm = 'linearSVM-vector';
 	end
 	par = 0;
-	if nargin == 3
+	if nargin >= 3
 		par = init_parallel;
 	end
-	if test_type == 0
-		error('Kernel test is unavailable for this experiment!');
+
+	if nargin < 4
+		sample = 300;
+	else
+		sample = subset;
 	end
 
 	addpath('pcontrollers');
@@ -26,61 +28,41 @@ function experiment04_petroglyphs(test_type, algorithm, init_parallel, subset)
 	expPath = 'exp04_petroglyphs/';
 	pbowsPath = strcat(expPath, 'pbows/');
 	mkdir(pbowsPath);
+	confPath = strcat(expPath, 'conf/');
+	mkdir(confPath);
+	mkdir(strcat(expPath, 'descriptors/'));
 
 	parallel_pi = true; 
-	sample = 300;
-	train_sample_size = 200;
+
 	sufix = strcat('s', num2str(sample));
 	basename = strcat('pds_petroglyphs_', sufix);
-	load([expPath, basename, '.mat'], 'pds');
-	% data is a cell array 26x1
-	% each cell contains cell array samplex2
-	% first column contains PD not clasified as a picture
-	% second column contains PD not clasified as a picture
-
-	% following scans, out of 26, are chosen for a training set
-	train_scans = [2, 4, 6, 7, 9, 11, 15, 16, 17, 18, 22, 23, 25];
-
+	
 	nclasses = 2;
 
-	types = {'stone', 'picture'};
+	types = {'no_engravement', 'engravement'};
 	
-	%%%%% COMPUTE DIAGRAM LIMITS
-	disp(strcat('Computing limits'));
-	diagramLimits = [0, 0];
-	dmax = max(pds{2}{1,1}(:,2));
-	dmin = min(pds{2}{1,1}(:,1));
-	dmaxs = [];
-	dmins = [];
-	for s = train_scans
-		for i = 1:sample
-			for j = 1:2
-				dmin = min(dmin, min(pds{s}{i,j}(:,1)));
-				dmax = max(dmax, max(pds{s}{i,j}(:,2)));
-				dmins = [dmins, min(pds{s}{i,j}(:,1))];
-				dmaxs = [dmaxs, max(pds{s}{i,j}(:,2))];
-			end
-		end
-	end
-	diagramLimits = [dmin, dmax];
-	disp(strcat('MinMax diagram values: ', num2str(diagramLimits)));
-	diagramLimits = [quantile(dmins, 0.01), quantile(dmaxs, 0.99)];
-	disp(strcat('Diagram limits: ', num2str(diagramLimits)));
-
 	%%%%% EXPERIMENT PARAMETERS
 	% Number of trials
-	N = 25;
+	N = 20;
 	% PI tested resolutions and relative sigmas
-	pi_r = [5, 10:10:50];%, 170:30:200];
+	pi_r = [5, 10:10:100];%, 170:30:200];
 	pi_s = [0.1, 0.25, 0.5, 1, 1.5, 2];
 	% tested codebook sizes
 %	bow_sizes = 150:20:210;
-	bow_sizes = [5, 10:10:50]; %, 75, 100];%, 180:30:210];
+	bow_sizes = [5, 10:10:100]; %, 75, 100];%, 180:30:210];
 %	bow_sizes = [10:10:50];
 	sample_sizes = [10000];
 
 	objs = {};
 	switch test_type
+	%%% KERNEL APPROACHES
+	case 0
+		disp('Creating kernel descriptor objects');
+		objs{end + 1} = {PersistenceWasserstein(2), {'pw', 'pw'}};
+		for a = 50:50:250
+		  objs{end + 1} = {PersistenceKernelTwo(0, a), {'pk2a', ['pk2a_', num2str(a)]}};
+		end
+		objs{end + 1} = {PersistenceLandscape(), {'pl', 'pl'}};
 	%%% OTHER VECTORIZED APPROACHES
 	case 1
 		disp('Creating vectorized descriptor objects');
@@ -185,31 +167,37 @@ function experiment04_petroglyphs(test_type, algorithm, init_parallel, subset)
 		pool = parpool(workers);
 	end
 
-	% all pds in flat cell array
-	flat_pds = cell(26*sample*2, 1); 
-	% all labels in flat array
-	flat_labels = zeros(26*sample*2, 1);
-	for s = 1:26
-		l = sample*2*(s-1)+1;
-		r = l + sample*2-1;
-		flat_pds(l:r) = [pds{s}(:,1), pds{s}(:,2)];
-		flat_labels(l:r) = [zeros(sample, 1); ones(sample, 1)];
-	end
-
 	for o = 1:numel(objs)
 		acc = zeros(N, nclasses + 1);
+		conf_matrices = zeros(N, nclasses, nclasses);
 		all_times = zeros(N, 2);
 		obj = objs{o}{1};
 		prop = objs{o}{2};
 		
 		for i = 1:N
+			[pds, train_surfs, diagramLimits] = load_data_nth_rep(i, expPath, basename, sample);
+			% all pds in flat cell array
+			flat_pds = cell(26*sample*2, 1); 
+			% all labels in flat array
+			flat_labels = zeros(26*sample*2, 1);
+			for s = 1:26
+				l = sample*2*(s-1)+1;
+				r = l + sample*2-1;
+				flat_pds(l:r) = [pds{s}(:,1), pds{s}(:,2)];
+				flat_labels(l:r) = [zeros(sample, 1); ones(sample, 1)];
+			end
+
 			seedBig = i * 10103;
+			rng(seedBig);
 			fprintf('Computing: %s\t, repetition %d\n', prop{2}, i);
 			
-			[accuracy, preciseAccuracy, times, obj] = compute_accuracy_petroglyphs( ...
-				obj, pds, flat_pds, flat_labels, train_scans, sample, train_sample_size, ...
-				diagramLimits, algorithm, prop{1}, strcat(basename, '_', prop{2}), expPath, seedBig);
+			[accuracy, preciseAccuracy, confusion_matrix, times, obj] = ...
+				compute_accuracy_petroglyphs(obj, pds, flat_pds, ...
+				flat_labels, train_surfs, sample, diagramLimits, algorithm, ...
+				prop{1}, strcat(basename, '_', 'rep', num2str(i), '_', prop{2}), ...
+				expPath, seedBig);
 			acc(i, :) = [accuracy, preciseAccuracy]';
+			conf_matrices(i, :, :) = confusion_matrix;
 			all_times(i, :) = times;
 
 %			% Save pbow objects
@@ -220,14 +208,15 @@ function experiment04_petroglyphs(test_type, algorithm, init_parallel, subset)
 %				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_lbls.mat'), 'labels');
 %			end
 		end
-
+		
+		avg_conf_mat = squeeze(sum(conf_matrices, 1));
 		fprintf('Saving results for: %s\n', prop{2});
-		print_results(expPath, obj, N, algorithm, sufix, types, prop, all_times, acc); 
+		print_results(expPath, obj, N, algorithm, sufix, types, prop, all_times, acc, avg_conf_mat);
 	end
 end
 
-function [accuracy, preciseAccuracy, times, obj] = compute_accuracy_petroglyphs(...
-		obj, pds, flat_pds, flat_labels, train_scans, sample, train_sample_size, diagramLimits, ...
+function [accuracy, preciseAccuracy, confusion_matrix, times, obj] = compute_accuracy_petroglyphs(...
+		obj, pds, flat_pds, flat_labels, train_surfs, sample, diagramLimits, ...
 		algorithm, name, detailName, expPath, seed)
   %%% OUTPUT:
   %     accuracy - overall accuracy
@@ -237,18 +226,16 @@ function [accuracy, preciseAccuracy, times, obj] = compute_accuracy_petroglyphs(
 	times = [-1, -1];
 
 	%Get train subset 
-	tr_pds = cell(length(train_scans) * train_sample_size * 2, 1);
+	tr_pds = cell(length(train_surfs) * sample * 2, 1);
 	tridx = [];
 	disp('Preparing train subset');
-	for s = 1:length(train_scans)
-		sidx = train_scans(s);
-		idx0 = randperm(sample, train_sample_size);
-		idx1 = randperm(sample, train_sample_size);
-		l = train_sample_size*2*(s-1)+1;
-		r = l + train_sample_size*2-1;
-		tr_pds(l:r) = [pds{sidx}(idx0, 1), pds{sidx}(idx1,2)];
+	for s = 1:length(train_surfs)
+		sidx = train_surfs(s);
+		l = sample*2*(s-1)+1;
+		r = l + sample*2-1;
+		tr_pds(l:r) = [pds{sidx}(:, 1), pds{sidx}(:,2)];
 		offset = (sidx-1) * sample * 2;
-		tridx = [tridx, offset + idx0, offset + sample + idx1];
+		tridx = [tridx, offset + [1:2*sample]];
 	end
 	tridx = sort(tridx);
 	teidx = 1:length(flat_labels);
@@ -256,6 +243,29 @@ function [accuracy, preciseAccuracy, times, obj] = compute_accuracy_petroglyphs(
 	disp('Prepared');
 
 	switch name
+	case {'pw'}
+		kernelPath = [expPath, detailName, '.mat'];
+		disp(kernelPath);
+		if ~exist(kernelPath, 'file')
+		    throw(MException('Error', 'Wasserstein distance is currently not implemented'));
+		else
+		    load(kernelPath);
+		    K = double(K);
+		end
+	case {'pk1', 'pk2e', 'pk2a', 'pl'}
+		kernelPath = [expPath, detailName, '.mat'];
+		if ~exist(kernelPath, 'file')
+			tic;
+			repr = obj.predict(flat_pds);
+		
+			K = obj.generateKernel(repr);
+			times(2) = toc;
+			save(kernelPath, 'K', 'times');
+		else
+			load(kernelPath);
+		end
+		% K is uppertriangular, so ...
+		K = K + K';
 	case {'pi', 'pbow', 'pvlad', 'pfv', 'pbow_st', 'svlad'}
 		tic;
 		if strcmp(name, 'pi') %|| strcmp(name, 'pds')
@@ -266,9 +276,16 @@ function [accuracy, preciseAccuracy, times, obj] = compute_accuracy_petroglyphs(
 		end
 
 		times(1) = toc;
-		features = zeros(obj.feature_size, length(reprCell));
-		for i = 1:length(reprCell)
-			features(:, i) = reprCell{i}(:)';
+		switch algorithm 
+		case 'linearSVM-kernel'
+			tic;
+			K = obj.generateKernel(reprCell);
+			times(2) = toc;
+		case 'linearSVM-vector'
+			features = zeros(obj.feature_size, length(reprCell));
+			for i = 1:length(reprCell)
+				features(:, i) = reprCell{i}(:)';
+			end
 		end
 	case {'pds'}
 		tic;
@@ -281,18 +298,53 @@ function [accuracy, preciseAccuracy, times, obj] = compute_accuracy_petroglyphs(
 		for i = 1:size(features, 2)
 		  reprNonCell{i} = features(:, i);
 		end
-		tic;
-		times(2) = toc;
+		if strcmp(algorithm, 'linearSVM-kernel')
+			tic;
+			K = obj.generateKernel(reprNonCell);
+			times(2) = toc;
+		end
 	end
-	
+
 	switch algorithm
-%		case 'linearSVM-kernel'
-%		  [accuracy, preciseAccuracy] = new_PD_svmclassify(1-K, labels, tridx, teidx, ...
-%		        'kernel');
+		case 'linearSVM-kernel'
+		  [accuracy, preciseAccuracy, confusion_matrix] = new_PD_svmclassify(1-K, flat_labels+1, tridx, teidx, ...
+		        'kernel');
 		case 'linearSVM-vector'
-		  [accuracy, preciseAccuracy] = new_PD_svmclassify(features, flat_labels+1, tridx, teidx, ...
+		  [accuracy, preciseAccuracy, confusion_matrix] = new_PD_svmclassify(features, flat_labels+1, tridx, teidx, ...
 		        'vector');
 		otherwise
 			error('Only vectorSVM can be used for this experiment');
 	end
+end
+
+function [pds, train_surfs, diagramLimits] = load_data_nth_rep(n, path, basename, sample)
+	% data is a cell array 26x1
+	% each cell contains cell array samplex2
+	% first column contains PDs not clasified as a picture
+	% second column contains PDs clasified as a picture
+	load([path, basename, '_rep', num2str(n),'.mat'], 'pds');
+
+	rng(n)
+	train_surfs = sort(randsample(26,13))';
+	%%%%% COMPUTE DIAGRAM LIMITS
+	disp(strcat('Computing limits'));
+	diagramLimits = [0, 0];
+	dmax = max(pds{train_surfs(1)}{1,1}(:,2));
+	dmin = min(pds{train_surfs(1)}{1,1}(:,1));
+	dmaxs = [];
+	dmins = [];
+	for s = train_surfs
+		for i = 1:sample
+			for j = 1:2
+				dmin = min(dmin, min(pds{s}{i,j}(:,1)));
+				dmax = max(dmax, max(pds{s}{i,j}(:,2)));
+				dmins = [dmins, min(pds{s}{i,j}(:,1))];
+				dmaxs = [dmaxs, max(pds{s}{i,j}(:,2))];
+			end
+		end
+	end
+	diagramLimits = [dmin, dmax];
+	disp(strcat('MinMax diagram values: ', num2str(diagramLimits)));
+	diagramLimits = [quantile(dmins, 0.01), quantile(dmaxs, 0.99)];
+	disp(strcat('Diagram limits: ', num2str(diagramLimits)));
 end

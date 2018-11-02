@@ -60,6 +60,8 @@ if length(type_params)~=0
 				points = b_p_data{j,i,d};
 				points = points(find(points(:,1) >= type_params(d, 1)),:);
 				points = points(find(points(:,2) <= type_params(d, 2)),:);
+				% not all datasets are computed with nonnegative height function
+				% thus we have to move them to 0
                 points(:,1) = points(:,1) - type_params(d,1);
 				b_p_data{j,i,d} = points;
 			end
@@ -72,7 +74,8 @@ disp('Old max birth and persistence values:');
 disp(max_b_p_Hk);
 if type==1       
 	if size(type_params) == [n_dims 2]
-		% max_b_p_Hk = type_params;
+		% substracting the first parameter is due to negative coordinates 
+		% of some diagram points
 		max_b_p_Hk = [max_b_p_Hk(:,1)-type_params(:,1) type_params(:,2)];
 	elseif length(type_params) ~= 0
 		error('type_params argument is of wrong dimension');

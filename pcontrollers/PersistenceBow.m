@@ -30,6 +30,29 @@ classdef PersistenceBow < PersistenceRepresentation
 		end
 		obj.feature_size = obj.numWords;
 	end
+
+	function sufix = getSufix(obj)
+		if strcmp(func2str(obj.weightingFunction), 'constant_one')
+			ff = '_const';
+		elseif strcmp(func2str(obj.weightingFunction), 'linear_ramp')
+			ff = '_lin';
+		else
+			error('unknown weightning function');
+		end
+		if ~isempty(obj.weightingFunctionPredict)
+			if strcmp(func2str(obj.weightingFunctionPredict), 'constant_one')
+				pf = '_const';
+			elseif strcmp(func2str(obj.weightingFunctionPredict), 'linear_ramp')
+				pf = '_lin';
+			else
+				error('unknown weightning function');
+			end
+		else
+			pf = '';
+		end
+
+		sufix = ['c', num2str(obj.numWords), ff, pf,'_', num2str(obj.sampleSize)];
+	end
     
     function setup(obj)
 		pbow_path = which('PersistenceBow');

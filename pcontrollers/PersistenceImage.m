@@ -54,6 +54,18 @@ classdef PersistenceImage < PersistenceRepresentation
 			diagramLimitsPersist, obj.parallel);
 		end
     end
+
+	function sufix = getSufix(obj)
+		if strcmp(func2str(obj.weightingFunction), 'constant_one')
+			ff = 'const';
+		elseif strcmp(func2str(obj.weightingFunction), 'linear_ramp')
+			ff = 'lin';
+		else
+			error('unknown weightning function');
+		end
+
+		sufix = ['r', num2str(obj.resolution), '_s', num2str(100*obj.sigma),'_', ff]
+	end
   end
 end
 

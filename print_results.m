@@ -1,4 +1,4 @@
-function print_results(expPath, obj, N, algorithm_name, sufix, types, prop, times, acc)
+function print_results(expPath, obj, N, algorithm_name, sufix, types, prop, times, acc, confusion_matrix)
 %%% ARGS:
 %	expPath	- directory where results will be saved
 %	algorithm_name
@@ -64,4 +64,9 @@ function print_results(expPath, obj, N, algorithm_name, sufix, types, prop, time
 	fprintf(fid_summary, '%s,%s\n', basicLine, specs);
 
 	fclose(fid);
+	fclose(fid_summary);
+	
+	
+	save([expPath, 'conf/confmat_', sufix, algorithm_name, '_', prop{1}, '_', strrep(specs, ';', '_'), '.mat'], 'confusion_matrix');
+	
 end

@@ -11,7 +11,7 @@ function experiment07_3Dseg(test_type, algorithm, init_parallel)
 	end
 
 	par = 0;
-	if nargin == 3
+	if nargin >= 3
 		par = init_parallel;
 	end
 
@@ -21,6 +21,9 @@ function experiment07_3Dseg(test_type, algorithm, init_parallel)
 	addpath('../pdsphere/matlab');
 	pbowsPath = strcat(expPath, 'pbows/');
 	mkdir(pbowsPath);
+	confPath = strcat(expPath, 'conf/');
+	mkdir(confPath);
+	mkdir(strcat(expPath, 'descriptors/'));
   
 	sufix = '';
 	basename = strcat('pds', sufix);
@@ -141,6 +144,7 @@ function experiment07_3Dseg(test_type, algorithm, init_parallel)
 
 	for o = 1:numel(objs)
 		acc = zeros(N, nclasses+1);
+		conf_matrices = zeros(N, nclasses, nclasses);
 		all_times = zeros(N, 2);
 		obj = objs{o}{1};
 		prop = objs{o}{2};
@@ -149,21 +153,23 @@ function experiment07_3Dseg(test_type, algorithm, init_parallel)
 			seedBig = i * 10000;
 			fprintf('Computing: %s\t, repetition %d\n', prop{2}, i);
 			
-			[accuracy, preciseAccuracy, times, obj] = compute_accuracy(obj, pds(:), ...
+			[accuracy, preciseAccuracy, confusion_matrix, times, obj] = compute_accuracy(obj, pds(:), ...
 			    labels, 4, diagramLimits, algorithm, prop{1}, prop{2}, ...
 			    expPath, seedBig);
 			acc(i, :) = [accuracy, preciseAccuracy]';
+			conf_matrices(i, :, :) = confusion_matrix;
 			all_times(i, :) = times;
 
-% 			if strcmp(prop{1}, 'pbow')
-% 				repr = obj.test(pds(:));
-% 				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_book.mat'), 'obj');
-% 				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_data.mat'), 'repr');
-% 				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_lbls.mat'), 'labels');
-% 			end
-		end
+%			if strcmp(prop{1}, 'pbow')
+%				repr = obj.predict(pds(:));
+%				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_book.mat'), 'obj');
+%				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_data.mat'), 'repr');
+%				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_lbls.mat'), 'labels');
+%			end
+%		end
 		
+		avg_conf_mat = squeeze(sum(conf_matrices, 1));
 		fprintf('Saving results for: %s\n', prop{2});
-		print_results(expPath, obj, N, algorithm, '', types, prop, all_times, acc);
+		print_results(expPath, obj, N, algorithm, '', types, prop, all_times, acc, avg_conf_mat);
 	end
 end

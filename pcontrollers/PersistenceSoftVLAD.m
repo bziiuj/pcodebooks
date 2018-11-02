@@ -59,5 +59,17 @@ methods
 			repr{i} = z;
 		end
 	end
+
+	function sufix = getSufix(obj)
+		if strcmp(func2str(obj.weightingFunction), 'constant_one')
+			ff = 'const';
+		elseif strcmp(func2str(obj.weightingFunction), 'linear_ramp')
+			ff = 'lin';
+		else
+			error('unknown weightning function');
+		end
+
+		sufix = ['c', num2str(obj.numWords), '_', ff, '_', num2str(obj.sampleSize)];
+	end
 end
 end

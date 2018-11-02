@@ -42,5 +42,9 @@ classdef PersistenceRepresentation
 			K = pdist2(reprVect', reprVect');
 			% K = exp(pdist2(reprVect',reprVect','euclidean').^2);
 		end
+		% to override
+		function sufix = getSufix(obj)
+			%%% Get string describing object parameters
+		end
 	end
 end
