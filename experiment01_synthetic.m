@@ -30,8 +30,9 @@ function experiment01_synthetic(test_type, algorithm, init_parallel)
 
 	% calculate diagram limits
 	allPoints = cat(1, pds{:});
-	diagramLimits = [quantile(allPoints(:, 1), 0.001), ...
-    quantile(allPoints(:, 2), 0.999)];
+	allPointsPersist = allPoints(:, 2) - allPoints(:, 1);
+	diagramLimits = [quantile(allPointsPersist, 0.01), ...
+		quantile(allPointsPersist, 0.95)];
 
 	if par
 		cluster = parcluster('local');
@@ -59,7 +60,7 @@ function experiment01_synthetic(test_type, algorithm, init_parallel)
 	case 0
 		disp('Creating kernel descriptor objects');
 		objs{end + 1} = {PersistenceWasserstein(2), {'pw', 'pw'}};
-		for c = [0.5, 1., 1.5]
+		for c = [0.5, 1., 1.5, 2.0, 3.0]
 			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', ['pk1_', num2str(c)]}};
 			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', 'pk1'}};
 		end
@@ -95,17 +96,19 @@ function experiment01_synthetic(test_type, algorithm, init_parallel)
 	case 2 
 		disp('Creating codebooks objects');
 		for c = bow_sizes
-			objs{end + 1} = {PersistenceBow(c, @linear_ramp), {'pbow', ['pbow_', num2str(c)]}};
-		end
-		for c = bow_sizes
-			objs{end + 1} = {PersistenceBow(c, @linear_ramp, @linear_ramp), {'pbow', ['pbow_weight_', num2str(c)]}};
-		end
-		for c = bow_sizes
 			objs{end + 1} = {PersistenceBow(c, @constant_one), {'pbow', ['pbow_', num2str(c)]}};
 		end
 		for c = bow_sizes
 			objs{end + 1} = {PersistenceBow(c, @constant_one, @linear_ramp), {'pbow', ['pbow_weight_', num2str(c)]}};
 		end
+		for c = bow_sizes
+			objs{end + 1} = {PersistenceBow(c, @linear_ramp), {'pbow', ['pbow_', num2str(c)]}};
+		end
+		for c = bow_sizes
+			objs{end + 1} = {PersistenceBow(c, @linear_ramp, @linear_ramp), {'pbow', ['pbow_weight_', num2str(c)]}};
+		end
+	%%% PERSISTENCE CODEBOOKS PVLAD + PFV
+	case 4
 		for c = bow_sizes
 			objs{end + 1} = {PersistenceVLAD(c, @linear_ramp), {'pvlad', ['pvlad_', num2str(c)]}};
 		end
@@ -127,6 +130,8 @@ function experiment01_synthetic(test_type, algorithm, init_parallel)
 		for c = bow_sizes
 			objs{end + 1} = {PersistenceStableBow(c, @constant_one), {'pbow_st', ['pbow_st_', num2str(c)]}};
 		end
+	%%% STABLE PERSISTENCE VLAD
+	case 6
 		for c = bow_sizes
 			objs{end + 1} = {PersistenceSoftVLAD(c, @linear_ramp), {'svlad', ['svlad_', num2str(c)]}};
 		end

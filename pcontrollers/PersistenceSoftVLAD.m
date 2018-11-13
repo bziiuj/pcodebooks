@@ -17,7 +17,8 @@ methods
 	function obj = fit(obj, diagrams, diagramLimits)
 		allPoints = cat(1, diagrams{:});
 		allPointsPersist = [allPoints(:, 1), allPoints(:, 2) - allPoints(:, 1)];
-		diagramLimitsPersist = [0, diagramLimits(2) - diagramLimits(1)];
+%		diagramLimitsPersist = [0, diagramLimits(2) - diagramLimits(1)];
+		diagramLimitsPersist = diagramLimits;
 
 		samplePointsPersist = obj.getSample(allPointsPersist, diagramLimitsPersist);
 

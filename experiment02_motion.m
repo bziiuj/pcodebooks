@@ -47,8 +47,11 @@ function experiment02_motion(test_type, algorithm, init_parallel, subset)
 		for i = 1:nelem
 			allPoints = [allPoints; cat(1, pds{i,d})];
 		end
-		diagramLimits{d} = [quantile(allPoints(:, 1), 0.005), ...
-			quantile(allPoints(:, 2), 0.995)];
+		allPointsPersist = allPoints(:, 2) - allPoints(:, 1);
+		diagramLimits = [quantile(allPointsPersist, 0.01), ...
+			quantile(allPointsPersist, 0.95)];
+%		diagramLimits{d} = [quantile(allPoints(:, 1), 0.005), ...
+%			quantile(allPoints(:, 2), 0.995)];
 	end
 	
 	%%%%% EXPERIMENT PARAMETERS
@@ -193,7 +196,7 @@ function experiment02_motion(test_type, algorithm, init_parallel, subset)
 %				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_data.mat'), 'repr');
 %				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_lbls.mat'), 'labels');
 %			end
-%		end
+		end
 
 		avg_conf_mat = squeeze(sum(conf_matrices, 1));
 		fprintf('Saving results for: %s\n', prop{2});

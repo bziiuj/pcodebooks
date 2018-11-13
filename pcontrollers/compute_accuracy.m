@@ -19,7 +19,18 @@ function [accuracy, preciseAccuracy, confusion_matrix, times, obj] = compute_acc
 		    load(kernelPath);
 		    K = double(K);
 		end
-	case {'pk1', 'pk2e', 'pk2a', 'pl'}
+	case {'pk1'}
+		if ~exist(kernelPath, 'file')
+			repr = obj.predict(pds);
+			[K, tk] = obj.generateKernel(repr);
+			times(2) = tk;
+			save(kernelPath, 'K', 'times');
+		else
+			load(kernelPath);
+		end
+		% K is uppertriangular, so ...
+		K = K + K';
+	case {'pk2e', 'pk2a', 'pl'}
 		if ~exist(kernelPath, 'file')
 			tic;
 			repr = obj.predict(pds);

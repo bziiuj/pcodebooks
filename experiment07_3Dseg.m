@@ -36,8 +36,11 @@ function experiment07_3Dseg(test_type, algorithm, init_parallel)
 
 	% calculate diagram limits
 	allPoints = cat(1, pds{:});
-	diagramLimits = [quantile(allPoints(:, 1), 0.001), ...
-    quantile(allPoints(:, 2), 0.999)];
+	allPointsPersist = allPoints(:, 2) - allPoints(:, 1);
+	diagramLimits = [quantile(allPointsPersist, 0.01), ...
+		quantile(allPointsPersist, 0.95)];
+%	diagramLimits = [quantile(allPoints(:, 1), 0.001), ...
+%    quantile(allPoints(:, 2), 0.999)];
 
 	if par
 		cluster = parcluster('local');
@@ -63,12 +66,13 @@ function experiment07_3Dseg(test_type, algorithm, init_parallel)
 	%%% KERNEL APPROACHES
 	case 0
 		disp('Creating kernel descriptor objects');
+		objs{end + 1} = {PersistenceKernelOne(2.0), {'pk1', ['pk1_', num2str(2.0)]}};
 		objs{end + 1} = {PersistenceWasserstein(2), {'pw', 'pw'}};
-%		for c = [0.5, 1., 1.5]
-%			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', ['pk1_', num2str(c)]}};
-%			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', 'pk1'}};
-%		end
-%		objs{end + 1} = {PersistenceKernelTwo(1, -1), {'pk2e', 'pk2e'}};
+		for c = [0.5, 1., 1.5, 2.0, 3.0]
+			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', ['pk1_', num2str(c)]}};
+			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', 'pk1'}};
+		end
+		objs{end + 1} = {PersistenceKernelTwo(1, -1), {'pk2e', 'pk2e'}};
 		for a = 50:50:250
 			objs{end + 1} = {PersistenceKernelTwo(0, a), {'pk2a', ['pk2a_', num2str(a)]}};
 		end
@@ -166,8 +170,8 @@ function experiment07_3Dseg(test_type, algorithm, init_parallel)
 %				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_data.mat'), 'repr');
 %				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_lbls.mat'), 'labels');
 %			end
-%		end
-		
+		end
+
 		avg_conf_mat = squeeze(sum(conf_matrices, 1));
 		fprintf('Saving results for: %s\n', prop{2});
 		print_results(expPath, obj, N, algorithm, '', types, prop, all_times, acc, avg_conf_mat);

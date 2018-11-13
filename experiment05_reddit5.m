@@ -44,7 +44,10 @@ function experiment05_reddit5K(test_type, algorithm, init_parallel, subset)
 	types = {'cl1', 'cl2', 'cl3', 'cl4', 'cl5'};
 	
 	allPoints = cat(1, pds{:});
-	diagramLimits = [0 1];
+	allPointsPersist = allPoints(:, 2) - allPoints(:, 1);
+	diagramLimits = [quantile(allPointsPersist, 0.01), ...
+		quantile(allPointsPersist, 0.95)];
+%	diagramLimits = [0 1];
 	
 	%%%%% EXPERIMENT PARAMETERS
 	N = 25;
@@ -63,7 +66,12 @@ function experiment05_reddit5K(test_type, algorithm, init_parallel, subset)
 	%%% KERNEL APPROACHES
 	case 0
 		disp('Creating kernel descriptor objects');
+		objs{end + 1} = {PersistenceKernelOne(2.0), {'pk1', ['pk1_', num2str(2.0)]}};
 		objs{end + 1} = {PersistenceWasserstein(2), {'pw', 'pw'}};
+		for c = [0.5, 1., 1.5, 2.0, 3.0]
+			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', ['pk1_', num2str(c)]}};
+			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', 'pk1'}};
+		end
 		for a = 50:50:250
 		  objs{end + 1} = {PersistenceKernelTwo(0, a), {'pk2a', ['pk2a_', num2str(a)]}};
 		end
@@ -92,6 +100,7 @@ function experiment05_reddit5K(test_type, algorithm, init_parallel, subset)
 				end
 			end
 		end
+
 	%%% PERSISTENCE CODEBOOKS
 	case 2
 		disp('Creating codebooks objects');
@@ -197,7 +206,7 @@ function experiment05_reddit5K(test_type, algorithm, init_parallel, subset)
 %				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_data.mat'), 'repr');
 %				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_lbls.mat'), 'labels');
 %			end
-%		end
+		end
 
 		avg_conf_mat = squeeze(sum(conf_matrices, 1));
 		fprintf('Saving results for: %s\n', prop{2});

@@ -19,6 +19,10 @@ classdef PersistenceWasserstein < PersistenceRepresentation
 		function setup(obj)
 		end
 
+		function sufix = getSufix(obj)
+			sufix = '';
+		end
+
 		function obj = fit(obj, diagrams)
 			disp('PersistenceWasserstein does not need fitting.');
 		end

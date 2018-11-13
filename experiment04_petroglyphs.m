@@ -58,7 +58,12 @@ function experiment04_petroglyphs(test_type, algorithm, init_parallel, subset)
 	%%% KERNEL APPROACHES
 	case 0
 		disp('Creating kernel descriptor objects');
+		objs{end + 1} = {PersistenceKernelOne(2.0), {'pk1', ['pk1_', num2str(2.0)]}};
 		objs{end + 1} = {PersistenceWasserstein(2), {'pw', 'pw'}};
+		for c = [0.5, 1., 1.5, 2.0, 3.0]
+			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', ['pk1_', num2str(c)]}};
+			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', 'pk1'}};
+		end
 		for a = 50:50:250
 		  objs{end + 1} = {PersistenceKernelTwo(0, a), {'pk2a', ['pk2a_', num2str(a)]}};
 		end
@@ -252,7 +257,20 @@ function [accuracy, preciseAccuracy, confusion_matrix, times, obj] = compute_acc
 		    load(kernelPath);
 		    K = double(K);
 		end
-	case {'pk1', 'pk2e', 'pk2a', 'pl'}
+	case {'pk1'}
+		kernelPath = [expPath, detailName, '.mat'];
+		if ~exist(kernelPath, 'file')
+			repr = obj.predict(flat_pds);
+		
+			[K, time] = obj.generateKernel(repr, detailName);
+			times(2) = time;
+			save(kernelPath, 'K', 'times');
+		else
+			load(kernelPath);
+		end
+		% K is uppertriangular, so ...
+		K = K;
+	case {'pk2e', 'pk2a', 'pl'}
 		kernelPath = [expPath, detailName, '.mat'];
 		if ~exist(kernelPath, 'file')
 			tic;
@@ -305,6 +323,9 @@ function [accuracy, preciseAccuracy, confusion_matrix, times, obj] = compute_acc
 		end
 	end
 
+	accuracy = [];
+	preciseAccuracy = [];
+	confusion_matrix = [];
 	switch algorithm
 		case 'linearSVM-kernel'
 		  [accuracy, preciseAccuracy, confusion_matrix] = new_PD_svmclassify(1-K, flat_labels+1, tridx, teidx, ...
@@ -338,13 +359,16 @@ function [pds, train_surfs, diagramLimits] = load_data_nth_rep(n, path, basename
 			for j = 1:2
 				dmin = min(dmin, min(pds{s}{i,j}(:,1)));
 				dmax = max(dmax, max(pds{s}{i,j}(:,2)));
-				dmins = [dmins, min(pds{s}{i,j}(:,1))];
-				dmaxs = [dmaxs, max(pds{s}{i,j}(:,2))];
+%				dmins = [dmins, min(pds{s}{i,j}(:,1))];
+%				dmaxs = [dmaxs, max(pds{s}{i,j}(:,2))];
+				dpers = [dpers, min(pds{s}{i,j}(:,2) - pds{s}{i,j}(:,1))];
+				dpers = [dpers, max(pds{s}{i,j}(:,2) - pds{s}{i,j}(:,1))];
 			end
 		end
 	end
 	diagramLimits = [dmin, dmax];
 	disp(strcat('MinMax diagram values: ', num2str(diagramLimits)));
-	diagramLimits = [quantile(dmins, 0.01), quantile(dmaxs, 0.99)];
+%	diagramLimits = [quantile(dmins, 0.01), quantile(dmaxs, 0.99)];
+	diagramLimits = [quantile(dpers, 0.01), quantile(dpers, 0.99)];
 	disp(strcat('Diagram limits: ', num2str(diagramLimits)));
 end

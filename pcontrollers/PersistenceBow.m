@@ -50,7 +50,6 @@ classdef PersistenceBow < PersistenceRepresentation
 		else
 			pf = '';
 		end
-
 		sufix = ['c', num2str(obj.numWords), ff, pf,'_', num2str(obj.sampleSize)];
 	end
     
@@ -78,12 +77,13 @@ classdef PersistenceBow < PersistenceRepresentation
 			samplePointsPersist = allPointsPersist(randsample(1:size(allPointsPersist, 1), obj.sampleSize), :);
 		end
 	end
-	
+
 	function obj = fit(obj, diagrams, diagramLimits)
 		disp('Fitting Persistence BoW');
 		allPoints = cat(1, diagrams{:});
 		allPointsPersist = [allPoints(:, 1), allPoints(:, 2) - allPoints(:, 1)];
-		diagramLimitsPersist = [0, diagramLimits(2) - diagramLimits(1)];
+%		diagramLimitsPersist = [0, diagramLimits(2) - diagramLimits(1)];
+		diagramLimitsPersist = diagramLimits;
 		obj.diagramLimits = diagramLimitsPersist;
 		
 		samplePointsPersist = obj.getSample(allPointsPersist, diagramLimitsPersist);
@@ -92,7 +92,7 @@ classdef PersistenceBow < PersistenceRepresentation
 		  'verbose', 'algorithm', 'ann') ;
 		obj.kdtree = vl_kdtreebuild(obj.kdwords, 'numTrees', 2) ;
 	end
-	
+
 	function repr = predict(obj, diagrams)
 		repr = cell(numel(diagrams), 1);
 		for i = 1:numel(diagrams)

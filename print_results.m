@@ -24,8 +24,10 @@ function print_results(expPath, obj, N, algorithm_name, sufix, types, prop, time
 
 	specs = ''; 
 	switch prop{1}
-		case {'pw', 'pk1', 'pl'}
+		case {'pw', 'pl'}
 			specs = '';
+		case {'pk1'}
+			specs = num2str(obj.sigma);
 		case {'pk2e', 'pk2a'}
 			specs = [num2str(obj.exact), ';', num2str(obj.n)];
 		case 'pi'
@@ -61,7 +63,7 @@ function print_results(expPath, obj, N, algorithm_name, sufix, types, prop, time
 	    prop{1}, std(acc(:,1)), mean(times(:,1)), mean(times(:,2)), mean(acc));
 	fprintf(fid, '%s\n', basicLine);
 	
-	fprintf(fid_summary, '%s,%s\n', basicLine, specs);
+	fprintf(fid_summary, '%s;%s\n', basicLine, specs);
 
 	fclose(fid);
 	fclose(fid_summary);

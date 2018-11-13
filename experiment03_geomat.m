@@ -50,8 +50,11 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 	    'Soil - Mulch', 'Stone - Granular', 'Stone - Limestone', 'Wood'};
 	
 	allPoints = cat(1, pds{:});
-	diagramLimits = [quantile(allPoints(:, 1), 0.005), ...
-	  quantile(allPoints(:, 2), 0.995)];
+	allPointsPersist = allPoints(:, 2) - allPoints(:, 1);
+	diagramLimits = [quantile(allPointsPersist, 0.01), ...
+		quantile(allPointsPersist, 0.95)];
+%	diagramLimits = [quantile(allPoints(:, 1), 0.005), ...
+%	  quantile(allPoints(:, 2), 0.995)];
 
 	%%%%% EXPERIMENT PARAMETERS
 	% PI tested resolutions and relative sigmas
@@ -71,6 +74,10 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 	%%% KERNEL APPROACHES
 	case 0
 		disp('Creating kernel descriptor objects');
+		for c = [1., 2.0]
+			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', ['pk1_', num2str(c)]}};
+			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', 'pk1'}};
+		end
 		objs{end + 1} = {PersistenceWasserstein(2), {'pw', 'pw'}};
 		for a = 50:50:250
 		  objs{end + 1} = {PersistenceKernelTwo(0, a), {'pk2a', ['pk2a_', num2str(a)]}};
@@ -99,6 +106,7 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 				end
 			end
 		end
+
 	%%% PERSISTENCE CODEBOOKS
 	case 2
 		disp('Creating codebooks objects');
@@ -108,48 +116,49 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 				objs{end}{1}.sampleSize = s;
 			end
 		end
-%		for c = bow_sizes
-%			for s = sample_sizes
-%				objs{end + 1} = {PersistenceBow(c, @linear_ramp, @linear_ramp), {'pbow', ['pbow_weight_', num2str(c)]}};
-%				objs{end}{1}.sampleSize = s;
-%			end
-%		end
-%		for c = bow_sizes
-%			for s = sample_sizes
-%				objs{end + 1} = {PersistenceBow(c, @constant_one), {'pbow', ['pbow_', num2str(c)]}};
-%				objs{end}{1}.sampleSize = s;
-%			end
-%		end
-%		for c = bow_sizes
-%			for s = sample_sizes
-%				objs{end + 1} = {PersistenceBow(c, @constant_one, @linear_ramp), {'pbow', ['pbow_weight_', num2str(c)]}};
-%				objs{end}{1}.sampleSize = s;
-%			end
-%		end
-%		for c = bow_sizes
-%			for s = sample_sizes
-%				objs{end + 1} = {PersistenceVLAD(c, @linear_ramp), {'pvlad', ['pvlad_', num2str(c)]}};
-%				objs{end}{1}.sampleSize = s;
-%			end
-%		end
-%		for c = bow_sizes
-%			for s = sample_sizes
-%				objs{end + 1} = {PersistenceFV(c, @linear_ramp), {'pfv', ['pfv_', num2str(c)]}};
-%				objs{end}{1}.sampleSize = s;
-%			end
-%		end
-%		for c = bow_sizes
-%			for s = sample_sizes
-%				objs{end + 1} = {PersistenceVLAD(c, @constant_one), {'pvlad', ['pvlad_', num2str(c)]}};
-%				objs{end}{1}.sampleSize = s;
-%			end
-%		end
-%		for c = bow_sizes
-%			for s = sample_sizes
-%				objs{end + 1} = {PersistenceFV(c, @constant_one), {'pfv', ['pfv_', num2str(c)]}};
-%				objs{end}{1}.sampleSize = s;
-%			end
-%		end
+		for c = bow_sizes
+			for s = sample_sizes
+				objs{end + 1} = {PersistenceBow(c, @linear_ramp, @linear_ramp), {'pbow', ['pbow_weight_', num2str(c)]}};
+				objs{end}{1}.sampleSize = s;
+			end
+		end
+		for c = bow_sizes
+			for s = sample_sizes
+				objs{end + 1} = {PersistenceBow(c, @constant_one), {'pbow', ['pbow_', num2str(c)]}};
+				objs{end}{1}.sampleSize = s;
+			end
+		end
+		for c = bow_sizes
+			for s = sample_sizes
+				objs{end + 1} = {PersistenceBow(c, @constant_one, @linear_ramp), {'pbow', ['pbow_weight_', num2str(c)]}};
+				objs{end}{1}.sampleSize = s;
+			end
+		end
+		for c = bow_sizes
+			for s = sample_sizes
+				objs{end + 1} = {PersistenceVLAD(c, @linear_ramp), {'pvlad', ['pvlad_', num2str(c)]}};
+				objs{end}{1}.sampleSize = s;
+			end
+		end
+		for c = bow_sizes
+			for s = sample_sizes
+				objs{end + 1} = {PersistenceFV(c, @linear_ramp), {'pfv', ['pfv_', num2str(c)]}};
+				objs{end}{1}.sampleSize = s;
+			end
+		end
+		for c = bow_sizes
+			for s = sample_sizes
+				objs{end + 1} = {PersistenceVLAD(c, @constant_one), {'pvlad', ['pvlad_', num2str(c)]}};
+				objs{end}{1}.sampleSize = s;
+			end
+		end
+		for c = bow_sizes
+			for s = sample_sizes
+				objs{end + 1} = {PersistenceFV(c, @constant_one), {'pfv', ['pfv_', num2str(c)]}};
+				objs{end}{1}.sampleSize = s;
+			end
+		end
+
 	%%% STABLE PERSISTENCE CODEBOOKS
 	case 3
 		disp('Creating stable codebooks objects');
@@ -204,9 +213,9 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 %				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_data.mat'), 'repr');
 %				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_lbls.mat'), 'labels');
 %			end
-%		end
+		end
 
-		avg_conf_mat = squeeze(sum(conf_matrices, 1));
+		avg_conf_mat = squeeze(sum(conf_matrices, 1)/N);
 		fprintf('Saving results for: %s\n', prop{2});
 		print_results(expPath, obj, N, algorithm, sufix, types, prop, all_times, acc, avg_conf_mat); 
 	end
