@@ -16,10 +16,10 @@ function experiment04_petroglyphs(test_type, algorithm, init_parallel, subset)
 		par = init_parallel;
 	end
 
-	if nargin < 4
-		sample = 300;
+	if subset
+		sample = 10;
 	else
-		sample = subset;
+		sample = 300;
 	end
 
 	addpath('pcontrollers');
@@ -43,14 +43,14 @@ function experiment04_petroglyphs(test_type, algorithm, init_parallel, subset)
 	
 	%%%%% EXPERIMENT PARAMETERS
 	% Number of trials
-	N = 20;
+	N = 10;
 	% PI tested resolutions and relative sigmas
-	pi_r = [5, 10:10:100];%, 170:30:200];
-	pi_s = [0.1, 0.25, 0.5, 1, 1.5, 2];
+	pi_r = 10:10:100;%, 170:30:200];
+	pi_s = [0.5, 1, 2, 3];
 	% tested codebook sizes
 %	bow_sizes = 150:20:210;
-	bow_sizes = [5, 10:10:100]; %, 75, 100];%, 180:30:210];
-%	bow_sizes = [10:10:50];
+	bow_sizes = [10, 20:20:200]; %, 75, 100];%, 180:30:210];
+	bow_sizes = [50];
 	sample_sizes = [10000];
 
 	objs = {};
@@ -58,8 +58,8 @@ function experiment04_petroglyphs(test_type, algorithm, init_parallel, subset)
 	%%% KERNEL APPROACHES
 	case 0
 		disp('Creating kernel descriptor objects');
+		objs{end + 1} = {PersistenceWasserstein(), {'pw', 'pw'}};
 		objs{end + 1} = {PersistenceKernelOne(2.0), {'pk1', ['pk1_', num2str(2.0)]}};
-		objs{end + 1} = {PersistenceWasserstein(2), {'pw', 'pw'}};
 		for c = [0.5, 1., 1.5, 2.0, 3.0]
 			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', ['pk1_', num2str(c)]}};
 			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', 'pk1'}};
@@ -68,142 +68,165 @@ function experiment04_petroglyphs(test_type, algorithm, init_parallel, subset)
 		  objs{end + 1} = {PersistenceKernelTwo(0, a), {'pk2a', ['pk2a_', num2str(a)]}};
 		end
 		objs{end + 1} = {PersistenceLandscape(), {'pl', 'pl'}};
+
 	%%% OTHER VECTORIZED APPROACHES
 	case 1
 		disp('Creating vectorized descriptor objects');
 		for r = pi_r
 			for s = pi_s
 				objs{end + 1} = {PersistenceImage(r, s, @linear_ramp), {'pi', ['pi_', num2str(r), '_', num2str(s)]}};
-				objs{end}{1}.parallel = parallel_pi;
+				objs{end}{1}.parallel = true;
 			end
 		end
 		for r = pi_r
 			for s = pi_s
 				objs{end + 1} = {PersistenceImage(r, s, @constant_one), {'pi', ['pi_', num2str(r), '_', num2str(s)]}};
-				objs{end}{1}.parallel = parallel_pi;
+				objs{end}{1}.parallel = true;
 			end
 		end
 		for r = [10, 20, 40, 60]
 			for s = 0.1:0.1:0.3
-%			for s = [0.0001, 0.0005, 0.001, 0.005, 0.01]
 				for d = 25:25:100
 					objs{end + 1} = {PersistencePds(r, s, d), {'pds', ['pds_', num2str(r), ...
-					'_', num2str(s), '_', num2str(d)]}};
+						'_', num2str(s), '_', num2str(d)]}};
 				end
 			end
 		end
 
 	%%% PERSISTENCE CODEBOOKS
-	case 2
-		disp('Creating codebooks objects');
-		for c = bow_sizes
-			for s = sample_sizes
-				objs{end + 1} = {PersistenceBow(c, @linear_ramp), {'pbow', ['pbow_', num2str(c)]}};
-				objs{end}{1}.sampleSize = s;
-			end
-		end
-		for c = bow_sizes
-			for s = sample_sizes
-				objs{end + 1} = {PersistenceBow(c, @linear_ramp, @linear_ramp), {'pbow', ['pbow_weight_', num2str(c)]}};
-				objs{end}{1}.sampleSize = s;
-			end
-		end
-		for c = bow_sizes
-			for s = sample_sizes
+	case 2 
+		for sample_size = sample_sizes
+			disp(['Creating PBOW objects.', ' Sample size: ', num2str(sample_size)]);
+			for c = bow_sizes
 				objs{end + 1} = {PersistenceBow(c, @constant_one), {'pbow', ['pbow_', num2str(c)]}};
-				objs{end}{1}.sampleSize = s;
+				objs{end}{1}.sampleSize = sample_size;
 			end
-		end
-		for c = bow_sizes
-			for s = sample_sizes
+			for c = bow_sizes
 				objs{end + 1} = {PersistenceBow(c, @constant_one, @linear_ramp), {'pbow', ['pbow_weight_', num2str(c)]}};
-				objs{end}{1}.sampleSize = s;
+				objs{end}{1}.sampleSize = sample_size;
+			end
+			for c = bow_sizes
+				objs{end + 1} = {PersistenceBow(c, @linear_ramp), {'pbow', ['pbow_', num2str(c)]}};
+				objs{end}{1}.sampleSize = sample_size;
+			end
+			for c = bow_sizes
+				objs{end + 1} = {PersistenceBow(c, @linear_ramp, @linear_ramp), {'pbow', ['pbow_weight_', num2str(c)]}};
+				objs{end}{1}.sampleSize = sample_size;
 			end
 		end
-		for c = bow_sizes
-			for s = sample_sizes
+	%%% PERSISTENCE CODEBOOKS PVLAD + PFV
+	case 4
+		for sample_size = sample_sizes
+			disp(['Creating PLVAD and PFV objects.', ' Sample size: ', num2str(sample_size)]);
+			for c = bow_sizes
 				objs{end + 1} = {PersistenceVLAD(c, @linear_ramp), {'pvlad', ['pvlad_', num2str(c)]}};
-				objs{end}{1}.sampleSize = s;
+				objs{end}{1}.sampleSize = sample_size;
 			end
-		end
-		for c = bow_sizes
-			for s = sample_sizes
+			for c = bow_sizes
 				objs{end + 1} = {PersistenceFV(c, @linear_ramp), {'pfv', ['pfv_', num2str(c)]}};
-				objs{end}{1}.sampleSize = s;
+				objs{end}{1}.sampleSize = sample_size;
 			end
-		end
-		for c = bow_sizes
-			for s = sample_sizes
+			for c = bow_sizes
 				objs{end + 1} = {PersistenceVLAD(c, @constant_one), {'pvlad', ['pvlad_', num2str(c)]}};
-				objs{end}{1}.sampleSize = s;
+				objs{end}{1}.sampleSize = sample_size;
 			end
-		end
-		for c = bow_sizes
-			for s = sample_sizes
+			for c = bow_sizes
 				objs{end + 1} = {PersistenceFV(c, @constant_one), {'pfv', ['pfv_', num2str(c)]}};
-				objs{end}{1}.sampleSize = s;
+				objs{end}{1}.sampleSize = sample_size;
 			end
 		end
 
 	%%% STABLE PERSISTENCE CODEBOOKS
 	case 3
-		disp('Creating stable codebooks objects');
-		for c = bow_sizes
-			objs{end + 1} = {PersistenceStableBow(c, @linear_ramp), {'pbow_st', ['pbow_st_', num2str(c)]}};
-		end
-		for c = bow_sizes
-			objs{end + 1} = {PersistenceStableBow(c, @constant_one), {'pbow_st', ['pbow_st_', num2str(c)]}};
-		end
-		for c = bow_sizes
-			objs{end + 1} = {PersistenceSoftVLAD(c, @linear_ramp), {'svlad', ['svlad_', num2str(c)]}};
-		end
-		for c = bow_sizes
-			objs{end + 1} = {PersistenceSoftVLAD(c, @constant_one), {'svlad', ['svlad_', num2str(c)]}};
+		for sample_size = sample_sizes
+			disp(['Creating stable codebooks objects.', ' Sample size: ', num2str(sample_size)]);
+			for c = bow_sizes
+				objs{end + 1} = {PersistenceStableBow(c, @linear_ramp), {'pbow_st', ['pbow_st_', num2str(c)]}};
+				objs{end}{1}.sampleSize = sample_size;
+			end
+			for c = bow_sizes
+				objs{end + 1} = {PersistenceStableBow(c, @constant_one), {'pbow_st', ['pbow_st_', num2str(c)]}};
+				objs{end}{1}.sampleSize = sample_size;
+			end
+			for c = bow_sizes
+				objs{end + 1} = {PersistenceSoftVLAD(c, @linear_ramp), {'svlad', ['svlad_', num2str(c)]}};
+				objs{end}{1}.sampleSize = sample_size;
+			end
+			for c = bow_sizes
+				objs{end + 1} = {PersistenceSoftVLAD(c, @constant_one), {'svlad', ['svlad_', num2str(c)]}};
+				objs{end}{1}.sampleSize = sample_size;
+			end
 		end
 	end
 	%%%
-	disp('Descriptor objects created. Testing');
+
+	% init seed for RNG
+	initSeed = 11111;
 
 	if par
 		cluster = parcluster('local');
-		workers = 32;
+		workers = 8;
 		cluster.NumWorkers = workers;
 		saveProfile(cluster);
 		pool = parpool(workers);
 	end
 
 	for o = 1:numel(objs)
-		acc = zeros(N, nclasses + 1);
-		conf_matrices = zeros(N, nclasses, nclasses);
-		all_times = zeros(N, 2);
+		allAccTest = zeros(N, nclasses + 1);
+		allAccTrain = zeros(N, nclasses + 1);
+		conf_matrices_test = zeros(N, nclasses, nclasses);
+		conf_matrices_train = zeros(N, nclasses, nclasses);
+		allTimes = zeros(N, 4);
+		allC = zeros(N, 1);
+
 		obj = objs{o}{1};
 		prop = objs{o}{2};
-		
+
 		for i = 1:N
-			[pds, train_surfs, diagramLimits] = load_data_nth_rep(i, expPath, basename, sample);
+			[pds, train_surfs, persistenceLimits] = load_data_nth_rep(i, expPath, basename, sample);
 			% all pds in flat cell array
 			flat_pds = cell(26*sample*2, 1); 
 			% all labels in flat array
 			flat_labels = zeros(26*sample*2, 1);
+			train_set = [];
+			test_set = [];
 			for s = 1:26
 				l = sample*2*(s-1)+1;
 				r = l + sample*2-1;
 				flat_pds(l:r) = [pds{s}(:,1), pds{s}(:,2)];
 				flat_labels(l:r) = [zeros(sample, 1); ones(sample, 1)];
+
+				if ismember(s, train_surfs)
+					train_set = [train_set l:r];
+				else
+					test_set = [test_set l:r];
+				end
 			end
 
-			seedBig = i * 10103;
+			seedBig = i * initSeed;
 			rng(seedBig);
 			fprintf('Computing: %s\t, repetition %d\n', prop{2}, i);
-			
-			[accuracy, preciseAccuracy, confusion_matrix, times, obj] = ...
-				compute_accuracy_petroglyphs(obj, pds, flat_pds, ...
-				flat_labels, train_surfs, sample, diagramLimits, algorithm, ...
-				prop{1}, strcat(basename, '_', 'rep', num2str(i), '_', prop{2}), ...
-				expPath, seedBig);
-			acc(i, :) = [accuracy, preciseAccuracy]';
-			conf_matrices(i, :, :) = confusion_matrix;
-			all_times(i, :) = times;
+
+			[acc, precAcc, confMats, C, times, obj] = compute_accuracy(obj, ...
+				pds(train_set), pds(test_set), labels(train_set), labels(test_set), ...
+				nclasses, persistenceLimits(i,:), algorithm, prop{1}, prop{2}, ...
+				expPath, '', seedBig);
+
+			allC(i) = C;
+			allAccTest(i, :) = [acc{1}, precAcc{1}]';
+			conf_matrices_test(i, :, :) = confMats{1};
+			allAccTrain(i, :) = [acc{2}, precAcc{2}]';
+			conf_matrices_train(i, :, :) = confMats{2};
+			allTimes(i, :) = times;
+
+% 			[accuracy, preciseAccuracy, confusion_matrix, times, obj] = ...
+% 				compute_accuracy_petroglyphs(obj, pds, flat_pds, ...
+% 				flat_labels, train_surfs, sample, diagramLimits, algorithm, ...
+% 				prop{1}, strcat(basename, '_', 'rep', num2str(i), '_', prop{2}), ...
+% 				expPath, seedBig);
+% 			acc(i, :) = [accuracy, preciseAccuracy]';
+% 			conf_matrices(i, :, :) = confusion_matrix;
+% 			all_times(i, :) = times;
 
 %			% Save pbow objects
 %			if strcmp(prop{1}, 'pbow') || strcmp(prop{1}, 'pfv') || strcmp(prop{1}, 'pvlad')
@@ -338,7 +361,7 @@ function [accuracy, preciseAccuracy, confusion_matrix, times, obj] = compute_acc
 	end
 end
 
-function [pds, train_surfs, diagramLimits] = load_data_nth_rep(n, path, basename, sample)
+function [pds, train_surfs, persistenceLimits] = load_data_nth_rep(n, path, basename, sample)
 	% data is a cell array 26x1
 	% each cell contains cell array samplex2
 	% first column contains PDs not clasified as a picture
@@ -346,14 +369,14 @@ function [pds, train_surfs, diagramLimits] = load_data_nth_rep(n, path, basename
 	load([path, basename, '_rep', num2str(n),'.mat'], 'pds');
 
 	rng(n)
-	train_surfs = sort(randsample(26,13))';
+	train_surfs = sort(randsample(26, 13))';
 	%%%%% COMPUTE DIAGRAM LIMITS
 	disp(strcat('Computing limits'));
-	diagramLimits = [0, 0];
+	persistenceLimits = [0, 0];
 	dmax = max(pds{train_surfs(1)}{1,1}(:,2));
 	dmin = min(pds{train_surfs(1)}{1,1}(:,1));
-	dmaxs = [];
-	dmins = [];
+	dpers = [];
+	dpers = [];
 	for s = train_surfs
 		for i = 1:sample
 			for j = 1:2
@@ -366,9 +389,9 @@ function [pds, train_surfs, diagramLimits] = load_data_nth_rep(n, path, basename
 			end
 		end
 	end
-	diagramLimits = [dmin, dmax];
-	disp(strcat('MinMax diagram values: ', num2str(diagramLimits)));
+	persistenceLimits = [dmin, dmax];
+	disp(strcat('MinMax diagram values: ', num2str(persistenceLimits)));
 %	diagramLimits = [quantile(dmins, 0.01), quantile(dmaxs, 0.99)];
-	diagramLimits = [quantile(dpers, 0.01), quantile(dpers, 0.99)];
-	disp(strcat('Diagram limits: ', num2str(diagramLimits)));
+	persistenceLimits = [quantile(dpers, 0.01), quantile(dpers, 0.99)];
+	disp(strcat('Diagram limits: ', num2str(persistenceLimits)));
 end

@@ -34,11 +34,13 @@ classdef PersistenceKernelOne < PersistenceRepresentation
 
 			if nargin < 3
 				run_id = '';
+			else
+				run_id = ['_', run_id];
 			end
 
 			diagram_distance = '../persistence-learning/code/dipha-pss/build/diagram_distance';
 			
-			outDir = ['temp_',run_id]; 
+			outDir = ['temp',run_id]; 
 			if exist(outDir)
 				rmdir(outDir, 's');
 			end
@@ -54,40 +56,22 @@ classdef PersistenceKernelOne < PersistenceRepresentation
 				pl_write_persistence_diagram(outFile, 'dipha', data);
 				file_list = [file_list, ' ', outFile, '.bin'];
 			end
+
 			% GRAM matrix
 			gram_matrix_file_wIFGT = fullfile(outDir, ...
 				  sprintf('K_wIFGT.txt'));
-%			gram_matrix_file_wIFGT = fullfile(outDir, ...
-%				  sprintf('Gramm_matrix'));
-%			time_file = fullfile(outDir, ...
-%				  sprintf('duration'));
-
-			gram_matrix_file_wIFGT = ['K_wIFGT_', run_id, '.txt'];
 
 			options = ['--time ', num2str(obj.sigma), ...
 				  ' --dim ', num2str(dim) ' '];
 			exec = [diagram_distance ' ' options file_list ' > ' gram_matrix_file_wIFGT];
 			system(exec);
 
-			K = load(gram_matrix_file_wIFGT);
 			K = dlmread(gram_matrix_file_wIFGT, ' ', 1, 0);
 			K = K(:,1:end-1);
-%			K = load(gram_matrix_file_wIFGT);
-%			K = dlmread(gram_matrix_file_wIFGT, ' ');
-%			K = K(:,1:end-1);
+			time = dlmread(gram_matrix_file_wIFGT, ' ', [0 2 0 2]); 
 
-			time = dlmread(time_file, ' ', [0 0 0 0]); 
-
-			cleanup = ['rm ', gram_matrix_file_wIFGT, ' ', file_list];
+			cleanup = ['rm -rf ', outDir];
 			system(cleanup);
-
-%			disp('Saving command');
-%			fid_run = fopen(fullfile(outDir, 'mk_run.sh'), 'a');
-%
-%			fprintf(fid_run, 'touch %s\n', gram_matrix_file_wIFGT);
-%			fprintf(fid_run, '%s', exec);
-%			fclose(fid_run)
-
 		end
 	end
 end

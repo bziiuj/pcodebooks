@@ -1,5 +1,4 @@
 function [trids, teids] = train_test_indices(labels, nclass, p, seed)
-%%% nex - number of examples per class
 	teN = zeros(nclass, 1);
 	for n = 1:nclass
 		teN(n) = floor(p * sum(labels==n));

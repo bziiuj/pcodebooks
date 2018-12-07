@@ -26,21 +26,18 @@ classdef PersistenceFV < PersistenceBow
 		sufix = ['c', num2str(obj.numWords), '_', ff, '_', num2str(obj.sampleSize)];
 	end
 
-	function obj = fit(obj, diagrams, diagramLimits)
-		disp('Fitting Persistence FV');
-		allPoints = cat(1, diagrams{:});
-		allPointsPersist = [allPoints(:, 1), allPoints(:, 2) - allPoints(:, 1)];
-%		diagramLimitsPersist = [0, diagramLimits(2) - diagramLimits(1)];
-		diagramLimitsPersist = diagramLimits;
+		function obj = fit(obj, diagrams, persistenceLimits)
+			disp('Fitting Persistence FV');
+			obj.persistenceLimits = persistenceLimits;
 
-		samplePointsPersist = obj.getSample(allPointsPersist, diagramLimitsPersist);
+			samplePointsPersist = obj.getSample(diagrams, obj.persistenceLimits);
 
-		v = var(samplePointsPersist)' ;
-		[obj.means, obj.covariances, obj.priors] = ...
-			vl_gmm(samplePointsPersist', obj.numWords, 'verbose', ...
-				'Initialization', 'kmeans', ...
-				'CovarianceBound', double(max(v)*0.0001), ...
-				'NumRepetitions', 1);
+			v = var(samplePointsPersist)' ;
+			[obj.means, obj.covariances, obj.priors] = ...
+				vl_gmm(samplePointsPersist', obj.numWords, 'verbose', ...
+					'Initialization', 'kmeans', ...
+					'CovarianceBound', double(max(v)*0.0001), ...
+					'NumRepetitions', 1);
 		end
 
 		function repr = predict(obj, diagrams)

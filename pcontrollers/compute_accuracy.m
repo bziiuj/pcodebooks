@@ -1,24 +1,38 @@
-function [accuracy, preciseAccuracy, confusion_matrix, times, obj] = compute_accuracy(obj, pds, ...
-	  labels, nclass, diagramLimits, algorithm, name, detailName, ...
-	  expPath, seed)
-  %%% OUTPUT:
-  %     accuracy - overall accuracy
-  %     preciseAccuracy - accuracy for every class
-  %     times - cell array {descriptor creation time, kernel creation time}
-  %     obj   - 
-	times = [-1, -1];
-	kernelPath = [expPath, detailName, '.mat'];
-	descrPath = [expPath, 'descriptors/', name, '_', obj.getSufix(), '.mat'];
-	[tridx, teidx] = train_test_indices(labels, nclass, 0.2, seed);
+function [accuracy, preciseAccuracy, confMats, C, times, obj] = ...
+	compute_accuracy(obj, train_pds, test_pds, train_labels, test_labels, ...
+	nclass, persistenceLimits, algorithm, name, detailName, expPath, sufix, seed)
+%	compute_accuracy(obj, pds, labels, tridx, teidx, nclass, ...
+% function [accTest, pAccTest, confMatTest, accTrain, pAccTrain, confMatTrain, ... 
+% 		C, times, obj] = 
+%%% OUTPUT:
+%	accuracy - overall accuracy, two cells array, first for test, second for train
+%	preciseAccuracy - accuracy for each class, two cells array, first for test, second for train
+%	confMats - confusion matrix, two cells array, first for test, second for train
+%	C - svm C parameter, deterimined by crossvalidation
+%	times - 3 element array: descriptor fitting time, feature vectors/kernel creation time, svm duration time
+%		(depending on descriptor some values are not filled) 
+%   obj - escriptor object, it can modified by fitting process
+	times = [-1, -1, -1, -1];
+
+	kernelPath = [expPath, detailName,'_', num2str(seed), '.mat'];
+	descrPath = [expPath, 'descriptors/', name, sufix, '_', obj.getSufix(), '_', num2str(seed), '.mat'];
+
+	pds = cat(1, train_pds, test_pds);
+	labels = cat(1, train_labels, test_labels);
+
+%	[tridx, teidx] = train_test_indices(labels, nclass, 0.2, seed);
 	switch name
 	case {'pw'}
 		disp(kernelPath);
 		if ~exist(kernelPath, 'file')
-		    throw(MException('Error', 'Wasserstein distance is currently not implemented'));
+			[K, tk] = obj.generateKernel(pds, num2str(seed));
+			times(2) = tk;
+			save(kernelPath, 'K', 'times');
 		else
-		    load(kernelPath);
-		    K = double(K);
+			load(kernelPath);
+			K = double(K);
 		end
+
 	case {'pk1'}
 		if ~exist(kernelPath, 'file')
 			repr = obj.predict(pds);
@@ -30,11 +44,11 @@ function [accuracy, preciseAccuracy, confusion_matrix, times, obj] = compute_acc
 		end
 		% K is uppertriangular, so ...
 		K = K + K';
+
 	case {'pk2e', 'pk2a', 'pl'}
 		if ~exist(kernelPath, 'file')
 			tic;
 			repr = obj.predict(pds);
-		
 			K = obj.generateKernel(repr);
 			times(2) = toc;
 			save(kernelPath, 'K', 'times');
@@ -43,6 +57,7 @@ function [accuracy, preciseAccuracy, confusion_matrix, times, obj] = compute_acc
 		end
 		% K is uppertriangular, so ...
 		K = K + K';
+
 	case {'pi', 'pbow', 'pvlad', 'pfv', 'pbow_st', 'svlad'}
 		if ~exist(descrPath, 'file')
 			tic;
@@ -54,10 +69,10 @@ function [accuracy, preciseAccuracy, confusion_matrix, times, obj] = compute_acc
 				reprCell = cell(nelem, nsubpds);
 				for d = 1:nsubpds
 					if strcmp(name, 'pi') %|| strcmp(name, 'pds')
-						reprCell(:,d) = obj.predict(pds(:,d), diagramLimits{d});
+						reprCell(:,d) = obj.predict(pds(:,d), persistenceLimits{d});
 					else
 						tr_pds = pds(tridx, d);
-						obj = obj.fit(tr_pds, diagramLimits{d});
+						obj = obj.fit(tr_pds, persistenceLimits{d});
 						reprCell(:,d) = obj.predict(pds(:, d));
 					end
 				end
@@ -72,25 +87,30 @@ function [accuracy, preciseAccuracy, confusion_matrix, times, obj] = compute_acc
 				end
 			else
 				if strcmp(name, 'pi')
-					reprCell = obj.predict(pds, diagramLimits);
+					reprCell = obj.predict(pds, persistenceLimits);
 				else
-					tr_pds = pds(tridx);
-					obj = obj.fit(tr_pds, diagramLimits);
+% 					tr_pds = pds(tridx);
+					obj = obj.fit(train_pds, persistenceLimits);
 					reprCell = obj.predict(pds);
 				end
 				times(1) = toc;
-				tic;
-				K = obj.generateKernel(reprCell);
-				times(2) = toc;
-				features = zeros(obj.feature_size, length(reprCell));
-				for i = 1:size(pds, 1)
-					features(:, i) = reprCell{i}(:)';
+				switch algorithm
+					case 'linearSVM-kernel'
+						tic;
+						K = obj.generateKernel(reprCell);
+						times(2) = toc;
+					case 'linearSVM-vector'
+						features = zeros(obj.feature_size, length(reprCell));
+						for i = 1:size(pds, 1)
+							features(:, i) = reprCell{i}(:)';
+						end
 				end
 			end
-			save(descrPath, 'K', 'times', 'features');
+%			save(descrPath, 'K', 'times', 'features', 'persistenceLimits');
 		else
 			load(descrPath);
 		end
+
 	case {'pds'}
 		if ~exist(descrPath, 'file')
 			tic;
@@ -103,7 +123,7 @@ function [accuracy, preciseAccuracy, confusion_matrix, times, obj] = compute_acc
 				for d = 1:nsubpds
 					l = (d-1)*obj.feature_size+1;
 					r = d*obj.feature_size;
-					repr = obj.predict(pds(:,d), diagramLimits{d});
+					repr = obj.predict(pds(:,d), persistenceLimits{d});
 					try
 						features(l:r, :) = repr;
 					catch
@@ -120,7 +140,7 @@ function [accuracy, preciseAccuracy, confusion_matrix, times, obj] = compute_acc
 	% 			end
 			else
 				% compute diagram limits
-				features = obj.predict(pds, diagramLimits);
+				features = obj.predict(pds, persistenceLimits);
 				times(1) = toc;
 				% this is hack - modify it in the future, so that all representations
 				% return the same thing
@@ -132,18 +152,28 @@ function [accuracy, preciseAccuracy, confusion_matrix, times, obj] = compute_acc
 				K = obj.generateKernel(reprNonCell);
 				times(2) = toc;
 			end
-			save(descrPath, 'K', 'times', 'features');
+%			save(descrPath, 'K', 'times', 'features', 'persistenceLimits');
 		else
 			load(descrPath);
 		end
 	end
-	
+
+	train_idx = 1:length(train_pds);
+	test_idx = length(train_pds)+1:length(pds);
 	switch algorithm
 		case 'linearSVM-kernel'
-		  [accuracy, preciseAccuracy, confusion_matrix] = new_PD_svmclassify(1-K, labels, tridx, teidx, ...
-		        'kernel');
+			maxK = max(K(:));
+			[accTest, pAccTest, confMatTest, ...
+				accTrain, pAccTrain, confMatTrain, C, svm_time] = ...
+				new_PD_svmclassify((maxK-K), labels, train_idx, test_idx, 'kernel');
 		case 'linearSVM-vector'
-		  [accuracy, preciseAccuracy, confusion_matrix] = new_PD_svmclassify(features, labels, tridx, teidx, ...
-		        'vector');
+			[accTest, pAccTest, confMatTest, ...
+				accTrain, pAccTrain, confMatTrain, C, svm_time] = ...
+				new_PD_svmclassify(features, labels, train_idx, test_idx, 'vector');
 	end
+	accuracy = {accTest, accTrain};
+	preciseAccuracy = {pAccTest, pAccTrain};
+	confMats = {confMatTest, confMatTrain};
+	times(3) = svm_time(1);
+	times(4) = svm_time(2);
 end

@@ -1,6 +1,5 @@
 classdef PersistenceVLAD < PersistenceBow
 %PERSISTENCEVLAD
-  
 	properties
 	end
 

@@ -26,48 +26,36 @@ function experiment07_3Dseg(test_type, algorithm, init_parallel)
 	mkdir(strcat(expPath, 'descriptors/'));
   
 	sufix = '';
-	basename = strcat('pds', sufix);
-	
-	load([expPath, basename, '.mat'], 'pds');
-	load([expPath, basename, '.mat'], 'labels');
+
+	load([expPath, 'exp07_pds.mat'], 'pds');
+	load([expPath, 'exp07_pds.mat'], 'labels');
 	pds = pds';
-	nclasses = 4;
+	nclasses = length(unique(labels));
 	labels = labels + 1;
 
-	% calculate diagram limits
-	allPoints = cat(1, pds{:});
-	allPointsPersist = allPoints(:, 2) - allPoints(:, 1);
-	diagramLimits = [quantile(allPointsPersist, 0.01), ...
-		quantile(allPointsPersist, 0.95)];
-%	diagramLimits = [quantile(allPoints(:, 1), 0.001), ...
-%    quantile(allPoints(:, 2), 0.999)];
-
-	if par
-		cluster = parcluster('local');
-		workers = 16;
-		cluster.NumWorkers = workers;
-		saveProfile(cluster);
-		pool = parpool(workers);
-	end
+% 	cPI = consolidated_PI(pds(:), 0.1, 150);
 
 	types = {'class1','class2','class3','class4'};
 
 	%%%%% EXPERIMENT PARAMETERS
 	% number of trials
-	N = 25;
+	N = 10;
 	% PI tested resolutions and relative sigmas
-	pi_r = [5, 10, 15, 20:10:50];
-	pi_s = [0.1, 0.25, 0.5, 1, 1.5, 2];
+	pi_r = 10:10:100;
+	pi_s = [0.5, 1, 2, 3];
 	% tested codebook sizes
-	bow_sizes = [5, 10, 15, 20:10:50];
+	bow_sizes = [10:10:100];
+	sample_sizes = [5000, 10000, 20000];
+% 	bow_sizes = [120];
+% 	sample_sizes = [10000];
 	
 	objs = {};
 	switch test_type
 	%%% KERNEL APPROACHES
 	case 0
 		disp('Creating kernel descriptor objects');
+		objs{end + 1} = {PersistenceWasserstein(), {'pw', 'pw'}};
 		objs{end + 1} = {PersistenceKernelOne(2.0), {'pk1', ['pk1_', num2str(2.0)]}};
-		objs{end + 1} = {PersistenceWasserstein(2), {'pw', 'pw'}};
 		for c = [0.5, 1., 1.5, 2.0, 3.0]
 			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', ['pk1_', num2str(c)]}};
 			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', 'pk1'}};
@@ -77,6 +65,7 @@ function experiment07_3Dseg(test_type, algorithm, init_parallel)
 			objs{end + 1} = {PersistenceKernelTwo(0, a), {'pk2a', ['pk2a_', num2str(a)]}};
 		end
 		objs{end + 1} = {PersistenceLandscape(), {'pl', 'pl'}};
+
 	%%% OTHER VECTORIZED APPROACHES
 	case 1
 		disp('Creating vectorized descriptor objects');
@@ -100,80 +89,146 @@ function experiment07_3Dseg(test_type, algorithm, init_parallel)
 				end
 			end
 		end
+
 	%%% PERSISTENCE CODEBOOKS
 	case 2 
-		disp('Creating codebooks objects');
-		for c = bow_sizes
-			objs{end + 1} = {PersistenceBow(c, @linear_ramp), {'pbow', ['pbow_', num2str(c)]}};
+		for sample_size = sample_sizes
+			disp(['Creating PBOW objects.', ' Sample size: ', num2str(sample_size)]);
+			for c = bow_sizes
+				objs{end + 1} = {PersistenceBow(c, @constant_one), {'pbow', ['pbow_', num2str(c)]}};
+				objs{end}{1}.sampleSize = sample_size;
+			end
+			for c = bow_sizes
+				objs{end + 1} = {PersistenceBow(c, @constant_one, @linear_ramp), {'pbow', ['pbow_weight_', num2str(c)]}};
+				objs{end}{1}.sampleSize = sample_size;
+			end
+			for c = bow_sizes
+				objs{end + 1} = {PersistenceBow(c, @linear_ramp), {'pbow', ['pbow_', num2str(c)]}};
+				objs{end}{1}.sampleSize = sample_size;
+			end
+			for c = bow_sizes
+				objs{end + 1} = {PersistenceBow(c, @linear_ramp, @linear_ramp), {'pbow', ['pbow_weight_', num2str(c)]}};
+				objs{end}{1}.sampleSize = sample_size;
+			end
 		end
-		for c = bow_sizes
-			objs{end + 1} = {PersistenceBow(c, @linear_ramp, @linear_ramp), {'pbow', ['pbow_weight_', num2str(c)]}};
+	%%% PERSISTENCE CODEBOOKS PVLAD + PFV
+	case 4
+		for sample_size = sample_sizes
+			disp(['Creating PLVAD and PFV objects.', ' Sample size: ', num2str(sample_size)]);
+			for c = bow_sizes
+				objs{end + 1} = {PersistenceVLAD(c, @linear_ramp), {'pvlad', ['pvlad_', num2str(c)]}};
+				objs{end}{1}.sampleSize = sample_size;
+			end
+			for c = bow_sizes
+				objs{end + 1} = {PersistenceFV(c, @linear_ramp), {'pfv', ['pfv_', num2str(c)]}};
+				objs{end}{1}.sampleSize = sample_size;
+			end
+			for c = bow_sizes
+				objs{end + 1} = {PersistenceVLAD(c, @constant_one), {'pvlad', ['pvlad_', num2str(c)]}};
+				objs{end}{1}.sampleSize = sample_size;
+			end
+			for c = bow_sizes
+				objs{end + 1} = {PersistenceFV(c, @constant_one), {'pfv', ['pfv_', num2str(c)]}};
+				objs{end}{1}.sampleSize = sample_size;
+			end
 		end
-		for c = bow_sizes
-			objs{end + 1} = {PersistenceBow(c, @constant_one), {'pbow', ['pbow_', num2str(c)]}};
-		end
-		for c = bow_sizes
-			objs{end + 1} = {PersistenceBow(c, @constant_one, @linear_ramp), {'pbow', ['pbow_weight_', num2str(c)]}};
-		end
-		for c = bow_sizes
-			objs{end + 1} = {PersistenceVLAD(c, @linear_ramp), {'pvlad', ['pvlad_', num2str(c)]}};
-		end
-		for c = bow_sizes
-			objs{end + 1} = {PersistenceFV(c, @linear_ramp), {'pfv', ['pfv_', num2str(c)]}};
-		end
-		for c = bow_sizes
-			objs{end + 1} = {PersistenceVLAD(c, @constant_one), {'pvlad', ['pvlad_', num2str(c)]}};
-		end
-		for c = bow_sizes
-			objs{end + 1} = {PersistenceFV(c, @constant_one), {'pfv', ['pfv_', num2str(c)]}};
-		end
+
 	%%% STABLE PERSISTENCE CODEBOOKS
 	case 3
-		disp('Creating stable codebooks objects');
-		for c = bow_sizes
-			objs{end + 1} = {PersistenceStableBow(c, @linear_ramp), {'pbow_st', ['pbow_st_', num2str(c)]}};
-		end
-		for c = bow_sizes
-			objs{end + 1} = {PersistenceStableBow(c, @constant_one), {'pbow_st', ['pbow_st_', num2str(c)]}};
-		end
-		for c = bow_sizes
-			objs{end + 1} = {PersistenceSoftVLAD(c, @linear_ramp), {'svlad', ['svlad_', num2str(c)]}};
-		end
-		for c = bow_sizes
-			objs{end + 1} = {PersistenceSoftVLAD(c, @constant_one), {'svlad', ['svlad_', num2str(c)]}};
+		for sample_size = sample_sizes
+			disp(['Creating stable codebooks objects.', ' Sample size: ', num2str(sample_size)]);
+			for c = bow_sizes
+				objs{end + 1} = {PersistenceStableBow(c, @linear_ramp), {'pbow_st', ['pbow_st_', num2str(c)]}};
+				objs{end}{1}.sampleSize = sample_size;
+			end
+			for c = bow_sizes
+				objs{end + 1} = {PersistenceStableBow(c, @constant_one), {'pbow_st', ['pbow_st_', num2str(c)]}};
+				objs{end}{1}.sampleSize = sample_size;
+			end
+			for c = bow_sizes
+				objs{end + 1} = {PersistenceSoftVLAD(c, @linear_ramp), {'svlad', ['svlad_', num2str(c)]}};
+				objs{end}{1}.sampleSize = sample_size;
+			end
+			for c = bow_sizes
+				objs{end + 1} = {PersistenceSoftVLAD(c, @constant_one), {'svlad', ['svlad_', num2str(c)]}};
+				objs{end}{1}.sampleSize = sample_size;
+			end
 		end
 	end
 	%%%%%
-	disp('Descriptor objects created. Testing');
 
+	if par
+		cluster = parcluster('local');
+		workers = 8;
+		cluster.NumWorkers = workers;
+		saveProfile(cluster);
+		pool = parpool(workers);
+	end
+
+	% init seed for RNG
+	initSeed = 10000;
+
+	% compute diagram limits and train/test division for every run
+	disp('Computing diagrams limits');
+	persistenceLimits = zeros(N, 2);
+	trainSet = cell(N, 1);
+	testSet = cell(N, 1);
+	for i = 1:N
+		seedBig = i * initSeed;
+		[tridx, teidx] = train_test_indices(labels, nclasses, 0.5, seedBig);
+		trainSet{i} = tridx;
+		testSet{i} = teidx;
+
+		trainPoints = cat(1, pds{tridx});
+		trainPointsPersist = trainPoints(:, 2) - trainPoints(:, 1);
+		persistenceLimits(i,:) = [quantile(trainPointsPersist, 0.05), ...
+			quantile(trainPointsPersist, 0.95)];
+	end
+
+	disp('Descriptor objects created. Testing');
 	for o = 1:numel(objs)
-		acc = zeros(N, nclasses+1);
-		conf_matrices = zeros(N, nclasses, nclasses);
-		all_times = zeros(N, 2);
+		allAccTest = zeros(N, nclasses + 1);
+		allAccTrain = zeros(N, nclasses + 1);
+		conf_matrices_test = zeros(N, nclasses, nclasses);
+		conf_matrices_train = zeros(N, nclasses, nclasses);
+		allTimes = zeros(N, 4);
+		allC = zeros(N, 1);
+
 		obj = objs{o}{1};
 		prop = objs{o}{2};
 
 		for i = 1:N
-			seedBig = i * 10000;
+			seedBig = i * initSeed;
 			fprintf('Computing: %s\t, repetition %d\n', prop{2}, i);
-			
-			[accuracy, preciseAccuracy, confusion_matrix, times, obj] = compute_accuracy(obj, pds(:), ...
-			    labels, 4, diagramLimits, algorithm, prop{1}, prop{2}, ...
-			    expPath, seedBig);
-			acc(i, :) = [accuracy, preciseAccuracy]';
-			conf_matrices(i, :, :) = confusion_matrix;
-			all_times(i, :) = times;
+
+			[acc, precAcc, confMats, C, times, obj] = compute_accuracy(obj, ...
+				pds(trainSet{i}), pds(testSet{i}), labels(trainSet{i}), labels(testSet{i}), ...
+				nclasses, persistenceLimits(i,:), algorithm, prop{1}, prop{2}, ...
+				expPath, '', seedBig);
+
+			allC(i) = C;
+			allAccTest(i, :) = [acc{1}, precAcc{1}]';
+			conf_matrices_test(i, :, :) = confMats{1};
+			allAccTrain(i, :) = [acc{2}, precAcc{2}]';
+			conf_matrices_train(i, :, :) = confMats{2};
+			allTimes(i, :) = times;
 
 %			if strcmp(prop{1}, 'pbow')
 %				repr = obj.predict(pds(:));
+%				kdwords = obj.kdwords;
 %				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_book.mat'), 'obj');
+%				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_codebook.mat'), 'kdwords');
 %				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_data.mat'), 'repr');
 %				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_lbls.mat'), 'labels');
 %			end
 		end
 
-		avg_conf_mat = squeeze(sum(conf_matrices, 1));
+		avg_conf_mat_test = squeeze(sum(conf_matrices_test, 1)/N);
+		avg_conf_mat_train = squeeze(sum(conf_matrices_train, 1)/N);
+
 		fprintf('Saving results for: %s\n', prop{2});
-		print_results(expPath, obj, N, algorithm, '', types, prop, all_times, acc, avg_conf_mat);
+		print_results(expPath, obj, N, algorithm, sufix, types, prop, ...
+			allTimes, allAccTest, avg_conf_mat_test, allAccTrain, ...
+			avg_conf_mat_train, allC); 
 	end
 end

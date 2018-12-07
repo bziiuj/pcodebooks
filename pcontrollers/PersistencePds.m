@@ -38,7 +38,7 @@ classdef PersistencePds < PersistenceRepresentation
 		end
 
 		function sufix = getSufix(obj)
-			sufix = ['r', num2str(obj.resolution), '_s', num2str(10000*obj.sigma), '_d', num2str(obj.dim)]
+			sufix = ['r', num2str(obj.resolution), '_s', num2str(10000*obj.sigma), '_d', num2str(obj.dim)];
 		end
 	end
 end

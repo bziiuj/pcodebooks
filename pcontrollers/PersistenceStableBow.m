@@ -14,14 +14,11 @@ classdef PersistenceStableBow < PersistenceBow
 			obj.feature_size = obj.numWords;
 		end
 		  
-		  function obj = fit(obj, diagrams, diagramLimits)
+		function obj = fit(obj, diagrams, persistenceLimits)
 			disp('Fitting Stable Persistence BoW');
-			allPoints = cat(1, diagrams{:});
-			allPointsPersist = [allPoints(:, 1), allPoints(:, 2) - allPoints(:, 1)];
-%			diagramLimitsPersist = [0, diagramLimits(2) - diagramLimits(1)];
-			diagramLimitsPersist = diagramLimits;
+			obj.persistenceLimits = persistenceLimits;
 
-			samplePointsPersist = obj.getSample(allPointsPersist, diagramLimitsPersist);
+			samplePointsPersist = obj.getSample(diagrams, obj.persistenceLimits);
 
 			v = var(samplePointsPersist)' ;
 			[obj.means, obj.covariances, obj.priors] = ...
