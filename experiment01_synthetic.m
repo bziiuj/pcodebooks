@@ -185,7 +185,7 @@ function experiment01_synthetic(test_type, algorithm, init_parallel)
 		[tridx, teidx] = train_test_indices(labels, nclasses, 0.2, seedBig);
 		trainSet{i} = tridx;
 		testSet{i} = teidx;
-		
+
 		trainPoints = cat(1, pds{tridx});
 		trainPointsPersist = trainPoints(:, 2) - trainPoints(:, 1);
 		persistenceLimits(i,:) = [quantile(trainPointsPersist, 0.05), ...

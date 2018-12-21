@@ -37,21 +37,24 @@ function experiment05_reddit5K(test_type, algorithm, init_parallel, subset)
 
 	types = {'cl1', 'cl2', 'cl3', 'cl4', 'cl5'};
 
-% 	cPI = consolidated_PI(pds(:), 0.1, 150);
-
 	%%%%% EXPERIMENT PARAMETERS
 	N = 5;
-	% PI tested resolutions and relative sigmas
-	%pi_r = [10:10:50, 60:20:140, 170:30:200];
-	pi_r = [10:10:50, 60:20:120];
-	pi_s = [0.5, 1, 2, 3];
-% 	pi_r = [50];
-% 	pi_s = [0.5];
-	% tested codebook sizes
-	bow_sizes = [10:10:50, 60:20:200];
-	sample_sizes = [2000, 10000, 50000];
-%	bow_sizes = [50];
-%	sample_sizes = [10000];
+
+	if subset
+		% PI tested resolutions and relative sigmas
+		pi_r = [10:10:50, 60:20:120];
+		pi_s = [0.5, 1, 2];
+		% tested codebook sizes
+		bow_sizes = [10:10:50, 60:20:200];
+		sample_sizes = [2000, 10000, 50000];
+	else
+		% PI tested resolutions and relative sigmas
+		pi_r = [10:10:60];
+		pi_s = [0.5, 1, 2];
+		% tested codebook sizes
+		bow_sizes = [10:10:50, 60:20:200];
+		sample_sizes = [2000, 10000, 50000];
+	end
 
 	objs = {};
 	switch test_type
@@ -70,7 +73,7 @@ function experiment05_reddit5K(test_type, algorithm, init_parallel, subset)
 		objs{end + 1} = {PersistenceLandscape(), {'pl', 'pl'}};
 
 	%%% OTHER VECTORIZED APPROACHES
-	case 1
+	case 11
 		disp('Creating vectorized descriptor objects');
 		for r = pi_r
 			for s = pi_s
@@ -78,15 +81,16 @@ function experiment05_reddit5K(test_type, algorithm, init_parallel, subset)
 				objs{end}{1}.parallel = true;
 			end
 		end
+	case 12
 		for r = pi_r
 			for s = pi_s
 				objs{end + 1} = {PersistenceImage(r, s, @constant_one), {'pi', ['pi_', num2str(r), '_', num2str(s)]}};
 				objs{end}{1}.parallel = true;
 			end
 		end
-		for r = [10, 20, 40, 60]
+	case 13
+		for r = [20, 40, 60]
 			for s = 0.1:0.1:0.3
-%			for s = [0.0001, 0.0005, 0.001, 0.005, 0.01, 0.1]
 				for d = 25:25:100
 					objs{end + 1} = {PersistencePds(r, s, d), {'pds', ['pds_', num2str(r), ...
 					'_', num2str(s), '_', num2str(d)]}};

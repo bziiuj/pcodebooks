@@ -9,7 +9,6 @@ classdef PersistenceBow < PersistenceRepresentation
 		sampleSize
 		kdwords
 		kdtree
-%		sampleRatio
 	end
  
 	methods
@@ -30,12 +29,6 @@ classdef PersistenceBow < PersistenceRepresentation
 				obj.sampleSize = sampleSize;
 			end
 			obj.feature_size = obj.numWords;
-
-%			if nargin < 4
-%				obj.sampleRatio = 0.1;
-%			else
-%				obj.sampleRatio = sampleRatio;
-%			end
 		end
 
 		function sufix = getSufix(obj)
@@ -94,42 +87,13 @@ classdef PersistenceBow < PersistenceRepresentation
 			end
 		end
 
-%		function samplePointsPersist = getDiagramsSample(obj, diagrams, persistenceLimits)
-%		%%% Sample picked by ratio
-%			all_points = cell(length(diagrams), 1);
-%			if ~strcmp(func2str(obj.weightingFunction), 'constant_one')
-%				for i = 1:length(diagrams) 
-%					diag = diagrams{i};
-%					diag = [diag(:,1), diag(:,2) - diag(:,1)];
-%					k = size(diag, 1);
-%					weights = arrayfun(@(row) ...
-%						obj.weightingFunction(diag(row,:), persistenceLimits), 1:k)';
-%					weights = weights / sum(weights);
-%					all_points{i} = diag(randsample(1:k, ...
-%						floor(obj.sampleRatio*k), true, weights), :);
-%				end
-%			else
-%				for i = 1:length(diagrams)
-%					diag = diagrams{i};
-%					diag = [diag(:,1), diag(:,2) - diag(:,1)];
-%					k = size(diag, 1);
-%					all_points{i} = diag(randsample(1:k, floor(obj.sampleRatio*k)), :);
-%				end
-%			end
-%			samplePointsPersist = cat(1,all_points{:});
-%		end
-
 		function obj = fit(obj, diagrams, persistenceLimits)
 			disp('Fitting Persistence BoW');
-			% allPoints = cat(1, diagrams{:});
-			% allPointsPersist = [allPoints(:, 1), allPoints(:, 2) - allPoints(:, 1)];
-	%		diagramLimitsPersist = [0, diagramLimits(2) - diagramLimits(1)];
 			obj.persistenceLimits = persistenceLimits;
 
-			samplePointsPersist = obj.getSample(diagrams, obj.persistenceLimits);
-%			samplePointsPersist = obj.getDiagramsSample(diagrams, obj.persistenceLimits);
+			sampleBpPoints = obj.getSample(diagrams, obj.persistenceLimits);
 
-			obj.kdwords = vl_kmeans(samplePointsPersist', obj.numWords, ...
+			obj.kdwords = vl_kmeans(sampleBpPoints', obj.numWords, ...
 			  'verbose', 'algorithm', 'ann') ;
 			obj.kdtree = vl_kdtreebuild(obj.kdwords, 'numTrees', 2) ;
 		end

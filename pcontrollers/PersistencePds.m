@@ -26,10 +26,14 @@ classdef PersistencePds < PersistenceRepresentation
 			disp('PersistencePds does not need fitting.');
 		end
 
-		function repr = predict(obj, diagrams, diagramLimits)
-			stepVal = (diagramLimits(2) - diagramLimits(1)) / obj.resolution;
-			params.x1 = diagramLimits(1):stepVal:diagramLimits(2);
-			params.x2 = params.x1;
+		function repr = predict(obj, diagrams, birthLimits, deathLimits)
+%			stepVal = (diagramLimits(2) - diagramLimits(1)) / obj.resolution;
+%			params.x1 = diagramLimits(1):stepVal:diagramLimits(2);
+			stepVal1 = (birthLimits(2) - birthLimits(1)) / obj.resolution;
+			stepVal2 = (deathLimits(2) - deathLimits(1)) / obj.resolution;
+			params.x1 = birthLimits(1):stepVal1:birthLimits(2);
+			params.x2 = deathLimits(1):stepVal2:deathLimits(2);
+%			params.x2 = params.x1;
 			params.sig = obj.sigma;
 
 			htMap = newHeatMapfromPD(diagrams, params);

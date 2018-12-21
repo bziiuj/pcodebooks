@@ -69,11 +69,14 @@ function [accuracy, preciseAccuracy, confMats, C, times, obj] = ...
 				reprCell = cell(nelem, nsubpds);
 				for d = 1:nsubpds
 					if strcmp(name, 'pi') %|| strcmp(name, 'pds')
-						reprCell(:,d) = obj.predict(pds(:,d), persistenceLimits{d});
+						reprCell(:,d) = obj.predict(pds(:,d), persistenceLimits(d,:));
+% 						reprCell(:,d) = obj.predict(pds(:,d), persistenceLimits{d});
 					else
-						tr_pds = pds(tridx, d);
-						obj = obj.fit(tr_pds, persistenceLimits{d});
-						reprCell(:,d) = obj.predict(pds(:, d));
+						obj = obj.fit(train_pds(:,d), persistenceLimits(d,:));
+						reprCell(:,d) = obj.predict(pds(:,d));
+% 						tr_pds = pds(tridx, d);
+% 						obj = obj.fit(tr_pds, persistenceLimits{d});
+% 						reprCell(:,d) = obj.predict(pds(:, d));
 					end
 				end
 				times(1) = toc;
@@ -113,6 +116,8 @@ function [accuracy, preciseAccuracy, confMats, C, times, obj] = ...
 
 	case {'pds'}
 		if ~exist(descrPath, 'file')
+			% compute diagram limits 
+
 			tic;
 			if size(pds, 2) > 1
 				nelem = size(pds, 1);
@@ -121,9 +126,15 @@ function [accuracy, preciseAccuracy, confMats, C, times, obj] = ...
 				% for each sub diagram do another classification
 				features = zeros(obj.feature_size * nsubpds, nelem);
 				for d = 1:nsubpds
+					trainPoints = cat(1, train_pds{:,d});
+					birthLimits = [quantile(trainPoints(:,1), 0.05), ...
+						quantile(trainPoints(:,1), 0.95)];
+					deathLimits = [quantile(trainPoints(:,2), 0.05), ...
+						quantile(trainPoints(:,2), 0.95)];
+
 					l = (d-1)*obj.feature_size+1;
 					r = d*obj.feature_size;
-					repr = obj.predict(pds(:,d), persistenceLimits{d});
+					repr = obj.predict(pds(:,d), birthLimits, deathLimits);
 					try
 						features(l:r, :) = repr;
 					catch
@@ -131,16 +142,15 @@ function [accuracy, preciseAccuracy, confMats, C, times, obj] = ...
 					end
 				end
 				times(1) = toc;
-	% 			for i = 1:nelem
-	% 				for d = 1:nsubpds
-	% 					l = (d-1)*obj.feature_size+1;
-	% 					r = d*obj.feature_size;
-	% 					features(l:r, i) = reprCell{i, d}(:)';
-	% 				end
-	% 			end
 			else
+				trainPoints = cat(1, train_pds{:});
+				birthLimits = [quantile(trainPoints(:,1), 0.05), ...
+					quantile(trainPoints(:,1), 0.95)];
+				deathLimits = [quantile(trainPoints(:,2), 0.05), ...
+					quantile(trainPoints(:,2), 0.95)];
+
 				% compute diagram limits
-				features = obj.predict(pds, persistenceLimits);
+				features = obj.predict(pds, birthLimits, deathLimits);
 				times(1) = toc;
 				% this is hack - modify it in the future, so that all representations
 				% return the same thing

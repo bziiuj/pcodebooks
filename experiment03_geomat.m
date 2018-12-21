@@ -35,12 +35,7 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 	else
 		sufix = '';
 	end
-
-%	if subset
-%		load([expPath, 'exp03_pds_1_400.mat'], 'pds');
-%	else
 	load([expPath, 'exp03_pds.mat'], 'pds');
-%	end
 
 	nclasses = size(pds, 2);
 
@@ -51,23 +46,27 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 	    'Soil - Mulch', 'Stone - Granular', 'Stone - Limestone', 'Wood'};
 
 	%%%%% EXPERIMENT PARAMETERS
-	% PI tested resolutions and relative sigmas
 	% number of trials
 	if subset
 		N = 10;
 	else 
 		N = 3;
 	end
-	pi_r = [10, 20:20:200];
-	pi_s = [0.5, 1, 2, 3];
-%	pi_r = [30];
-%	pi_s = [0.5];
-
-	% tested codebook sizes
-	bow_sizes = [10, 20:20:200];
-	sample_sizes = [2000, 10000, 50000];
-% 	bow_sizes = [20, 50, 100];
-% 	sample_sizes = [10000];
+	if subset
+		% PI tested resolutions and relative sigmas
+		pi_r = [10 20:20:100];
+		pi_s = [0.5, 1, 2];
+		% tested codebook sizes
+		bow_sizes = [10:10:40, 60:20:200];
+		sample_sizes = [2000, 10000, 50000];
+	else
+		% PI tested resolutions and relative sigmas
+		pi_r = [10:10:60];
+		pi_s = [0.5, 1, 2];
+		% tested codebook sizes
+		bow_sizes = [10, 20:20:200];
+		sample_sizes = [2000, 10000, 50000];
+	end
 
 	objs = {};
 	switch test_type
@@ -76,7 +75,7 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 		disp('Creating kernel descriptor objects');
 		objs{end + 1} = {PersistenceWasserstein(), {'pw', 'pw'}};
 		objs{end + 1} = {PersistenceKernelOne(2.0), {'pk1', ['pk1_', num2str(2.0)]}};
-		for c = [0.5, 1., 1.5, 2.0, 3.0]
+		for c = [0.5, 1., 2.0, 3.0]
 			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', ['pk1_', num2str(c)]}};
 			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', 'pk1'}};
 		end
@@ -86,7 +85,7 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 		objs{end + 1} = {PersistenceLandscape(), {'pl', 'pl'}};
 
 	%%% OTHER VECTORIZED APPROACHES
-	case 1
+	case 11
 		disp('Creating vectorized descriptor objects');
 		for r = pi_r
 			for s = pi_s
@@ -94,12 +93,14 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 				objs{end}{1}.parallel = true;
 			end
 		end
+	case 12
 		for r = pi_r
 			for s = pi_s
 				objs{end + 1} = {PersistenceImage(r, s, @constant_one), {'pi', ['pi_', num2str(r), '_', num2str(s)]}};
 				objs{end}{1}.parallel = true;
 			end
 		end
+	case 13
 		for r = [10, 20, 40, 60]
 			for s = 0.1:0.1:0.3
 				for d = 25:25:100

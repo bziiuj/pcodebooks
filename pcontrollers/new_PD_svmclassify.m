@@ -15,9 +15,6 @@ function [accuracy_test, precise_accuracy_test, confusion_matrix_test, ...
 	C = [0.1, 1, 10, 100, 1000];
 	cv_acc = zeros(numel(C), 1);
 
-	% save worksp ace
-	% save(['cross		val_', num2str(size(f,1)/4),'_vec.mat']);
-
 	% Training with crossvalidation 
 	tic;
 	for i=1:numel(C)
