@@ -1,14 +1,13 @@
 #!/bin/bash
 
-# Download and setup required libraries/projects 
- 
-
+#### Download and setup required libraries/projects 
 echo 'PERSISTENCE LEARNING'
 mkdir ../persistence-learning
 git clone https://github.com/rkwitt/persistence-learning ../persistence-learning
 cd ../persistence-learning
 git pull
 git submodule update --init --recursive
+cp -a ../pcodebooks/modified_code/persistence-learning/code/dipha-pss/src/diagram_distance.cpp code/dipha-pss/src
 cd code/dipha-pss
 mkdir build
 cd build
@@ -40,3 +39,11 @@ wget http://www.vlfeat.org/download/vlfeat-0.9.21-bin.tar.gz
 tar -C .. -xzf $VLFEAT_VER-bin.tar.gz $VLFEAT_VER 
 rm $VLFEAT_VER-bin.tar.gz
 mv ../$VLFEAT_VER ../vlfeat
+
+echo 'WASSERSTEIN HERA'
+mkdir wasserstein_hera/build
+cd wasserstein_hera/build
+cmake ..
+make
+cd ../..
+

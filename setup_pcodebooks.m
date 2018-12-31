@@ -1,4 +1,4 @@
-% Download data
+% Download dependencies
 system('./get_dependencies.sh');
 
 % Persistence Learning
@@ -21,3 +21,6 @@ system('make')
 cd matlab
 make
 cd ../../../../pcodebooks
+
+% Download pds
+system('./get_pds.sh');

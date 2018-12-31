@@ -30,7 +30,7 @@ function experiment02_motion(test_type, algorithm, init_parallel, ~)
 	mkdir(confPath);
 	mkdir(strcat(expPath, 'descriptors/'));
 
-	basename = 'pds_motion';
+	basename = 'exp02_pds';
 
 	load([expPath, basename, '.mat'], 'pds');
 	load([expPath, basename, '.mat'], 'labels');

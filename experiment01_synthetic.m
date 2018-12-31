@@ -245,8 +245,9 @@ end %experiment01
 function pds = prepareDiagrams(rawPath, expPath, types)
 	PLOT = 0;
 
+	pdfilename = 'exp01_pds.mat';
 	% load pds
-	if ~exist([expPath, 'pd.mat'], 'file')
+	if ~exist([expPath, pdfilename], 'file')
 		pds = cell(numel(types), 50);
 		for i = 2:51
 			for j = 1:numel(types)
@@ -264,8 +265,8 @@ function pds = prepareDiagrams(rawPath, expPath, types)
 			end
 		end
 		pds = pds';
-		save([expPath, 'pd.mat'], 'pds');
+		save([expPath, pdfilename], 'pds');
 	else
-		load([expPath, 'pd.mat']);
+		load([expPath, pdfilename]);
 	end
 end

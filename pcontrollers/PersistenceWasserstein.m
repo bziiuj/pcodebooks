@@ -11,7 +11,7 @@ classdef PersistenceWasserstein < PersistenceRepresentation
 		end
 
 		function setup(obj)
-			addpath('../wasserstein_hera/build/');
+			addpath('wasserstein_hera/build/');
 		end
 
 		function sufix = getSufix(obj)
@@ -34,7 +34,7 @@ classdef PersistenceWasserstein < PersistenceRepresentation
 				run_id = ['_', run_id];
 			end
 
-			wass_matrix_exec = '../wasserstein_hera/build/wasserstein_dist_hacked';
+			wass_matrix_exec = 'wasserstein_hera/build/wasserstein_dist_hacked';
 
 			outDir = ['temp', run_id]; 
 			if exist(outDir)
