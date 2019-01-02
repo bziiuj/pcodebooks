@@ -4,9 +4,9 @@ addpath('../pdsphere/matlab');
 seed = 31415;
 
 % Load persistence diagrams
-load('exp01/pd.mat');
+load('exp01_synthetic/exp01_pds.mat');
 % Number of classes
-nclasses = 6;
+nclasses = 7;
 % Number of examples in each class
 nexamples = 50;
 % Create labels vector

@@ -1,8 +1,22 @@
 % Synthetic shapes experiment
 function experiment07_3Dseg(test_type, algorithm, init_parallel)
 %%%	ARGS:
-%		test_type:	0-kernels, 1-vectors, 2-codebooks, 3-stable codebooks
+%		test_type:	0-kernels, 1-vectorized descriptors, 2-codebooks, 3-stable codebooks, 4-PVLAD+PFV
 %		algorithm:	0-'linearSVM-kernel', 1-'linearSVM-vector'
+%		init_parallel: aplicable only for test_type=1
+
+	%%%%% EXPERIMENT PARAMETERS
+	% number of trials
+	N = 10;
+	% PI tested resolutions and relative sigmas
+	pi_r = 10:10:100;
+	pi_s = [0.5, 1, 2, 3];
+	% tested codebook sizes
+	bow_sizes = [10:10:100];
+	sample_sizes = [5000, 10000, 20000];
+% 	bow_sizes = [120];
+% 	sample_sizes = [10000];
+
 	switch algorithm
 	case 0
 		algorithm = 'linearSVM-kernel'; 
@@ -37,18 +51,6 @@ function experiment07_3Dseg(test_type, algorithm, init_parallel)
 
 	types = {'class1','class2','class3','class4'};
 
-	%%%%% EXPERIMENT PARAMETERS
-	% number of trials
-	N = 10;
-	% PI tested resolutions and relative sigmas
-	pi_r = 10:10:100;
-	pi_s = [0.5, 1, 2, 3];
-	% tested codebook sizes
-	bow_sizes = [10:10:100];
-	sample_sizes = [5000, 10000, 20000];
-% 	bow_sizes = [120];
-% 	sample_sizes = [10000];
-	
 	objs = {};
 	switch test_type
 	%%% KERNEL APPROACHES

@@ -1,10 +1,31 @@
 % Petroglyphs experiment
 function experiment04_petroglyphs(test_type, algorithm, init_parallel, subset)
 %%%	ARGS:
-%		test_type:	0-kernels, 1-vectors, 2-codebooks, 3-stable codebooks
+%		test_type:	0-kernels, 11-PI, 12-PI weighted, 13-Riemannian sphere, 2-codebooks, 3-stable codebooks, 4-PVLAD+PFV
 %		algorithm:	0-'linearSVM-kernel', 1-'linearSVM-vector'
 %		initialize parallel pool (it is convinient to have a lot of workers while computing PI on a grid)
 %		experiment using subset of data (true) or full dataset (false)
+
+	%%%%% EXPERIMENT PARAMETERS
+	% Number of trials
+	N = 4;
+
+	if subset
+		% PI tested resolutions and relative sigmas
+		pi_r = [10 20:20:100];
+		pi_s = [0.5, 1, 2];
+		% tested codebook sizes
+		bow_sizes = [10:10:50, 60:20:200];
+		sample_sizes = [5000, 10000, 50000];
+	else
+		% PI tested resolutions and relative sigmas
+		pi_r = [10:10:60];
+		pi_s = [0.5, 1, 2];
+		% tested codebook sizes
+		bow_sizes = [10:10:50 60:20:100];
+		sample_sizes = [5000, 10000, 50000];
+	end
+
 	switch algorithm
 	case 0
 		algorithm = 'linearSVM-kernel'; 
@@ -41,26 +62,6 @@ function experiment04_petroglyphs(test_type, algorithm, init_parallel, subset)
 
 	types = {'no_engravement', 'engravement'};
 	
-	%%%%% EXPERIMENT PARAMETERS
-	% Number of trials
-	N = 4;
-
-	if subset
-		% PI tested resolutions and relative sigmas
-		pi_r = [10 20:20:100];
-		pi_s = [0.5, 1, 2];
-		% tested codebook sizes
-		bow_sizes = [10:10:50, 60:20:200];
-		sample_sizes = [5000, 10000, 50000];
-	else
-		% PI tested resolutions and relative sigmas
-		pi_r = [10:10:60];
-		pi_s = [0.5, 1, 2];
-		% tested codebook sizes
-		bow_sizes = [10:10:50 60:20:100];
-		sample_sizes = [5000, 10000, 50000];
-	end
-
 	objs = {};
 	switch test_type
 	%%% KERNEL APPROACHES

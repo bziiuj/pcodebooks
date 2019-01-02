@@ -1,30 +1,34 @@
 # pcodebooks
 Persistence Codebooks
 
-A. This code contains experiments presented in "Persistence Codebooks for Topological Data Analysis" (https://arxiv.org/abs/1802.04852). It was tested on macOS High Sierra 10.13.3 and Linux Ubuntu 16.04 LTS.
+A. This code contains experiments presented in "Persistence Bag-of-Words for Topological Data Analysis" (/https://arxiv.org/abs/1812.09245). It was tested on Debian Stretch 9.6 x64.
 
 B. Instalation steps:
 
-  1. All needed dependencies should download and build automatically by running setup_pcodebook.m matlab script
-     (in cases of some environments, it is necessary to run ./get_dependencies.sh script directly from the console).
+	1. All needed dependencies and experiment data should download and build automatically by running setup_pcodebook.m matlab script (in cases of some environments, it is necessary to run ./get_dependencies.sh script directly from the console).
 
 C. Test persistence codebooks (only vlfeat library needed):
 
-  1. In order to test only the persistence codebooks, you can run:
+	1. In order to test only the persistence codebooks, you can run:
 
-    simple_test();
+	simple_test();
 
 D. Run experiments (all libraries needed):
 
-  1. In order to recompute the results from Table 1, please run the following in Matlab:
+	1. In Matlab run one of the file 'experiment0...', e.g.:
 
-    experiment01();
-    result01();
+	experiment01_synthetic(2, 0, 0)
 
-  2. In order to recompute the results from Table 2, please run the following in Matlab:
+	2. Arguments are described in every file, but in general:
 
-    experiment02();
-    result02();
+		- First argument describes set of descriptors to be tested.
+		- Second, type of svm, using precomputed kernel or feature vector.
+		- Third, in case of Persistence Image, you can use parallel computing, while generating descriptors.
+		- Forth, if dataset is used both in EXP-A and EXP-B, you can decide to compute experiment only for a subset of data.
+
+	3. Results are stored in appropiate files in respective experiment directory.
+
+	4. You can additionally change set of tested parameters in experiment files.
 
 E. Notice, that SW.h was extracted from the GUDHI open source library:
-   http://gudhi.gforge.inria.fr/
+	http://gudhi.gforge.inria.fr/

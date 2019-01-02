@@ -1,10 +1,23 @@
 % motion capture experiment
 function experiment02_motion(test_type, algorithm, init_parallel, ~)
 %%%	ARGS:
-%		test_type:	0-kernels, 1-vectors, 2-codebooks, 3-stable codebooks
+%		test_type:	0-kernels, 11-PI, 12-PI weighted, 13-Riemannian sphere, 2-codebooks, 3-stable codebooks, 4-PVLAD+PFV
 %		algorithm:	0-'linearSVM-kernel', 1-'linearSVM-vector'
 %		initialize parallel pool (it is convinient to have a lot of workers while computing PI on a grid)
 %		experiment using subset of data (true) or full dataset (false)
+
+	%%%%% EXPERIMENT PARAMETERS
+	% number of trials
+	N = 10;
+	% PI tested resolutions and relative sigmas
+	pi_r = [10:10:60];%, 170:30:200];
+	pi_s = [0.5, 1, 2];
+	% tested codebook sizes
+%	bow_sizes = 150:20:210;
+	bow_sizes = [10:10:50 60 80 100];%, 180:30:210];
+%	bow_sizes = [10:10:50];
+	sample_sizes = [2000, 5000, 10000];
+
 	switch algorithm
 	case 0
 		algorithm = 'linearSVM-kernel'; 
@@ -40,21 +53,6 @@ function experiment02_motion(test_type, algorithm, init_parallel, ~)
 	nsubpds = size(pds, 2);
 
 	types = {'dancing', 'jumping', 'running', 'sitting', 'walking'};
-
-	%%%%% EXPERIMENT PARAMETERS
-	N = 10;
-	% PI tested resolutions and relative sigmas
-	pi_r = [10:10:60];%, 170:30:200];
-	pi_s = [0.5, 1, 2];
-	% tested codebook sizes
-%	bow_sizes = 150:20:210;
-	bow_sizes = [10:10:50 60 80 100];%, 180:30:210];
-%	bow_sizes = [10:10:50];
-	sample_sizes = [2000, 5000, 10000];
-
-%	pi_r = [20];
-%	pi_s = [0.5];
-%	sample_sizes = [10000];
 
 	objs = {};
 	switch test_type

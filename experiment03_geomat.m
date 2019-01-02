@@ -1,10 +1,34 @@
 % GeoMat textures experiment
 function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 %%% ARGS:
-%		test_type:	0-kernels, 1-vectors, 2-codebooks, 3-stable codebooks
+%		test_type:	0-kernels, 11-PI, 12-PI weighted, 13-Riemannian sphere, 2-codebooks, 3-stable codebooks, 4-PVLAD+PFV
 %		algorithm:	0-'linearSVM-kernel', 1-'linearSVM-vector'
 %		initialize parallel pool (it is convinient to have a lot of workers while computing PI on a grid)
 %		experiment using subset of data (true) or full dataset (false)
+
+	%%%%% EXPERIMENT PARAMETERS
+	% number of trials
+	if subset
+		N = 10;
+	else 
+		N = 3;
+	end
+	if subset
+		% PI tested resolutions and relative sigmas
+		pi_r = [10 20:20:100];
+		pi_s = [0.5, 1, 2];
+		% tested codebook sizes
+		bow_sizes = [10:10:40, 60:20:200];
+		sample_sizes = [2000, 10000, 50000];
+	else
+		% PI tested resolutions and relative sigmas
+		pi_r = [10:10:60];
+		pi_s = [0.5, 1, 2];
+		% tested codebook sizes
+		bow_sizes = [10, 20:20:200];
+		sample_sizes = [2000, 10000, 50000];
+	end
+
 	switch algorithm
 	case 0
 		algorithm = 'linearSVM-kernel'; 
@@ -44,29 +68,6 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 	    'Grass', 'Gravel', 'Marble', 'Metal - Grills', 'Paving', ...
 	    'Soil - Compact', 'Soil - Dirt and Vegetation', 'Soil - Loose', ...
 	    'Soil - Mulch', 'Stone - Granular', 'Stone - Limestone', 'Wood'};
-
-	%%%%% EXPERIMENT PARAMETERS
-	% number of trials
-	if subset
-		N = 10;
-	else 
-		N = 3;
-	end
-	if subset
-		% PI tested resolutions and relative sigmas
-		pi_r = [10 20:20:100];
-		pi_s = [0.5, 1, 2];
-		% tested codebook sizes
-		bow_sizes = [10:10:40, 60:20:200];
-		sample_sizes = [2000, 10000, 50000];
-	else
-		% PI tested resolutions and relative sigmas
-		pi_r = [10:10:60];
-		pi_s = [0.5, 1, 2];
-		% tested codebook sizes
-		bow_sizes = [10, 20:20:200];
-		sample_sizes = [2000, 10000, 50000];
-	end
 
 	objs = {};
 	switch test_type

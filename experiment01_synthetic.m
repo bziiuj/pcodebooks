@@ -1,8 +1,25 @@
 % Synthetic shapes experiment
 function experiment01_synthetic(test_type, algorithm, init_parallel)
 %%%	ARGS:
-%		test_type:	0-kernels, 1-vectors, 2-codebooks, 3-stable codebooks
+%		test_type:	0-kernels, 1-vectorized descriptors, 2-codebooks, 3-stable codebooks, 4-PVLAD+PFV
 %		algorithm:	0-'linearSVM-kernel', 1-'linearSVM-vector'
+%		init_parallel: aplicable only for test_type=1
+
+%%%%% EXPERIMENT PARAMETERS
+	% number of trials
+	N = 25;
+	% PI tested resolutions and relative sigmas
+	pi_r = 10:10:100;
+	pi_s = [0.1, 0.5, 1, 1.5, 2, 3];
+%	pi_r = [30];
+%	pi_s = [0.5];
+	% tested codebook sizes
+	bow_sizes = [5, 10:10:200];
+	sample_sizes = [1000, 5000, 10000];
+% 	bow_sizes = [50];
+%	sample_sizes = [10000];
+%	sampleSize = [100, 500, 1000, 5000, 10000];
+
 	switch algorithm
 	case 0
 		algorithm = 'linearSVM-kernel'; 
@@ -39,22 +56,6 @@ function experiment01_synthetic(test_type, algorithm, init_parallel)
 		saveProfile(cluster);
 		pool = parpool(workers);
 	end
-
-	%%%%% EXPERIMENT PARAMETERS
-	% number of trials
-	N = 25;
-	% PI tested resolutions and relative sigmas
-	pi_r = 10:10:100;
-	pi_s = [0.1, 0.5, 1, 1.5, 2, 3];
-%	pi_r = [30];
-%	pi_s = [0.5];
-	% tested codebook sizes
-	bow_sizes = [5, 10:10:200];
-	sample_sizes = [1000, 5000, 10000];
-% 	bow_sizes = [50];
-%	sample_sizes = [10000];
-%	sampleRatios = [0.05, 0.1, 0.2, 0.5];
-%	sampleSize = [100, 500, 1000, 5000, 10000];
 
 	objs = {};
 	switch test_type
