@@ -68,10 +68,8 @@ function experiment04_petroglyphs(test_type, algorithm, init_parallel, subset)
 	case 0
 		disp('Creating kernel descriptor objects');
 		objs{end + 1} = {PersistenceWasserstein(), {'pw', 'pw'}};
-		objs{end + 1} = {PersistenceKernelOne(2.0), {'pk1', ['pk1_', num2str(2.0)]}};
-		for c = [0.5, 1., 1.5, 2.0, 3.0]
+		for c = [0.5, 1., 2.0]
 			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', ['pk1_', num2str(c)]}};
-			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', 'pk1'}};
 		end
 		for a = 50:50:250
 		  objs{end + 1} = {PersistenceKernelTwo(0, a), {'pk2a', ['pk2a_', num2str(a)]}};
@@ -183,11 +181,13 @@ function experiment04_petroglyphs(test_type, algorithm, init_parallel, subset)
 	end
 	labels = labels + 1;
 
+	% test surfaces for each run
 	test_surfs = {[5,6,7,8,9,10,20], [2,3,4,23,24,25,26], [12,13,15,16,17,18,19], [1,11,14,21,22]};
 
 	trainSet = cell(N, 1);
 	testSet = cell(N, 1);
 
+	% train test indices for each run
 	for s = 1:26
 		l = sample*2*(s-1)+1;
 		r = l + sample*2-1;
@@ -200,6 +200,7 @@ function experiment04_petroglyphs(test_type, algorithm, init_parallel, subset)
 		end
 	end
 
+	% get random subset for EXP-A
 	if subset
 		for i = 1:N
 			seedBig = i * initSeed;
@@ -209,6 +210,7 @@ function experiment04_petroglyphs(test_type, algorithm, init_parallel, subset)
 		end
 	end
 
+	% load diagrams and move them, so all points has positive values
 	pds_reps = cell(N,1);
 	for i = 1:N
 		load([expPath, basename, '_s300_rep', num2str(i),'.mat'], 'pds');
@@ -227,6 +229,7 @@ function experiment04_petroglyphs(test_type, algorithm, init_parallel, subset)
 		pds_reps{i} = pds;
 	end
 
+	% compute persistence limits for each run
 	persistenceLimits = zeros(N, 2);
 	for i = 1:N
 		pds = pds_reps{i};
@@ -243,8 +246,6 @@ function experiment04_petroglyphs(test_type, algorithm, init_parallel, subset)
 		saveProfile(cluster);
 		pool = parpool(workers);
 	end
-
-% I need here: trainPds, testPds, trainLabels, testLabels, limits
 
 	for o = 1:numel(objs)
 		allAccTest = zeros(N, nclasses + 1);

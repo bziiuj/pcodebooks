@@ -55,8 +55,6 @@ function experiment06_reddit12K(test_type, algorithm, init_parallel, subset)
 
 	load([expPath, 'exp06_pds.mat'], 'pds');
   
-%  	cPI = consolidated_PI(pds(:), 0.1, 150);
-
 	nclasses = size(pds, 2);
 
 	types = {'cl1', 'cl2', 'cl3', 'cl4', 'cl5', 'cl6', 'cl7', 'cl8', 'cl9', ...
@@ -66,15 +64,14 @@ function experiment06_reddit12K(test_type, algorithm, init_parallel, subset)
 	switch test_type
 	%%% KERNEL APPROACHES
 	case 0
+		N = 3;
 		disp('Creating kernel descriptor objects');
 		objs{end + 1} = {PersistenceWasserstein(), {'pw', 'pw'}};
-		objs{end + 1} = {PersistenceKernelOne(2.0), {'pk1', ['pk1_', num2str(2.0)]}};
-		for c = [0.5, 1., 1.5, 2.0, 3.0]
+		for c = [0.5, 1., 2.0]
 			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', ['pk1_', num2str(c)]}};
-			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', 'pk1'}};
 		end
 		for a = 50:50:250
-		  objs{end + 1} = {PersistenceKernelTwo(0, a), {'pk2a', ['pk2a_', num2str(a)]}};
+			objs{end + 1} = {PersistenceKernelTwo(0, a), {'pk2a', ['pk2a_', num2str(a)]}};
 		end
 		objs{end + 1} = {PersistenceLandscape(), {'pl', 'pl'}};
 

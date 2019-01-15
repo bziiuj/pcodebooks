@@ -14,6 +14,10 @@ function [accuracy, preciseAccuracy, confMats, C, times, obj] = ...
 %   obj - escriptor object, it can modified by fitting process
 	times = [-1, -1, -1, -1];
 
+	disp("Started: ");
+	c = clock();
+	disp(round(c(2:end)));
+	
 	kernelPath = [expPath, detailName,'_', num2str(seed), '.mat'];
 	descrPath = [expPath, 'descriptors/', name, sufix, '_', obj.getSufix(), '_', num2str(seed), '.mat'];
 
@@ -25,7 +29,7 @@ function [accuracy, preciseAccuracy, confMats, C, times, obj] = ...
 	case {'pw'}
 		disp(kernelPath);
 		if ~exist(kernelPath, 'file')
-			[K, tk] = obj.generateKernel(pds, num2str(seed));
+			[K, tk] = obj.generateKernel(pds, [detailName,'_',num2str(seed)]);
 			times(2) = tk;
 			save(kernelPath, 'K', 'times');
 		else
@@ -36,14 +40,14 @@ function [accuracy, preciseAccuracy, confMats, C, times, obj] = ...
 	case {'pk1'}
 		if ~exist(kernelPath, 'file')
 			repr = obj.predict(pds);
-			[K, tk] = obj.generateKernel(repr);
+			[K, tk] = obj.generateKernel(repr, [detailName,'_',num2str(seed)]);
 			times(2) = tk;
 			save(kernelPath, 'K', 'times');
 		else
 			load(kernelPath);
 		end
 		% K is uppertriangular, so ...
-		K = K + K';
+% 		K = K + K';
 
 	case {'pk2e', 'pk2a', 'pl'}
 		if ~exist(kernelPath, 'file')
@@ -186,4 +190,8 @@ function [accuracy, preciseAccuracy, confMats, C, times, obj] = ...
 	confMats = {confMatTest, confMatTrain};
 	times(3) = svm_time(1);
 	times(4) = svm_time(2);
+	
+	disp("Finished: ");
+	c = clock();
+	disp(round(c(2:end)));
 end

@@ -57,10 +57,8 @@ function experiment07_3Dseg(test_type, algorithm, init_parallel)
 	case 0
 		disp('Creating kernel descriptor objects');
 		objs{end + 1} = {PersistenceWasserstein(), {'pw', 'pw'}};
-		objs{end + 1} = {PersistenceKernelOne(2.0), {'pk1', ['pk1_', num2str(2.0)]}};
-		for c = [0.5, 1., 1.5, 2.0, 3.0]
+		for c = [0.5, 1., 2.0]
 			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', ['pk1_', num2str(c)]}};
-			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', 'pk1'}};
 		end
 		objs{end + 1} = {PersistenceKernelTwo(1, -1), {'pk2e', 'pk2e'}};
 		for a = 50:50:250

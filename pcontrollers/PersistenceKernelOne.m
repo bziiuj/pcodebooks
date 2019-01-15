@@ -46,24 +46,31 @@ classdef PersistenceKernelOne < PersistenceRepresentation
 			end
 			mkdir(outDir);
 
+% 			fileEx = fopen('mk1_ex.txt','w');
+			options = ['--time ', num2str(obj.sigma), ...
+				  ' --dim ', num2str(dim) ' '];
+% 			fprintf(fileEx, '%s %s ', diagram_distance, options);
+			  
 			file_list = '';
 			% Number of diagrams to create
 			for i=1:numel(repr)
 				data = [ones(size(repr{i}, 1), 1) * dim, repr{i}];
 
 				outFile = sprintf('pd_%d', i);
+% 				fprintf(fileEx, '%s.bin \\\n', outFile);
 				outFile = fullfile(outDir, outFile);
 				pl_write_persistence_diagram(outFile, 'dipha', data);
-				file_list = [file_list, ' ', outFile, '.bin'];
+				file_list = [file_list, ' ', outFile, '.bin '];
 			end
 
 			% GRAM matrix
 			gram_matrix_file_wIFGT = fullfile(outDir, ...
 				  sprintf('K_wIFGT.txt'));
 
-			options = ['--time ', num2str(obj.sigma), ...
-				  ' --dim ', num2str(dim) ' '];
+% 			fprintf(fileEx, '> %s ', gram_matrix_file_wIFGT);
+% 			fclose(fileEx);
 			exec = [diagram_distance ' ' options file_list ' > ' gram_matrix_file_wIFGT];
+
 			system(exec);
 
 			K = dlmread(gram_matrix_file_wIFGT, ' ', 1, 0);

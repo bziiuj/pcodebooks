@@ -75,10 +75,8 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 	case 0
 		disp('Creating kernel descriptor objects');
 		objs{end + 1} = {PersistenceWasserstein(), {'pw', 'pw'}};
-		objs{end + 1} = {PersistenceKernelOne(2.0), {'pk1', ['pk1_', num2str(2.0)]}};
-		for c = [0.5, 1., 2.0, 3.0]
+		for c = [0.5, 1., 2.0]
 			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', ['pk1_', num2str(c)]}};
-			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', 'pk1'}};
 		end
 		for a = 50:50:250
 		  objs{end + 1} = {PersistenceKernelTwo(0, a), {'pk2a', ['pk2a_', num2str(a)]}};
@@ -207,8 +205,6 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 	trainSet = cell(N, 1);
 	testSet = cell(N, 1);
 
-%	cPI = consolidated_PI(pds(:), 0.1, 150, 10000);
-
 %	if subset
 %		indices = repmat([1:149]',1,19) + repmat(0:149:149*18, 149, 1);
 %		tridx = indices(1:100, :);
@@ -225,6 +221,7 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 		testSet{i} = teidx(:);
 	end
 
+	% choose subset of examples for an EXP-A
 	if subset
 		for i = 1:N
 			seedBig = i * initSeed;
@@ -234,6 +231,7 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 		end
 	end
 
+	% compute persistence limits for each run
 	for i = 1:N
 		trainPoints = cat(1, pds{trainSet{i}});
 		trainPointsPersist = trainPoints(:, 2) - trainPoints(:, 1);

@@ -62,7 +62,8 @@ function [accuracy_test, precise_accuracy_test, confusion_matrix_test, ...
 		class_i_size = sum(class_i);
 		for j = 1:nclass
 			guessed_j = sum(predict_label(class_i) == j);
-			confusion_matrix_test(i,j) = (guessed_j/class_i_size) * 100.;
+%			confusion_matrix_test(i,j) = (guessed_j/class_i_size) * 100.;
+			confusion_matrix_test(i,j) = guessed_j;
 		end
 	end
 
@@ -76,7 +77,8 @@ function [accuracy_test, precise_accuracy_test, confusion_matrix_test, ...
 		class_i_size = sum(class_i);
 		for j = 1:nclass
 			guessed_j = sum(predict_label_train(class_i) == j);
-			confusion_matrix_train(i,j) = (guessed_j/class_i_size) * 100.;
+%			confusion_matrix_train(i,j) = (guessed_j/class_i_size) * 100.;
+			confusion_matrix_train(i,j) = guessed_j;
 		end
 	end
 

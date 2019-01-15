@@ -27,6 +27,8 @@ function [ PIs ] = new_make_PIs(interval_data, res, sig, weight_func, ...
 %			with respect to the boundaries. type=1 produces hard bounds, type=2
 %			produces soft boundaries on the images.
 %			-max_birth: limit for birth points based on a training set
+%			-parallel: boolean value, PIs are computed in parallel, parpool has
+%				to be set up before starting the function
 %OUTPUTS:   -PIs: The set of persistence images generated based on the
 %            options specified for the provided interval data.
 
@@ -38,14 +40,57 @@ function [ PIs ] = new_make_PIs(interval_data, res, sig, weight_func, ...
 		type=1;
 	end
 
+	%% LIMITING BY PERSISTENCE
+	% remove b_p points exceeding new limits
+	%if length(type_params)~=0
+		for d=1:n_dims
+			for i=1:n_classes
+				for j=1:n_items
+					points = b_p_data{j,i,d};
+					%% UPDATE
+	%				points = points(find(points(:,1) >= type_params(d, 1)),:);
+					% removal of points with a persistence outside the range
+					points = points(find(points(:,2) >= persistence_limits(d, 1)),:);
+					points = points(find(points(:,2) <= persistence_limits(d, 2)),:);
+					% not all datasets are computed with nonnegative height function
+					% thus we have to move them to 0
+	%                points(:,1) = points(:,1) - type_params(d,1);
+					b_p_data{j,i,d} = points;
+				end
+			end
+		end
+	% end
+
+	% set new limits for PI
+	% disp('Old max birth and persistence values:');
+	% disp(max_b_p_Hk);
+	%if type==1       
+	%	if size(type_params) == [n_dims 2]
+			% substracting the first parameter is due to negative coordinates 
+			% of some diagram points
+			%% UPDATE
+			% max_b_p_Hk = [max_b_p_Hk(:,1)-type_params(:,1) type_params(:,2)];
+	%	max_b_p_Hk = [max_b_p_Hk(:,1) type_params(:,2)];
+	%	elseif length(type_params) ~= 0
+	%		error('type_params argument is of wrong dimension');
+	%	end
+	%end
+
+	%%%% LIMITING BY BIRTH
+	if nargin >= 7
+		if max_birth > 0
+			max_b_p_Hk(:,1) = max_birth;
+		end
+	end
+	max_b_p_Hk(:,2) = persistence_limits(:,2);
+
+
 	disp('Max birth and persistence values:');
 	disp(max_b_p_Hk);
 	if nargin >= 7
 		max_b_p_Hk = max_b_p;
 	end
 	
-	%disp('Persistence limits');
-	%disp(persistence_limits);
 	disp('Pixel resolution:')
 	disp(max_b_p_Hk/res);
 
@@ -82,6 +127,7 @@ function [ PIs ] = new_make_PIs(interval_data, res, sig, weight_func, ...
 	% set default weighten function
 	if nargin<4
 		weight_func=@linear_ramp; %default setting is a linear weighting function
+	%    params=[0, max(max(max_b_p_Hk(:,2)))]; %default setting 0 at 0 and 1 at 
 	elseif nargin == 4
 		error('Error: Incomplete weight function and parameter pair');
 	end
@@ -102,7 +148,10 @@ function sigma = default_sigma(res, max_b_p_Hk)
 end
 
 function sigmas = relative_sigma(res, max_b_p_Hk, s)
-	sigmas = s*(max(max(max_b_p_Hk(:,2)))/res);
+%	% sigma relative to pixel size
+	sigb = s*(max(max(max_b_p_Hk(:,1)))/res);
+	sigp = s*(max(max(max_b_p_Hk(:,2)))/res);
+	sigmas = [sigb, sigp];
 end
 
 function [ b_p_data, max_b_p_Hk, problems] = birth_persistence_coordinates(interval_data)

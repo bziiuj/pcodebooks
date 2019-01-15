@@ -11,14 +11,9 @@ function experiment01_synthetic(test_type, algorithm, init_parallel)
 	% PI tested resolutions and relative sigmas
 	pi_r = 10:10:100;
 	pi_s = [0.1, 0.5, 1, 1.5, 2, 3];
-%	pi_r = [30];
-%	pi_s = [0.5];
 	% tested codebook sizes
 	bow_sizes = [5, 10:10:200];
 	sample_sizes = [1000, 5000, 10000];
-% 	bow_sizes = [50];
-%	sample_sizes = [10000];
-%	sampleSize = [100, 500, 1000, 5000, 10000];
 
 	switch algorithm
 	case 0
@@ -63,11 +58,9 @@ function experiment01_synthetic(test_type, algorithm, init_parallel)
 	case 0
 		disp('Creating kernel descriptor objects');
 		objs{end + 1} = {PersistenceWasserstein(), {'pw', 'pw'}};
-		for c = [0.5, 1., 1.5, 2.0, 3.0]
+		for c = [0.5, 1., 2.0]
 			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', ['pk1_', num2str(c)]}};
-			objs{end + 1} = {PersistenceKernelOne(c), {'pk1', 'pk1'}};
 		end
-		% objs{end + 1} = {PersistenceKernelTwo(1, -1), {'pk2e', 'pk2e'}};
 		for a = 50:50:250
 			objs{end + 1} = {PersistenceKernelTwo(0, a), {'pk2a', ['pk2a_', num2str(a)]}};
 		end

@@ -13,9 +13,7 @@ function experiment02_motion(test_type, algorithm, init_parallel, ~)
 	pi_r = [10:10:60];%, 170:30:200];
 	pi_s = [0.5, 1, 2];
 	% tested codebook sizes
-%	bow_sizes = 150:20:210;
-	bow_sizes = [10:10:50 60 80 100];%, 180:30:210];
-%	bow_sizes = [10:10:50];
+	bow_sizes = [10:10:50 60 80 100];
 	sample_sizes = [2000, 5000, 10000];
 
 	switch algorithm
