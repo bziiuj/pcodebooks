@@ -119,6 +119,7 @@ function experiment05_reddit5K(test_type, algorithm, init_parallel, subset)
 				objs{end}{1}.sampleSize = sample_size;
 			end
 		end
+
 	%%% PERSISTENCE CODEBOOKS PVLAD + PFV
 	case 4
 		for sample_size = sample_sizes
@@ -128,16 +129,20 @@ function experiment05_reddit5K(test_type, algorithm, init_parallel, subset)
 				objs{end}{1}.sampleSize = sample_size;
 			end
 			for c = bow_sizes
-				objs{end + 1} = {PersistenceFV(c, @linear_ramp), {'pfv', ['pfv_', num2str(c)]}};
-				objs{end}{1}.sampleSize = sample_size;
+				for o = [1,2]
+					objs{end + 1} = {PersistenceFV(c, @linear_ramp, o), {'pfv', ['pfv_', num2str(c)]}};
+					objs{end}{1}.sampleSize = sample_size;
+				end
 			end
 			for c = bow_sizes
 				objs{end + 1} = {PersistenceVLAD(c, @constant_one), {'pvlad', ['pvlad_', num2str(c)]}};
 				objs{end}{1}.sampleSize = sample_size;
 			end
 			for c = bow_sizes
-				objs{end + 1} = {PersistenceFV(c, @constant_one), {'pfv', ['pfv_', num2str(c)]}};
-				objs{end}{1}.sampleSize = sample_size;
+				for o = [1,2]
+					objs{end + 1} = {PersistenceFV(c, @constant_one, o), {'pfv', ['pfv_', num2str(c)]}};
+					objs{end}{1}.sampleSize = sample_size;
+				end
 			end
 		end
 
@@ -146,12 +151,16 @@ function experiment05_reddit5K(test_type, algorithm, init_parallel, subset)
 		for sample_size = sample_sizes
 			disp(['Creating stable codebooks objects.', ' Sample size: ', num2str(sample_size)]);
 			for c = bow_sizes
-				objs{end + 1} = {PersistenceStableBow(c, @linear_ramp), {'pbow_st', ['pbow_st_', num2str(c)]}};
-				objs{end}{1}.sampleSize = sample_size;
+				for o = [1,2]
+					objs{end + 1} = {PersistenceStableBow(c, @linear_ramp, o), {'pbow_st', ['pbow_st_', num2str(c)]}};
+					objs{end}{1}.sampleSize = sample_size;
+				end
 			end
 			for c = bow_sizes
-				objs{end + 1} = {PersistenceStableBow(c, @constant_one), {'pbow_st', ['pbow_st_', num2str(c)]}};
-				objs{end}{1}.sampleSize = sample_size;
+				for o = [1,2]
+					objs{end + 1} = {PersistenceStableBow(c, @constant_one, o), {'pbow_st', ['pbow_st_', num2str(c)]}};
+					objs{end}{1}.sampleSize = sample_size;
+				end
 			end
 			for c = bow_sizes
 				objs{end + 1} = {PersistenceSoftVLAD(c, @linear_ramp), {'svlad', ['svlad_', num2str(c)]}};
@@ -163,7 +172,7 @@ function experiment05_reddit5K(test_type, algorithm, init_parallel, subset)
 			end
 		end
 	end
-	%%%
+	%%%%%
 
 	if par
 		cluster = parcluster('local');

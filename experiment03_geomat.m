@@ -9,9 +9,9 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 	%%%%% EXPERIMENT PARAMETERS
 	% number of trials
 	if subset
-		N = 10;
+		N = 5;
 	else 
-		N = 3;
+		N = 5;
 	end
 	if subset
 		% PI tested resolutions and relative sigmas
@@ -130,6 +130,7 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 				objs{end}{1}.sampleSize = sample_size;
 			end
 		end
+
 	%%% PERSISTENCE CODEBOOKS PVLAD + PFV
 	case 4
 		for sample_size = sample_sizes
@@ -139,16 +140,20 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 				objs{end}{1}.sampleSize = sample_size;
 			end
 			for c = bow_sizes
-				objs{end + 1} = {PersistenceFV(c, @linear_ramp), {'pfv', ['pfv_', num2str(c)]}};
-				objs{end}{1}.sampleSize = sample_size;
+				for o = [1,2]
+					objs{end + 1} = {PersistenceFV(c, @linear_ramp, o), {'pfv', ['pfv_', num2str(c)]}};
+					objs{end}{1}.sampleSize = sample_size;
+				end
 			end
 			for c = bow_sizes
 				objs{end + 1} = {PersistenceVLAD(c, @constant_one), {'pvlad', ['pvlad_', num2str(c)]}};
 				objs{end}{1}.sampleSize = sample_size;
 			end
 			for c = bow_sizes
-				objs{end + 1} = {PersistenceFV(c, @constant_one), {'pfv', ['pfv_', num2str(c)]}};
-				objs{end}{1}.sampleSize = sample_size;
+				for o = [1,2]
+					objs{end + 1} = {PersistenceFV(c, @constant_one, o), {'pfv', ['pfv_', num2str(c)]}};
+					objs{end}{1}.sampleSize = sample_size;
+				end
 			end
 		end
 
@@ -157,12 +162,16 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 		for sample_size = sample_sizes
 			disp(['Creating stable codebooks objects.', ' Sample size: ', num2str(sample_size)]);
 			for c = bow_sizes
-				objs{end + 1} = {PersistenceStableBow(c, @linear_ramp), {'pbow_st', ['pbow_st_', num2str(c)]}};
-				objs{end}{1}.sampleSize = sample_size;
+				for o = [1,2]
+					objs{end + 1} = {PersistenceStableBow(c, @linear_ramp, o), {'pbow_st', ['pbow_st_', num2str(c)]}};
+					objs{end}{1}.sampleSize = sample_size;
+				end
 			end
 			for c = bow_sizes
-				objs{end + 1} = {PersistenceStableBow(c, @constant_one), {'pbow_st', ['pbow_st_', num2str(c)]}};
-				objs{end}{1}.sampleSize = sample_size;
+				for o = [1,2]
+					objs{end + 1} = {PersistenceStableBow(c, @constant_one, o), {'pbow_st', ['pbow_st_', num2str(c)]}};
+					objs{end}{1}.sampleSize = sample_size;
+				end
 			end
 			for c = bow_sizes
 				objs{end + 1} = {PersistenceSoftVLAD(c, @linear_ramp), {'svlad', ['svlad_', num2str(c)]}};
@@ -205,16 +214,10 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 	trainSet = cell(N, 1);
 	testSet = cell(N, 1);
 
-%	if subset
-%		indices = repmat([1:149]',1,19) + repmat(0:149:149*18, 149, 1);
-%		tridx = indices(1:100, :);
-%		teidx = indices(101:149, :);
-%	else
-%		% create matrix of indices
+	% create matrix of indices
 	indices = repmat([1:600]',1,19) + repmat(0:600:600*18, 600, 1);
 	tridx = indices(1:400, :);
 	teidx = indices(401:600, :);
-%	end
 
 	for i = 1:N
 		trainSet{i} = tridx(:);
@@ -275,7 +278,7 @@ function experiment03_geomat(test_type, algorithm, init_parallel, subset)
 			conf_matrices_train(i, :, :) = confMats{2};
 			allTimes(i, :) = times;
 
-%			if strcmp(prop{1}, 'pbow')
+%			if strcmp(prop{1}, 'pfv') && i == 1
 %				repr = obj.predict(pds(:));
 %				kdwords = obj.kdwords;
 %				save(strcat(pbowsPath, prop{2}, '_', char(obj.weightingFunction), '_', num2str(i), '_book.mat'), 'obj');

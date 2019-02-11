@@ -24,7 +24,7 @@ function print_results(expPath, obj, N, algorithm_name, sufix, types, ...
 			algorithm_name, '_', prop{1}, '.txt'], 'a');
 
 	header = repmat('%s;', [1, 5+length(types)]);
-	header = sprintf(header, prop{1}, 'iter', 'descr_time', 'feature_time', 'svm_time', 'acc', types{:});
+	header = sprintf(header, prop{1}, 'iter', 'descr_time', 'feature_time', 'cval_time', 'svm_time', 'acc', types{:});
 	fprintf(fid, '%s\n', header);
 
 	specs = ''; 
@@ -39,7 +39,11 @@ function print_results(expPath, obj, N, algorithm_name, sufix, types, ...
 			% resolution;sigma;weightingFunction
 			f = functions(obj.weightingFunction);
 			specs = [num2str(obj.resolution), ';', num2str(obj.sigma), ';', f.function];
-		case {'pbow', 'pvlad', 'pfv', 'pbow_st', 'svlad'}
+		case {'pfv', 'pbow_st'}
+			f = functions(obj.weightingFunction);
+			% numWords;sampleSize;weightingFunctionFit;weightingFunctionPredict
+			specs = [num2str(obj.numWords), ';', num2str(obj.sampleSize), ';', f.function, ';',num2str(obj.option)];
+		case {'pbow', 'pvlad', 'svlad'}
 			f = functions(obj.weightingFunction);
 			if isempty(obj.weightingFunctionPredict)
 				% numWords;sampleSize;weightingFunctionFit;weightingFunctionPredict

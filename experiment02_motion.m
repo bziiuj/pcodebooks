@@ -101,6 +101,7 @@ function experiment02_motion(test_type, algorithm, init_parallel, ~)
 				objs{end}{1}.sampleSize = sample_size;
 			end
 		end
+
 	%%% PERSISTENCE CODEBOOKS PVLAD + PFV
 	case 4
 		for sample_size = sample_sizes
@@ -110,16 +111,20 @@ function experiment02_motion(test_type, algorithm, init_parallel, ~)
 				objs{end}{1}.sampleSize = sample_size;
 			end
 			for c = bow_sizes
-				objs{end + 1} = {PersistenceFV(c, @linear_ramp), {'pfv', ['pfv_', num2str(c)]}};
-				objs{end}{1}.sampleSize = sample_size;
+				for o = [1,2]
+					objs{end + 1} = {PersistenceFV(c, @linear_ramp, o), {'pfv', ['pfv_', num2str(c)]}};
+					objs{end}{1}.sampleSize = sample_size;
+				end
 			end
 			for c = bow_sizes
 				objs{end + 1} = {PersistenceVLAD(c, @constant_one), {'pvlad', ['pvlad_', num2str(c)]}};
 				objs{end}{1}.sampleSize = sample_size;
 			end
 			for c = bow_sizes
-				objs{end + 1} = {PersistenceFV(c, @constant_one), {'pfv', ['pfv_', num2str(c)]}};
-				objs{end}{1}.sampleSize = sample_size;
+				for o = [1,2]
+					objs{end + 1} = {PersistenceFV(c, @constant_one, o), {'pfv', ['pfv_', num2str(c)]}};
+					objs{end}{1}.sampleSize = sample_size;
+				end
 			end
 		end
 
@@ -128,12 +133,16 @@ function experiment02_motion(test_type, algorithm, init_parallel, ~)
 		for sample_size = sample_sizes
 			disp(['Creating stable codebooks objects.', ' Sample size: ', num2str(sample_size)]);
 			for c = bow_sizes
-				objs{end + 1} = {PersistenceStableBow(c, @linear_ramp), {'pbow_st', ['pbow_st_', num2str(c)]}};
-				objs{end}{1}.sampleSize = sample_size;
+				for o = [1,2]
+					objs{end + 1} = {PersistenceStableBow(c, @linear_ramp, o), {'pbow_st', ['pbow_st_', num2str(c)]}};
+					objs{end}{1}.sampleSize = sample_size;
+				end
 			end
 			for c = bow_sizes
-				objs{end + 1} = {PersistenceStableBow(c, @constant_one), {'pbow_st', ['pbow_st_', num2str(c)]}};
-				objs{end}{1}.sampleSize = sample_size;
+				for o = [1,2]
+					objs{end + 1} = {PersistenceStableBow(c, @constant_one, o), {'pbow_st', ['pbow_st_', num2str(c)]}};
+					objs{end}{1}.sampleSize = sample_size;
+				end
 			end
 			for c = bow_sizes
 				objs{end + 1} = {PersistenceSoftVLAD(c, @linear_ramp), {'svlad', ['svlad_', num2str(c)]}};
@@ -145,7 +154,7 @@ function experiment02_motion(test_type, algorithm, init_parallel, ~)
 			end
 		end
 	end
-	%%%
+	%%%%%
 
 	% init seed for RNG
 	initSeed = 10010;

@@ -2,16 +2,22 @@ classdef PersistenceStableBow < PersistenceBow
 %%%%%%PERSISTENCESTABLEBOWA
 
 	properties
-	  means
-	  covariances
-	  priors
-	  gm
+		means
+		covariances
+		priors
+		gm
+		option
 	end
 
 	methods
-		function obj = PersistenceStableBow(numWords, weightingFunction)
+		function obj = PersistenceStableBow(numWords, weightingFunction, option)
 			obj = obj@PersistenceBow(numWords, weightingFunction);
 			obj.feature_size = obj.numWords;
+			if nargin < 3
+				obj.option = 1;
+			else
+				obj.option = option;
+			end
 		end
 		  
 		function obj = fit(obj, diagrams, persistenceLimits)
@@ -20,15 +26,45 @@ classdef PersistenceStableBow < PersistenceBow
 
 			samplePointsPersist = obj.getSample(diagrams, obj.persistenceLimits);
 
-			v = var(samplePointsPersist)' ;
-			[obj.means, obj.covariances, obj.priors] = ...
-			  vl_gmm(samplePointsPersist', obj.numWords, 'verbose', ...
-				  'Initialization', 'kmeans', ...
-				  'CovarianceBound', double(max(v)*0.0001), ...
-				  'NumRepetitions', 1);
+			if obj.option == 1
+				v = var(samplePointsPersist)' ;
+				[obj.means, obj.covariances, obj.priors] = ...
+				  vl_gmm(samplePointsPersist', obj.numWords, 'verbose', ...
+					  'Initialization', 'kmeans', ...
+					  'CovarianceBound', double(max(v)*0.0001), ...
+					  'NumRepetitions', 1);
+			elseif obj.option == 2
+				kdwords = vl_kmeans(samplePointsPersist', obj.numWords, ...
+					'verbose', 'algorithm', 'ann') ;
+				kdtree = vl_kdtreebuild(kdwords, 'numTrees', 2) ;
+				[words, ~] = vl_kdtreequery(kdtree, kdwords, ...
+					samplePointsPersist', ...
+					'MaxComparisons', 100);
+				
+				obj.means = zeros(2, obj.numWords);
+				obj.covariances = zeros(2, obj.numWords);
+				obj.priors = zeros(obj.numWords, 1);
+				for c = 1:obj.numWords
+					samplePointsPersistC = samplePointsPersist(words == c, :);
+					v = var(samplePointsPersistC)' ;
+					[mean, covariance, prior] = vl_gmm(samplePointsPersistC', 1, 'verbose', ...
+						'Initialization', 'kmeans', ...
+						'CovarianceBound', double(max(v)*0.0001), ...
+						'NumRepetitions', 1);
+
+					obj.means(:, c) = mean;
+					obj.covariances(:, c) = covariance;
+					obj.priors(c) = sum(words == c) / length(words);
+					if isnan(mean(1))
+						obj.covariances(:, c) = [0.000001, 0.000001];
+						obj.means(:, c) = samplePointsPersistC(1,:);
+						obj.priors(c) = 1/length(words);
+					end
+				end
+			end
 
 			reshaped_covariances = reshape(obj.covariances, ...
-			  [1, size(obj.covariances, 1), size(obj.covariances, 2)]);
+				[1, size(obj.covariances, 1), size(obj.covariances, 2)]);
 			zero_priors = [obj.priors==0];
 			obj.priors(zero_priors) = 0.1^20;
 			try  
