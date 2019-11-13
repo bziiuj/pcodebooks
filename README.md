@@ -1,7 +1,7 @@
 # pcodebooks
 Persistence Codebooks
 
-A. This code contains experiments presented in "Persistence Bag-of-Words for Topological Data Analysis" (/https://arxiv.org/abs/1812.09245). It was tested on Debian Stretch 9.6 x64.
+A. This code contains experiments presented in "Persistence Bag-of-Words for Topological Data Analysis" (/https://arxiv.org/abs/1812.09245). It was tested on Debian Stretch 9.6 x64 and OS 10.13 (High Sierra). The Statistics and Machine Learning Toolbox is required.
 
 B. Instalation steps:
 
