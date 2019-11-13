@@ -51,7 +51,7 @@ methods
 			kdtree = vl_kdtreebuild(kdwords, 'numTrees', 2) ;
 			[words, ~] = vl_kdtreequery(kdtree, kdwords, ...
 				samplePointsPersist', ...
-				'MaxComparisons', 100);
+				'MaxComparisons', 120);
 
 			obj.means = zeros(2, obj.numWords);
 			obj.covariances = zeros(2, obj.numWords);
@@ -59,10 +59,16 @@ methods
 			for c = 1:obj.numWords
 				samplePointsPersistC = samplePointsPersist(words == c, :);
 				v = var(samplePointsPersistC)' ;
-				[mean, covariance, prior] = vl_gmm(samplePointsPersistC', 1, 'verbose', ...
-					'Initialization', 'kmeans', ...
-					'CovarianceBound', double(max(v)*0.0001), ...
-					'NumRepetitions', 1);
+				if size(samplePointsPersistC,1) == 0
+					mean = [0,0];
+					covariance = [0.000001, 0.000001];
+					disp(c)
+				else
+					[mean, covariance, prior] = vl_gmm(samplePointsPersistC', 1, 'verbose', ...
+						'Initialization', 'kmeans', ...
+						'CovarianceBound', double(max(v)*0.0001), ...
+						'NumRepetitions', 1);
+				end
 
 				obj.means(:, c) = mean;
 				obj.covariances(:, c) = covariance;

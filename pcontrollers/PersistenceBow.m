@@ -70,20 +70,24 @@ classdef PersistenceBow < PersistenceRepresentation
 		function samplePointsPersist = getSample(obj, diagrams, persistenceLimits)
 			allPoints = cat(1, diagrams{:});
 			allBPpoints = [allPoints(:, 1), allPoints(:, 2) - allPoints(:, 1)];
-
 			if length(allPoints) > obj.sampleSize
 				sample = obj.sampleSize;
 			else
 				sample = length(allPoints);
 			end
 
-			if ~strcmp(func2str(obj.weightingFunction), 'constant_one')
-				weights = arrayfun(@(row) ...
-				  obj.weightingFunction(allBPpoints(row,:), persistenceLimits), 1:size(allBPpoints,1))';
+			if strcmp(func2str(obj.weightingFunction), 'linear_ramp')
+				weights = allBPpoints(:,2);
+				weights = max(weights, persistenceLimits(1));
+				weights = min(weights, persistenceLimits(2));
+				weights = (weights - persistenceLimits(1));
+				weights = weights/(persistenceLimits(2)-persistenceLimits(1));
 				weights = weights / sum(weights);
 				samplePointsPersist = allBPpoints(randsample(1:size(allBPpoints, 1), sample, true, weights), :);
-			else
+			elseif strcmp(func2str(obj.weightingFunction), 'constant_one')
 				samplePointsPersist = allBPpoints(randsample(1:size(allBPpoints, 1), sample), :);
+			else
+				error('Not supported function');
 			end
 		end
 
@@ -93,9 +97,11 @@ classdef PersistenceBow < PersistenceRepresentation
 
 			sampleBpPoints = obj.getSample(diagrams, obj.persistenceLimits);
 
+			tic;
 			obj.kdwords = vl_kmeans(sampleBpPoints', obj.numWords, ...
 			  'verbose', 'algorithm', 'ann') ;
 			obj.kdtree = vl_kdtreebuild(obj.kdwords, 'numTrees', 2) ;
+			disp(strcat('4: ', num2str(toc)))
 		end
 
 		function repr = predict(obj, diagrams)

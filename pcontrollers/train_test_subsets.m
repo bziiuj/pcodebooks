@@ -1,4 +1,5 @@
-function [trids, teids] = train_test_subsets(labels, nclasses, trainExamples, testExamples, subsetTrain, subsetTest, seed)
+function [trids, teids] = train_test_subsets(labels, nclasses, ...
+	trainExamples, testExamples, subsetTrain, subsetTest, seed)
 %%% nex - number of examples per class
 % 	trN = zeros(nclasses, 1);
 % 	teN = zeros(nclasses, 1);

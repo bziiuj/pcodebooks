@@ -9,8 +9,8 @@ function [accuracy, preciseAccuracy, confMats, C, times, obj] = ...
 %	preciseAccuracy - accuracy for each class, two cells array, first for test, second for train
 %	confMats - confusion matrix, two cells array, first for test, second for train
 %	C - svm C parameter, deterimined by crossvalidation
-%	times - 3 element array: descriptor fitting time, feature vectors/kernel creation time, svm duration time
-%		(depending on descriptor some values are not filled) 
+%	times - 4 element array: descriptor fitting time, feature vectors/kernel creation time, 
+%		svm-cross-validation, svm time; (depending on descriptor some values are not filled) 
 %   obj - escriptor object, it can modified by fitting process
 	times = [-1, -1, -1, -1];
 
