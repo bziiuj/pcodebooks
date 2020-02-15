@@ -14,8 +14,8 @@ function experiment07_3Dseg(test_type, algorithm, init_parallel)
 	% tested codebook sizes
 	bow_sizes = [10:10:100];
 	sample_sizes = [5000, 10000, 20000];
-% 	bow_sizes = [120];
-% 	sample_sizes = [10000];
+	bow_sizes = [80];
+	sample_sizes = [10000];
 
 	switch algorithm
 	case 0

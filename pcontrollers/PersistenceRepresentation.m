@@ -4,6 +4,7 @@ classdef PersistenceRepresentation
 	properties
 		seed
 		feature_size
+		options
 	end
 
 	methods
@@ -12,7 +13,10 @@ classdef PersistenceRepresentation
 		end
 
 		% to override
-		function setup(obj)
+		function setup(obj) %#ok<MANU>
+			pbow_path = which('PersistenceRepresentation');
+			[filepath, ~, ~] = fileparts(pbow_path);
+			addpath(strcat(filepath,'/../utils'))
 		end
 		
 		% to override
@@ -31,7 +35,7 @@ classdef PersistenceRepresentation
 			repr = [0];
 			error('predict function is not overrided');
 		end
-
+			
 		% to override for non-vector representations
 		function K = generateKernel(obj, repr)
 			reprVect = repr;

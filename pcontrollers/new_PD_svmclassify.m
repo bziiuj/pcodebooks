@@ -12,15 +12,19 @@ function [accuracy_test, precise_accuracy_test, confusion_matrix_test, ...
 
 	folds = 5;
 	g = 1/size(f,1);
-	C = [0.1, 1, 10, 100, 1000];
+% 	C = [0.1, 1, 10, 100, 1000];
+	C = [0.1, 1, 10, 100];
 	cv_acc = zeros(numel(C), 1);
 
 	% Training with crossvalidation 
 	tic;
+	rng(0);
 	for i=1:numel(C)
 %	for c=C
 		switch type
 			case 'vector'
+% 				cv_acc(i) = fitcsvm(f(:,train_idx)', labels(train_idx), ...
+% 					'KernelFunction', 'linear', );
 				cv_acc(i) = svmtrain(labels(train_idx), f(:,train_idx)', ...
 					['-s 0 -c ', num2str(C(i)), ' -t 0 -g ', num2str(g), ...
 					' -v ', num2str(folds)]);
@@ -36,12 +40,13 @@ function [accuracy_test, precise_accuracy_test, confusion_matrix_test, ...
 	[~, idxC] = max(cv_acc);
 	C = C(idxC);
 	tic;
+	rng(0);
 	% Main training
 	switch type
 		case 'vector'
 			model = svmtrain(labels(train_idx), f(:,train_idx)', ['-s 0 -c ',num2str(C),' -t 0 -g ',num2str(g)]);
-			[predict_label, accuracy, prob_values] = svmpredict(labels(test_idx), f(:,test_idx)', model);
-			[predict_label_train, accuracy, prob_values] = svmpredict(labels(train_idx), f(:,train_idx)', model);
+			[predict_label, accuracy_test, ~] = svmpredict(labels(test_idx), f(:,test_idx)', model);
+			[predict_label_train, accuracy_train, ~] = svmpredict(labels(train_idx), f(:,train_idx)', model);
 		case 'kernel'
 			K = [(1:length(train_idx))', f(train_idx, train_idx)];
 			KK = [(1:length(test_idx))', f(test_idx, train_idx)];

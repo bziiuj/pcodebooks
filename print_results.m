@@ -27,7 +27,7 @@ function print_results(expPath, obj, N, algorithm_name, sufix, types, ...
 	header = sprintf(header, prop{1}, 'iter', 'descr_time', 'feature_time', 'cval_time', 'svm_time', 'acc', types{:});
 	fprintf(fid, '%s\n', header);
 
-	specs = ''; 
+% 	specs = ''; 
 	switch prop{1}
 		case {'pw', 'pl'}
 			specs = '';
@@ -37,8 +37,10 @@ function print_results(expPath, obj, N, algorithm_name, sufix, types, ...
 			specs = [num2str(obj.exact), ';', num2str(obj.n)];
 		case 'pi'
 			% resolution;sigma;weightingFunction
-			f = functions(obj.weightingFunction);
-			specs = [num2str(obj.resolution), ';', num2str(obj.sigma), ';', f.function];
+% 			f = functions(obj.weightingFunction);
+% 			specs = [num2str(obj.resolution), ';', num2str(obj.sigma), ';', f.function];
+			specs = [num2str(obj.resolution), ';', num2str(obj.sigma), ';', ...
+				obj.options.weightingfunction, ';', num2str(obj.options.norm)];
 		case {'pfv', 'pbow_st'}
 			f = functions(obj.weightingFunction);
 			% numWords;sampleSize;weightingFunctionFit;weightingFunctionPredict
@@ -53,6 +55,22 @@ function print_results(expPath, obj, N, algorithm_name, sufix, types, ...
 				% numWords;sampleSize;weightingFunction
 				specs = [num2str(obj.numWords), ';', num2str(obj.sampleSize), ';', f.function, ';', fp.function];
 			end
+		case {'npbow'}
+			specs = [num2str(obj.numWords), ';', num2str(obj.options.samplesize), ';', ...
+				obj.options.method, ';', obj.options.samplingweight, ';', ...
+				obj.options.predictweight, ';', num2str(obj.options.norm), ';', ...
+				iif(obj.options.norm, [num2str(obj.options.scale(1)), 'x', num2str(obj.options.scale(2))], 'NA'), ';', ...
+				iif(strcmp(obj.options.method, 'wkmeans'), obj.options.kmeansweight, 'NA'), ';', ...
+				num2str(obj.options.gridsize), ';'
+				];
+		case {'nspbow'}
+			specs = [num2str(obj.numWords), ';', num2str(obj.options.samplesize), ';', ...
+				obj.options.method, ';', obj.options.samplingweight, ';', ...
+				num2str(obj.options.norm), ';', ...
+				iif(obj.options.norm, [num2str(obj.options.scale(1)), 'x', num2str(obj.options.scale(2))], 'NA'), ';', ...
+				iif(strcmp(obj.options.method, 'wkmeans'), obj.options.kmeansweight, 'NA'), ';', ...
+				num2str(obj.options.gridsize)
+				];
 		case 'pds'
 			% resolution;sigma;dim
 			specs = [num2str(obj.resolution), ';', num2str(obj.sigma), ';', num2str(obj.dim)];
@@ -60,6 +78,7 @@ function print_results(expPath, obj, N, algorithm_name, sufix, types, ...
 		  throw(MException('Error', 'Representation is not saved'));
 	end
 
+	disp(['specs: ', specs]);
 	% type;repetition;time1;time2;time3;time4;accuracy;preciseAccuracy
 	template_line_test = ['%s;%d;%f;%f;%f;%f;%f', repmat(';%f',[1,length(types)])];
 	% type;repetition;accuracy;preciseAccuracy

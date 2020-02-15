@@ -7,7 +7,7 @@ function experiment01_synthetic(test_type, algorithm, init_parallel)
 
 %%%%% EXPERIMENT PARAMETERS
 	% number of trials
-	N = 10;
+	N = 5;
 	% PI tested resolutions and relative sigmas
 	pi_r = 10:10:100;
 	pi_s = [0.1, 0.5, 1, 1.5, 2, 3];
@@ -15,6 +15,9 @@ function experiment01_synthetic(test_type, algorithm, init_parallel)
 	bow_sizes = [5, 10:10:200];
 	sample_sizes = [1000, 5000, 10000];
 
+% 	bow_sizes = [100];
+% 	sample_sizes = [10000];
+	
 	switch algorithm
 	case 0
 		algorithm = 'linearSVM-kernel'; 

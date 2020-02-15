@@ -25,6 +25,7 @@ function [accuracy, preciseAccuracy, confMats, C, times, obj] = ...
 	labels = cat(1, train_labels, test_labels);
 
 %	[tridx, teidx] = train_test_indices(labels, nclass, 0.2, seed);
+
 	switch name
 	case {'pw'}
 		disp(kernelPath);
@@ -62,7 +63,7 @@ function [accuracy, preciseAccuracy, confMats, C, times, obj] = ...
 		% K is uppertriangular, so ...
 		K = K + K';
 
-	case {'pi', 'pbow', 'pvlad', 'pfv', 'pbow_st', 'svlad'}
+	case {'pi', 'pbow', 'pvlad', 'pfv', 'pbow_st', 'svlad', 'npbow', 'nspbow'}
 		if ~exist(descrPath, 'file')
 			tic;
 			if size(pds, 2) > 1
@@ -94,7 +95,11 @@ function [accuracy, preciseAccuracy, confMats, C, times, obj] = ...
 				end
 			else
 				if strcmp(name, 'pi')
-					reprCell = obj.predict(pds, persistenceLimits);
+					obj = obj.fit(train_pds);
+					reprCell = obj.predict(pds);
+				elseif strcmp(name, 'npbow') || strcmp(name, 'nspbow')
+					obj = obj.fit(train_pds);
+					reprCell = obj.predict(pds);
 				else
 % 					tr_pds = pds(tridx);
 					obj = obj.fit(train_pds, persistenceLimits);
@@ -163,6 +168,7 @@ function [accuracy, preciseAccuracy, confMats, C, times, obj] = ...
 				  reprNonCell{i} = features(:, i);
 				end
 				tic;
+			rng(0);
 				K = obj.generateKernel(reprNonCell);
 				times(2) = toc;
 			end

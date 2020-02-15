@@ -95,13 +95,13 @@ classdef PersistenceBow < PersistenceRepresentation
 			disp('Fitting Persistence BoW');
 			obj.persistenceLimits = persistenceLimits;
 
+			rng(0);
 			sampleBpPoints = obj.getSample(diagrams, obj.persistenceLimits);
 
 			tic;
 			obj.kdwords = vl_kmeans(sampleBpPoints', obj.numWords, ...
 			  'verbose', 'algorithm', 'ann') ;
 			obj.kdtree = vl_kdtreebuild(obj.kdwords, 'numTrees', 2) ;
-			disp(strcat('4: ', num2str(toc)))
 		end
 
 		function repr = predict(obj, diagrams)
@@ -117,7 +117,6 @@ classdef PersistenceBow < PersistenceRepresentation
 					% count words using weights or not
 					if ~isempty(obj.weightingFunctionPredict) ...
 						&& ~strcmp(func2str(obj.weightingFunctionPredict), 'constant_one')
-% 					if ~isempty(obj.weightingFunctionPredict)
 						z = zeros(obj.numWords, 1);
 						weights = obj.weightingFunctionPredict(bppoints, obj.persistenceLimits);
 						for x = 1:length(words)
@@ -133,7 +132,23 @@ classdef PersistenceBow < PersistenceRepresentation
 				repr{i} = z;
 			end
 		end
+		
+		function n = feature_size(obj)
+			n = obj.numWords
 
+		function show_pcodebook(obj, diagrams)
+% 			data = obj.transform_diagrams(diagrams);
+			data = cat(1, diagrams{:});
+			data = [data(:,1), data(:,2)-data(:,1)];
+			[labels, ~] = vl_kdtreequery(obj.kdtree, obj.kdwords, ...
+						data', 'MaxComparisons', 100);
+			sz = 6;
+			scatter(data(:,1), data(:,2), sz, labels', 'filled');
+			hold on;
+			scatter(obj.kdwords(1,:), obj.kdwords(2,:), sz*10, 1:length(obj.kdwords), 'filled');
+			voronoi(obj.kdwords(1,:),obj. kdwords(2,:))
+		end
+		
 		function pbow = saveobj(obj)
 			pbow.numWords = obj.numWords;
 			pbow.weightingFunction = obj.weightingFunction;
