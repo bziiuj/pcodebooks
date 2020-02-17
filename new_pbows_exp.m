@@ -23,10 +23,14 @@ function new_pbows_exp()
 		algorithm = 'linearSVM-vector';
 	end
 
-	dataset = '3Dseg';
-% 	[variants, exp_name] = spbow_vs_sapi(dataset);
+	dataset = 'geomat';
+	subset = false;
+	[variants, exp_name] = spbow_vs_sapi(dataset);
 % 	[variants, exp_name] = pi_vs_nspbow_test(dataset);
-	[variants, exp_name] = nspbow_sample_size_test(dataset);
+% 	[variants, exp_name] = nspbow_sample_size_test(dataset);
+	if ~subset
+		exp_name = [exp_name, '_full'];
+	end
 
 	switch dataset
 		case 'synthetic'
@@ -61,9 +65,23 @@ function new_pbows_exp()
 	testSet = cell(N, 1);
 
 	if strcmp(dataset, 'geomat')
-		load('exp03_geomat/exp03_test_train_subsets.mat', 'testSet');
-		load('exp03_geomat/exp03_test_train_subsets.mat', 'trainSet');
+		if subset
+			load('exp03_geomat/exp03_test_train_subsets.mat', 'testSet');
+			load('exp03_geomat/exp03_test_train_subsets.mat', 'trainSet');
+		else 
+			% create matrix of indices
+			indices = repmat([1:600]',1,19) + repmat(0:600:600*18, 600, 1);
+			tridx = indices(1:400, :);
+			teidx = indices(401:600, :);
+			for i = 1:N
+				trainSet{i} = tridx(:);
+				testSet{i} = teidx(:);
+			end
+		end
 	else
+		if ~subset
+			error("implement not subset");
+		end
 		for i = 1:N
 			seedBig = i * initSeed;
 			[tridx, teidx] = train_test_indices(labels, nclasses, test_split, seedBig);
