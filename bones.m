@@ -23,44 +23,53 @@ end
 
 pds(unknown, :) = [];
 labels(unknown, :) = [];
+limits = [min(min(cell2mat(pds(:)))), max(max(cell2mat(pds(:))))];
+
+%%
+
+method_name = ''; % empty or PI
 
 %%
 
 % Create PersistenceBow object
-pbow = PersistenceBow(5, @linear_ramp);
-
-% Randomly choose train and test subsets
-teidx = randi(length(pds), 1, floor(length(pds) / 5));
-tridx = setdiff(1:length(pds), teidx);
-
-tr_pds = pds(tridx);
-te_pds = pds(teidx);
-limits = [min(min(cell2mat(tr_pds(:)))), max(max(cell2mat(tr_pds(:))))];
-
-%%
-
-% Train PBOW
-pbow = pbow.fit(tr_pds, limits);
+if strcmp(method_name, 'PI')
+    method = PersistenceImage(20, 0.1,  @linear_ramp);
+else
+    %method = PersistenceBow(100, @linear_ramp);
+    method = PersistenceFV(100, @linear_ramp);
+end
 
 % Get PBOWs representation for all examples
-reprCell = pbow.predict(pds(:));
+if strcmp(method_name, 'PI')
+    reprCell = method.predict(pds(:), limits);
+else
+    % Train PBOW
+    method = method.fit(pds, limits);
+
+    reprCell = method.predict(pds(:));
+end
 
 % Transform PBOW representation into feature vector
-features = zeros(pbow.feature_size, length(reprCell));
-for i = 1:size(pds(:), 1)
+features = zeros(method.feature_size, length(reprCell));
+for i = 1:size(features, 2)
 	features(:, i) = reprCell{i}(:)';
 end
 
-%%
+rs = [];
+ps = [];
+for i = 1:size(features, 2)
+    [r, p] = corrcoef(features(i, :)', labels);
+    rs = [rs, r(1, 2)];
+    ps = [ps, p(1, 2)];
+end
+rs = abs(rs);
+[rs_sorted, rs_order] = sort(rs, 'descend');
 
-Y = tsne(features');
-scatter(Y(:, 1), Y(:, 2), 25, labels, 'filled');
-
-%%
-
-% Test using SVM
-[accuracy, preciseAccuracy] = new_PD_svmclassify(features, labels, ...
-    tridx, teidx, 'vector');
-
-% Print accuracy
-disp(strcat('Classification accuracy: ', num2str(accuracy)));
+%Y = tsne(features');
+%scatter(Y(:, 1), Y(:, 2), 25, labels, 'filled');
+figure;
+for i = 1:12
+    subplot(3, 4, i);
+    scatter(features(rs_order(i), :), labels, 5);
+    title([num2str(rs_order(i)), ' = ', num2str(rs_sorted(i))]);
+end
