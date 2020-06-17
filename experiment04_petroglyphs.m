@@ -14,6 +14,8 @@ function experiment04_petroglyphs(test_type, algorithm, init_parallel, subset)
 		% PI tested resolutions and relative sigmas
 		pi_r = [10 20:20:100];
 		pi_s = [0.5, 1, 2];
+		% pi_r = [40, 80, 120];
+		% pi_s = [1];
 		% tested codebook sizes
 		bow_sizes = [10:10:50, 60:20:200];
 		sample_sizes = [5000, 10000, 50000];
@@ -21,6 +23,8 @@ function experiment04_petroglyphs(test_type, algorithm, init_parallel, subset)
 		% PI tested resolutions and relative sigmas
 		pi_r = [10:10:60];
 		pi_s = [0.5, 1, 2];
+		% pi_r = [20, 50];
+		% pi_s = [2];
 		% tested codebook sizes
 		bow_sizes = [10:10:50 60:20:100];
 		sample_sizes = [5000, 10000, 50000];
@@ -77,6 +81,12 @@ function experiment04_petroglyphs(test_type, algorithm, init_parallel, subset)
 		objs{end + 1} = {PersistenceLandscape(), {'pl', 'pl'}};
 
 	%%% OTHER VECTORIZED APPROACHES
+	case 1
+		for r = pi_r
+			for s = pi_s
+				objs{end + 1} = {PersistenceImageAsFilter(r, s, @constant_one), {'pif', ['pif_', num2str(r), '_', num2str(s)]}};
+			end
+		end
 	case 11
 		disp('Creating vectorized descriptor objects');
 		for r = pi_r

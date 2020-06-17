@@ -14,6 +14,8 @@ function experiment05_reddit5K(test_type, algorithm, init_parallel, subset)
 		% PI tested resolutions and relative sigmas
 		pi_r = [10:10:50, 60:20:120];
 		pi_s = [0.5, 1, 2];
+	% 	pi_r = [50, 80, 120];
+	% 	pi_s = [0.5];
 		% tested codebook sizes
 		bow_sizes = [10:10:50, 60:20:200];
 		sample_sizes = [2000, 10000, 50000];
@@ -21,6 +23,8 @@ function experiment05_reddit5K(test_type, algorithm, init_parallel, subset)
 		% PI tested resolutions and relative sigmas
 		pi_r = [10:10:60];
 		pi_s = [0.5, 1, 2];
+	%	pi_r = [30, 50, 100];
+	%	pi_s = [0.5];
 		% tested codebook sizes
 		bow_sizes = [10:10:50, 60:20:200];
 		sample_sizes = [2000, 10000, 50000];
@@ -73,22 +77,26 @@ function experiment05_reddit5K(test_type, algorithm, init_parallel, subset)
 		objs{end + 1} = {PersistenceLandscape(), {'pl', 'pl'}};
 
 	%%% OTHER VECTORIZED APPROACHES
-	case 11
+	case 1
 		disp('Creating vectorized descriptor objects');
+		for r = pi_r
+			for s = pi_s
+				objs{end + 1} = {PersistenceImageAsFilter(r, s, @constant_one), {'pif', ['pif_', num2str(r), '_', num2str(s)]}};
+			end
+		end
+	case 11
 		for r = pi_r
 			for s = pi_s
 				objs{end + 1} = {PersistenceImage(r, s, @linear_ramp), {'pi', ['pi_', num2str(r), '_', num2str(s)]}};
 				objs{end}{1}.parallel = true;
 			end
 		end
-	case 12
 		for r = pi_r
 			for s = pi_s
 				objs{end + 1} = {PersistenceImage(r, s, @constant_one), {'pi', ['pi_', num2str(r), '_', num2str(s)]}};
-				objs{end}{1}.parallel = true;
+%				objs{end}{1}.parallel = true;
 			end
 		end
-	case 13
 		for r = [20, 40, 60]
 			for s = 0.1:0.1:0.3
 				for d = 25:25:100

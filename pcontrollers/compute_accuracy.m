@@ -62,7 +62,7 @@ function [accuracy, preciseAccuracy, confMats, C, times, obj] = ...
 		% K is uppertriangular, so ...
 		K = K + K';
 
-	case {'pi', 'pbow', 'pvlad', 'pfv', 'pbow_st', 'svlad'}
+	case {'pi', 'pif', 'pbow', 'pvlad', 'pfv', 'pbow_st', 'svlad'}
 		if ~exist(descrPath, 'file')
 			tic;
 			if size(pds, 2) > 1
@@ -72,7 +72,7 @@ function [accuracy, preciseAccuracy, confMats, C, times, obj] = ...
 				% for each sub diagram do another classification
 				reprCell = cell(nelem, nsubpds);
 				for d = 1:nsubpds
-					if strcmp(name, 'pi') %|| strcmp(name, 'pds')
+					if strcmp(name, 'pi') || strcmp(name, 'pif')
 						reprCell(:,d) = obj.predict(pds(:,d), persistenceLimits(d,:));
 % 						reprCell(:,d) = obj.predict(pds(:,d), persistenceLimits{d});
 					else
@@ -93,7 +93,7 @@ function [accuracy, preciseAccuracy, confMats, C, times, obj] = ...
 					end
 				end
 			else
-				if strcmp(name, 'pi')
+				if strcmp(name, 'pi') || strcmp(name, 'pif')
 					reprCell = obj.predict(pds, persistenceLimits);
 				else
 % 					tr_pds = pds(tridx);

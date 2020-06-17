@@ -7,10 +7,12 @@ function experiment07_3Dseg(test_type, algorithm, init_parallel)
 
 	%%%%% EXPERIMENT PARAMETERS
 	% number of trials
-	N = 10;
+	N = 5;
 	% PI tested resolutions and relative sigmas
 	pi_r = 10:10:100;
 	pi_s = [0.5, 1, 2, 3];
+% 	pi_r = [50, 70, 100];
+% 	pi_s = [0.5];
 	% tested codebook sizes
 	bow_sizes = [10:10:100];
 	sample_sizes = [5000, 10000, 20000];
@@ -71,14 +73,21 @@ function experiment07_3Dseg(test_type, algorithm, init_parallel)
 		disp('Creating vectorized descriptor objects');
 		for r = pi_r
 			for s = pi_s
+				objs{end + 1} = {PersistenceImageAsFilter(r, s, @constant_one), {'pif', ['pif_', num2str(r), '_', num2str(s)]}};
+			end
+		end
+	case 11
+		disp('Creating vectorized descriptor objects');
+		for r = pi_r
+			for s = pi_s
 				objs{end + 1} = {PersistenceImage(r, s, @linear_ramp), {'pi', ['pi_', num2str(r), '_', num2str(s)]}};
-				objs{end}{1}.parallel = true;
+% 				objs{end}{1}.parallel = true;
 			end
 		end
 		for r = pi_r
 			for s = pi_s
 				objs{end + 1} = {PersistenceImage(r, s, @constant_one), {'pi', ['pi_', num2str(r), '_', num2str(s)]}};
-				objs{end}{1}.parallel = true;
+% 				objs{end}{1}.parallel = true;
 			end
 		end
 		for r = [10, 20, 40]

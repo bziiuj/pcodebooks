@@ -35,7 +35,7 @@ function print_results(expPath, obj, N, algorithm_name, sufix, types, ...
 			specs = num2str(obj.sigma);
 		case {'pk2e', 'pk2a'}
 			specs = [num2str(obj.exact), ';', num2str(obj.n)];
-		case 'pi'
+		case {'pi', 'pif'}
 			% resolution;sigma;weightingFunction
 			f = functions(obj.weightingFunction);
 			specs = [num2str(obj.resolution), ';', num2str(obj.sigma), ';', f.function];
