@@ -135,6 +135,7 @@ classdef PersistenceBow < PersistenceRepresentation
 		
 		function n = feature_size(obj)
 			n = obj.numWords
+		end
 
 		function show_pcodebook(obj, diagrams)
 % 			data = obj.transform_diagrams(diagrams);
@@ -158,13 +159,13 @@ classdef PersistenceBow < PersistenceRepresentation
 		end
 	end %methods
  
-	methods (Static)
-
-		function obj = loadobj(pbow)
-			obj = PersistenceBow(pbow.numWords, pbow.weightingFunction, pbow.sampleSize);
-			obj.kdwords = pbow.kdwords;
-			obj.kdtree = pbow.kdtree;
-		end
-
-	end %methods (Static)
+% 	methods(Static)
+% 
+% 		function obj = loadobj(pbow)
+% 			obj = PersistenceBow(pbow.numWords, pbow.weightingFunction, pbow.sampleSize);
+% 			obj.kdwords = pbow.kdwords;
+% 			obj.kdtree = pbow.kdtree;
+% 		end
+% 
+% 	end %methods (Static)
 end %classdef

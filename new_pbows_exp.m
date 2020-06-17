@@ -45,8 +45,6 @@ function new_pbows_exp()
 			expPath = 'exp00_other/';
 	end
 	[types, pds, labels] = loadDataset(dataset);
-% 	bow_sizes = [100];
-% 	sample_sizes = [10000];
 
 	pbowsPath = strcat(expPath, 'pbows/');
 	mkdir(pbowsPath);
