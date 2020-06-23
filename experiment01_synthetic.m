@@ -11,8 +11,6 @@ function experiment01_synthetic(test_type, algorithm, init_parallel)
 	% PI tested resolutions and relative sigmas
 	pi_r = 10:10:100;
 	pi_s = [0.1, 0.5, 1, 1.5, 2, 3];
-% pi_r = [10, 50, 100];
-% pi_s = [0.1];
 	% tested codebook sizes
 	bow_sizes = [5, 10:10:200];
 	sample_sizes = [1000, 5000, 10000];

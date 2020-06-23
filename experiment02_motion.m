@@ -12,8 +12,6 @@ function experiment02_motion(test_type, algorithm, init_parallel, ~)
 	% PI tested resolutions and relative sigmas
 	pi_r = [10:10:60];%, 170:30:200];
 	pi_s = [0.5, 1, 2];
-	% pi_r = [10, 30, 60];
-	% pi_s = [2];
 	% tested codebook sizes
 	bow_sizes = [10:10:50 60 80 100];
 	sample_sizes = [2000, 5000, 10000];
